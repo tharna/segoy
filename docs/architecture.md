@@ -170,7 +170,7 @@ Otak must not parse prose, and there is no backend to translate. So the contract
 - **Issue labels in Roke**: `state:*` (one of the lifecycle states), `kind:idea|note|task|self`, `target:<repo>`.
 - **Commands in issue/PR comments**: `/spec`, `/plan`, `/park`, `/reject <reason>`, `/answer` (free text is also accepted as answers).
 - **Frontmatter** (all pipeline files): `id, title, state, created, updated, visibility, source, links`.
-- **Language**: file and folder names in English; note content in whatever language it was captured in (config: `content_language`).
+- **Language**: file and folder names in English. Captures are kept verbatim in the language typed (config: `capture_language`); notes agents write are in `notes_language`, and when the two differ the original capture is kept alongside the translation (`keep_original`).
 
 ## 8. Decision log (initial ADRs)
 
@@ -207,6 +207,10 @@ Run these first; each takes minutes and is listed as a task in `docs/bootstrap-p
 - **S9** Can a cloud session discover its own session URL (to include in run records)?
 - **S10** Can a scheduled task's API trigger be called from a phone app with the task token, and is that acceptable for "run now" and asynchronous Ask Roke? Otherwise use a labelled issue.
 
-Already observed (2026-11-14, in a cloud session): GitHub's GraphQL API is not available from Claude Code cloud sessions; the REST API is (`gh api repos/<owner>/<repo>/...`). `gh` subcommands that use GraphQL (`gh issue list`, `gh label list`, `gh pr create`) fail. Skills must use REST calls or the session's built-in GitHub tools. This does not affect Otak, which calls GitHub from the phone.
+- **S11** Which branches can a cloud session and a scheduled task push to (the session's own branch only, `claude/*`, `main`)? Who is the commit author and pusher (owner or Claude GitHub App)? Decides whether triage can commit to the brain's `main` (decision 5) and which actor a ruleset bypass list must name.
+
+Already observed (2026-11-14, in a cloud session): an interactive cloud session is assigned one working branch with a session-derived name (not `claude/<kind>-<slug>`) and is told to push only there, so one session yields one PR; S11 checks what scheduled tasks get.
+
+Also observed (2026-11-14, in a cloud session): GitHub's GraphQL API is not available from Claude Code cloud sessions; the REST API is (`gh api repos/<owner>/<repo>/...`). `gh` subcommands that use GraphQL (`gh issue list`, `gh label list`, `gh pr create`) fail. Skills must use REST calls or the session's built-in GitHub tools. This does not affect Otak, which calls GitHub from the phone.
 
 Record results in `docs/adr/spikes-2026-11.md` and adjust §4 if any assumption fails.

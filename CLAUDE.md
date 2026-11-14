@@ -30,8 +30,8 @@ Read before working: `docs/prd.md`, `docs/architecture.md`, `docs/workflows.md`,
 ## Commands
 
 - Build design system and check contrast: `python3 design-system/scripts/build.py` (`--check` to only check)
-- Lint scripts: `shellcheck scripts/segoy scripts/lib/*.sh kit/common/.claude/hooks/*.sh`
-- Lint skills: `scripts/segoy doctor --skills` (frontmatter and required sections)
+- Lint scripts: `shellcheck scripts/lib/*.sh tests/*.sh` (add `scripts/segoy` and `kit/**/*.sh` once they exist; CI picks them up automatically)
+- Lint skills: `scripts/lib/lint-skills.sh` (frontmatter and required sections; `scripts/segoy doctor --skills` will wrap it from M1)
 - Tests: `tests/run.sh`
 - Sync kit into this repo: `scripts/segoy sync .`
 

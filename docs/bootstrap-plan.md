@@ -4,11 +4,12 @@ Version 0.1, 2026-11-14. How to get from nothing to a self-hosting Segoy. Writte
 
 ## Manual steps for the owner (once)
 
-1. `segoy` and `roke` already exist (both private for now; `segoy` flips to public at M4).
-2. Connect GitHub at claude.ai/code and install the Claude GitHub App on both repos.
-3. Enable branch protection on `main` in both: require PR, block force-push.
-4. The design docs are in `docs/` and `CLAUDE.md` is at the repo root (done).
-5. Answer the open decisions in `docs/README.md` (or accept the defaults listed there).
+1. `segoy` and `roke` already exist (both private for now; `segoy` flips to public at M4). (done)
+2. Connect GitHub at claude.ai/code and install the Claude GitHub App on both repos. (done)
+3. Branch protection on `main` in both: deferred to T4.3, before Segoy goes public. Until then "never push to `main`" rests on the skills and the cloud git proxy.
+4. The design docs are in `docs/` and `CLAUDE.md` is at the repo root. (done)
+5. Answer the open decisions in `docs/README.md`. (done, 2026-11-14)
+6. For M0: create a private `segoy-scratch` repo with the Claude GitHub App installed; spikes run there so the brain stays clean. It is reused as the scratch project in T3.2. (done)
 
 ## M0 — Foundations and spikes
 
@@ -16,7 +17,7 @@ Goal: confirm platform assumptions before writing skills.
 
 Tasks
 - T0.1 Repo skeleton per architecture §2.1 (empty dirs with README stubs), LICENSE, `.gitignore`, CI workflow that runs shellcheck and a frontmatter linter on `kit/**/SKILL.md`.
-- T0.2 Spikes S1–S10 (architecture §9; S8–S10 concern the Otak app). For each: a throwaway skill/hook/task in a scratch branch or scratch repo, run it, record result in `docs/adr/spikes-2026-11.md`.
+- T0.2 Spikes S1–S11 (architecture §9; S8–S10 concern the Otak app; S11 is push rights and commit identity). For each: a throwaway skill/hook/task in a scratch branch or scratch repo, run it, record result in `docs/adr/spikes-2026-11.md`.
 - T0.3 Update architecture §4 and ADRs with spike outcomes; open questions that spikes resolve are closed.
 
 Done when: spike record merged; trigger map confirmed or revised.
@@ -62,7 +63,7 @@ Done when: one idea has gone capture → done with exactly the two gates.
 Tasks
 - T4.1 `scripts/segoy sync` with manifest and local-modification handling; tests on fixtures.
 - T4.2 Versioning: `CHANGELOG.md`, tags, `migrations/`.
-- T4.3 Public-readiness pass on Segoy: README with quick start for a stranger, scrub history check, generic examples, contribution notes. Flip to public if not already.
+- T4.3 Public-readiness pass on Segoy: README with quick start for a stranger, scrub history check, generic examples, contribution notes. Set up branch rulesets on `main` in Segoy (require PR, 0 approvals, block force-push and deletion, no bypass) and in the brain (same, with a bypass for whichever actor S11 shows triage pushes as, if direct commits are kept). Flip to public if not already.
 - T4.4 From here on, every Segoy change is an idea in Roke.
 
 Done when: a Segoy improvement is delivered through the pipeline and synced into Roke and the scratch project by PRs.
