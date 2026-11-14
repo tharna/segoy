@@ -1,0 +1,23 @@
+<!-- @dsCard group="Input" height=360 subtitle="Single line, multi line, error" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Field</title></head>
+<body>
+<div class="sg sg-screen sg-stack">
+  <div class="sg-field">
+    <label class="sg-field__label" for="f-repo">Brain repository</label>
+    <input class="sg-field__input" id="f-repo" type="text" value="&lt;owner&gt;/brain" autocomplete="off" spellcheck="false" aria-describedby="f-repo-h">
+    <span class="sg-field__hint" id="f-repo-h">owner/name on GitHub</span>
+  </div>
+  <div class="sg-field">
+    <label class="sg-field__label" for="f-answer">Your answer</label>
+    <textarea class="sg-field__input" id="f-answer" rows="2" placeholder="Tell the agent what to do instead…"></textarea>
+  </div>
+  <div class="sg-field sg-field--error">
+    <label class="sg-field__label" for="f-sync">Sync every (minutes)</label>
+    <input class="sg-field__input" id="f-sync" type="text" inputmode="numeric" value="0" aria-invalid="true" aria-describedby="f-sync-h">
+    <span class="sg-field__hint" id="f-sync-h">Use a number from 5 to 1440.</span>
+  </div>
+</div>
+</body>
+</html>

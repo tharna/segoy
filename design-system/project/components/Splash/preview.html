@@ -1,0 +1,28 @@
+<!-- @dsCard group="Brand" height=360 subtitle="App icon sizes and the splash screen" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Splash</title>
+<style>
+  .wrap { display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-end; padding: 16px; }
+  .icons { display: flex; gap: 16px; align-items: flex-end; background: transparent; }
+  .icons .sg-icon { outline: 1px solid var(--line); }
+  .phone { width: 180px; height: 320px; border: 1px solid var(--line); }
+  .phone .sg-splash { height: 100%; box-sizing: border-box; padding: 24px 16px; }
+</style>
+</head>
+<body>
+<div class="sg wrap">
+  <div class="icons" data-theme="phosphor" aria-label="App icon at 96, 48 and 24 pixels" role="img">
+    <span class="sg-icon" style="width:96px;font-size:72px">&gt;<span class="sg-icon__cursor"></span></span>
+    <span class="sg-icon" style="width:48px;font-size:36px">&gt;<span class="sg-icon__cursor"></span></span>
+    <span class="sg-icon" style="width:24px;font-size:18px">&gt;<span class="sg-icon__cursor"></span></span>
+  </div>
+  <div class="phone">
+    <div class="sg-splash">
+      <h1 class="sg-splash__name">otak</h1>
+      <p class="sg-splash__line">syncing <span class="sg-cursor" aria-hidden="true"></span></p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!-- @dsCard group="Containers" height=400 subtitle="Bottom panel for options and confirmations" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Sheet</title>
+<style>.demo { position: relative; height: 400px; overflow: hidden; } .demo .sg-scrim { position: absolute; }</style>
+</head>
+<body>
+<div class="sg demo">
+  <div class="sg-screen sg-stack" aria-hidden="true">
+    <div class="sg-msg sg-msg--claude"><span class="sg-msg__glyph">●</span><div class="sg-msg__body"><p>The plan for I-20260101-1 is ready.</p></div></div>
+    <div class="sg-msg sg-msg--system"><span class="sg-msg__glyph">※</span><div class="sg-msg__body"><p>Gate 1 opened 2h ago</p></div></div>
+  </div>
+  <div class="sg-scrim">
+    <section class="sg-sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-t">
+      <span class="sg-sheet__grip"></span>
+      <div class="sg-sheet__head"><h2 class="sg-sheet__title" id="sheet-t">Move to project</h2><button class="sg-btn sg-btn--ghost" type="button">Close <kbd>esc</kbd></button></div>
+      <ul class="sg-perm__opts" role="listbox" aria-label="Projects">
+        <li><button class="sg-option" role="option" aria-selected="true" type="button"><span class="sg-option__key">1</span><span class="sg-option__label">example-app</span></button></li>
+        <li><button class="sg-option" role="option" aria-selected="false" type="button"><span class="sg-option__key">2</span><span class="sg-option__label">example-site</span></button></li>
+        <li><button class="sg-option" role="option" aria-selected="false" type="button"><span class="sg-option__key">3</span><span class="sg-option__label">Keep in inbox</span></button></li>
+      </ul>
+      <div class="sg-sheet__actions"><button class="sg-btn sg-btn--primary" type="button">Move</button></div>
+    </section>
+  </div>
+</div>
+</body>
+</html>
