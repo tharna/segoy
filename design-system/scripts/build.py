@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
-"""Build dist/segoy.css from project/tokens.json + project/components/bundle.css,
-and check text/background contrast for every theme.
+"""Build the Segoy design system outputs from project/tokens.json and check contrast.
+
+Writes:
+  dist/segoy.css                tokens + project/components/bundle.css, for the web
+  dist/android/SegoyTokens.kt   tokens for Jetpack Compose (colours per theme,
+                                type in sp, spacing / radius / sizes in dp)
 
 Usage: python3 design-system/scripts/build.py [--check]
+  --check  only run the contrast check (exit 1 on any failure), write nothing
 """
 import json
 import re
@@ -106,6 +111,157 @@ def tokens_css(tokens):
     return "\n".join(out) + "\n"
 
 
+# ---------- Android (Jetpack Compose) ----------
+
+KT_PACKAGE = "segoy.tokens"
+
+
+def camel(name):
+    parts = re.split(r"[-_.]", name)
+    return parts[0] + "".join(p[:1].upper() + p[1:] for p in parts[1:])
+
+
+def pascal(name):
+    c = camel(name)
+    return c[:1].upper() + c[1:]
+
+
+def kt_color(hex_):
+    h = hex_.lstrip("#").lower()
+    if len(h) in (3, 4):
+        h = "".join(c * 2 for c in h)
+    if len(h) == 6:
+        h += "ff"
+    if not re.fullmatch(r"[0-9a-f]{8}", h):
+        raise ValueError(f"Android export supports hex colours only, got {hex_!r}")
+    return f"Color(0x{h[6:8]}{h[0:6]})".upper().replace("COLOR(0X", "Color(0x")
+
+
+def kt_num(x):
+    x = float(x)
+    return str(int(x)) if x == int(x) else repr(x)
+
+
+def kt_length(v, unit):
+    """'16px' / 16 / '0' -> '16.dp'; '0.08em' -> '0.08.em'; None for units Android has no equivalent for."""
+    if isinstance(v, (int, float)):
+        return f"{kt_num(v)}.{unit}"
+    m = re.fullmatch(r"(-?[0-9.]+)(px|em)?", str(v).strip())
+    if not m:
+        return None
+    n, u = m.groups()
+    return f"{kt_num(n)}.em" if u == "em" else f"{kt_num(n)}.{unit}"
+
+
+def kt_line_height(v):
+    if isinstance(v, (int, float)) or re.fullmatch(r"[0-9.]+", str(v)):
+        return f"{kt_num(v)}.em"  # unitless multiplier
+    return kt_length(v, "sp")
+
+
+def font_name(stack):
+    first = stack.split(",")[0].strip().strip('"\'')
+    return first
+
+
+def kotlin(tokens):
+    themes = tokens["color"]["themes"]
+    first = themes[0]["id"]
+    colors = {t["name"]: t["value"] for t in tokens["color"]["tokens"]}
+    names = [t["name"] for t in tokens["color"]["tokens"]]
+    o = []
+    o.append(f"// {tokens['name']} — generated from design-system/project/tokens.json by design-system/scripts/build.py.")
+    o.append("// Do not edit by hand: change tokens.json and rebuild.")
+    o.append("@file:Suppress(\"unused\", \"MemberVisibilityCanBePrivate\")")
+    o.append("")
+    o.append(f"package {KT_PACKAGE}")
+    o.append("")
+    o.append("import androidx.compose.runtime.Immutable")
+    o.append("import androidx.compose.ui.graphics.Color")
+    o.append("import androidx.compose.ui.text.font.FontWeight")
+    o.append("import androidx.compose.ui.unit.TextUnit")
+    o.append("import androidx.compose.ui.unit.dp")
+    o.append("import androidx.compose.ui.unit.em")
+    o.append("import androidx.compose.ui.unit.sp")
+    o.append("")
+    o.append("/** One theme's colours. Every field is a meaning token; see the brand book for usage. */")
+    o.append("@Immutable")
+    o.append("data class SegoyColors(")
+    o.append("    val id: String,")
+    o.append("    val isDark: Boolean,")
+    for t in tokens["color"]["tokens"]:
+        o.append(f"    /** {t.get('usage', '')} */")
+        o.append(f"    val {camel(t['name'])}: Color,")
+    o.append(")")
+    o.append("")
+    o.append("/** Font roles. Apps bundle the font files and map each role to a FontFamily. */")
+    o.append("enum class SegoyFont(val familyName: String) {")
+    fams = tokens["type"]["families"]
+    o.append(",\n".join(f"    {pascal(k)}(\"{font_name(v)}\")" for k, v in fams.items()) + ",")
+    o.append("}")
+    o.append("")
+    o.append("@Immutable")
+    o.append("data class SegoyTextStyle(")
+    o.append("    val font: SegoyFont,")
+    o.append("    val fontSize: TextUnit,")
+    o.append("    val lineHeight: TextUnit,")
+    o.append("    val fontWeight: FontWeight,")
+    o.append("    val letterSpacing: TextUnit = TextUnit.Unspecified,")
+    o.append("    val uppercase: Boolean = false,")
+    o.append(")")
+    o.append("")
+    o.append("object SegoyTokens {")
+    o.append(f"    const val VERSION: Int = {int(tokens.get('version', 1))}")
+    o.append("")
+    for th in themes:
+        tid = th["id"]
+        bg = resolve(colors, "bg", tid, first) if "bg" in colors else "#000000"
+        o.append(f"    /** {th['name']} */")
+        o.append(f"    val {pascal(tid)}: SegoyColors = SegoyColors(")
+        o.append(f"        id = \"{tid}\",")
+        o.append(f"        isDark = {'true' if lum(bg) < 0.5 else 'false'},")
+        for n in names:
+            o.append(f"        {camel(n)} = {kt_color(resolve(colors, n, tid, first))},")
+        o.append("    )")
+        o.append("")
+    o.append("    /** All themes by id; the first is the default. */")
+    o.append("    val themes: Map<String, SegoyColors> = linkedMapOf(")
+    o.append("".join(f"        \"{th['id']}\" to {pascal(th['id'])},\n" for th in themes).rstrip("\n"))
+    o.append("    )")
+    o.append("")
+    o.append("    object Type {")
+    upper_styles = {"text-label"}
+    for g in tokens["type"]["groups"]:
+        for st in g["styles"]:
+            fam = st.get("family", g["family"])
+            args = [f"font = SegoyFont.{pascal(fam)}",
+                    f"fontSize = {kt_length(st['fontSize'], 'sp')}",
+                    f"lineHeight = {kt_line_height(st['lineHeight'])}",
+                    f"fontWeight = FontWeight({int(st['fontWeight'])})"]
+            if "letterSpacing" in st:
+                args.append(f"letterSpacing = {kt_length(st['letterSpacing'], 'sp')}")
+            if st["name"] in upper_styles:
+                args.append("uppercase = true")
+            if st.get("usage"):
+                o.append(f"        /** {st['usage']} */")
+            o.append(f"        val {camel(st['name'])}: SegoyTextStyle = SegoyTextStyle({', '.join(args)})")
+    o.append("    }")
+    for fam, obj in (("spacing", "Spacing"), ("radius", "Radius"), ("size", "Size")):
+        o.append("")
+        o.append(f"    object {obj} {{")
+        for t in tokens.get(fam, {}).get("tokens", []):
+            v = kt_length(t["value"], "dp")
+            if v is None or v.endswith(".em"):
+                o.append(f"        // {t['name']} = {t['value']}: no Android equivalent, not exported")
+                continue
+            if t.get("usage"):
+                o.append(f"        /** {t['usage']} */")
+            o.append(f"        val {camel(t['name'])} = {v}")
+        o.append("    }")
+    o.append("}")
+    return "\n".join(o) + "\n"
+
+
 def main():
     tokens = json.loads((PROJECT / "tokens.json").read_text())
     failed = check(tokens)
@@ -117,7 +273,10 @@ def main():
     rest = "\n".join(l for l in bundle.splitlines() if not l.startswith("@import"))
     DIST.mkdir(exist_ok=True)
     (DIST / "segoy.css").write_text(imports + "\n" + tokens_css(tokens) + "\n" + rest + "\n")
-    print(f"\nwrote {DIST / 'segoy.css'}" + (f"  ({failed} contrast failures)" if failed else ""))
+    (DIST / "android").mkdir(exist_ok=True)
+    (DIST / "android" / "SegoyTokens.kt").write_text(kotlin(tokens))
+    print(f"\nwrote {DIST / 'segoy.css'}\nwrote {DIST / 'android' / 'SegoyTokens.kt'}"
+          + (f"\n{failed} contrast failures" if failed else ""))
     sys.exit(1 if failed else 0)
 
 
