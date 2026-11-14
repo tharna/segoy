@@ -28,22 +28,22 @@ Start here. These documents describe Segoy (this repo), the brain template (the 
 10. Segoy is project number one and is developed through its own pipeline from milestone M4.
 11. Otak (native Kotlin, no backend) is the phone front end for capture, questions, gate decisions, and status. It reads labels and small YAML blocks that skills add to their comments and PRs, and it polls GitHub instead of receiving push. It uses the Segoy design system already in the repo (terminal-style, touch-sized), with tokens generated for Android. It is the first project built through the pipeline.
 
-## Open decisions
+## Decisions
 
-Defaults are what the docs assume until the owner says otherwise.
+Resolved 2026-11-14. Values that differ per user live in the brain's `.segoy/config.yml`; this table records what Segoy is designed and tested for.
 
-| # | Question | Default |
+| # | Question | Decision |
 |---|---|---|
-| 1 | Which Claude plan? (affects usage headroom and whether Projects beta is available) | Pro or Max; Projects not required |
+| 1 | Which Claude plan? (affects usage headroom and whether Projects beta is available) | Must work on Pro; Max optional. Projects not required. Spike S7 measures headroom on Pro |
 | 2 | Licence for Segoy | MIT (already in the repo) |
 | 3 | Segoy public from day one, or private until M4? | Private until the M4 public-readiness pass |
-| 4 | Language for notes agents write in Roke | English; captures kept verbatim in whatever language you type |
-| 5 | May triage commit new idea files straight to Roke `main`, or must everything be a PR? | Direct commit for new idea files and the log only; PRs for everything else |
+| 4 | Language for notes agents write in Roke | Configurable: captures kept verbatim in `capture_language`, agent notes written in `notes_language` with the original kept alongside (`keep_original`). See `brain-design.md` §7 |
+| 5 | May triage commit new idea files straight to Roke `main`, or must everything be a PR? | Direct commit for new idea files and the log only; PRs for everything else. Whether a scheduled task can push to `main` at all is spike S11 |
 | 6 | Script language | POSIX shell + `gh` + `jq`; revisit if it gets complicated |
 | 7 | Do you want Obsidian (or similar) as a reader for Roke on phone/desktop? | Optional; design does not depend on it |
 | 8 | Personal context connectors (calendar, email) | Deferred to M6, read-only, after a privacy review |
 | 9 | Should Roke be created from a GitHub template repo, or by running `segoy init brain` in an empty repo? | `segoy init brain` |
-| 10 | Is using your own GitHub identity for agent commits acceptable, or do you want a separate bot account later? | Own identity with branch protection |
+| 10 | Is using your own GitHub identity for agent commits acceptable, or do you want a separate bot account later? | Own identity. Branch protection (rulesets) deferred to the M4 public-readiness pass (T4.3) |
 
 Otak-specific: decided — merging from the phone is allowed on all repos behind biometric confirmation; photo capture is deferred; the app follows the Segoy design system. Also decided: minimum Android 10, English UI, distribution as an APK from GitHub Releases.
 
@@ -59,5 +59,5 @@ Otak-specific: decided — merging from the phone is allowed on all repos behind
 
 ## Caveats
 
-- Scheduled tasks are a research preview and Projects are a beta; the architecture keeps triggers thin so they can be swapped. Ten short spikes (architecture §9) verify the assumptions before anything is built on them.
+- Scheduled tasks are a research preview and Projects are a beta; the architecture keeps triggers thin so they can be swapped. Eleven short spikes (architecture §9) verify the assumptions before anything is built on them.
 - The trigger behaviour for issue comments and multi-repo skill loading is unverified; fallbacks are documented.

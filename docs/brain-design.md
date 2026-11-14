@@ -155,7 +155,9 @@ Boundaries: the twin never approves, merges, rejects, or sends anything in the o
 owner: <github-handle>
 brain_repo: <owner>/roke
 tool_repo: <owner>/segoy
-content_language: en          # language agents write notes in; captures stay verbatim
+capture_language: <lang>      # language you usually capture in; captures stay verbatim
+notes_language: en            # language agents write notes in
+keep_original: true           # keep the verbatim capture next to the translation
 projects_default_visibility: private
 models:
   triage: <small-model>

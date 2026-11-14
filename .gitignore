@@ -1,0 +1,12 @@
+# OS and editor
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+*.pyc
+
+# Sync leftovers to resolve by hand
+*.segoy-new
