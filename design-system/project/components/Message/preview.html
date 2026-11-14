@@ -1,0 +1,12 @@
+<!-- @dsCard group="Transcript" height=250 subtitle="User, Claude and system turns" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Message</title></head>
+<body>
+<div class="sg sg-screen sg-stack">
+  <div class="sg-msg sg-msg--user"><span class="sg-msg__glyph" aria-hidden="true">&gt;</span><div class="sg-msg__body"><p>the login test fails about one run in five, can you find out why?</p></div></div>
+  <div class="sg-msg sg-msg--claude"><span class="sg-msg__glyph" aria-hidden="true">●</span><div class="sg-msg__body"><p>The test waits a fixed 200ms for the session cookie. On a slow runner the cookie arrives later, so <code>expect(cookie)</code> sees nothing.</p><p>I'll replace the sleep with <code>waitFor</code> in <a class="sg-path" href="#">tests/auth/login.spec.ts</a>.</p></div></div>
+  <div class="sg-msg sg-msg--system"><span class="sg-msg__glyph" aria-hidden="true">※</span><div class="sg-msg__body"><p>Context compacted · 41% of window left</p></div></div>
+</div>
+</body>
+</html>

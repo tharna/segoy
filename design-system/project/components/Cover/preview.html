@@ -1,0 +1,62 @@
+<!-- @dsCard height=288 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Segoy cover</title>
+<style>
+  html, body { margin: 0; background: var(--bg); }
+  .cover { position: relative; width: 960px; height: 288px; overflow: hidden; background: var(--bg); }
+  .cover svg { position: absolute; inset: 0; }
+  .b-claude { fill: var(--claude); }
+  .b-prompt { fill: var(--prompt); }
+  .b-tool { fill: var(--tool); }
+  .b-warn { fill: var(--warn); }
+  .c-muted { fill: var(--fg-muted); }
+  .c-fg { fill: var(--fg); }
+  .c-tool { fill: var(--tool); }
+  .c-strong { fill: var(--fg-strong); }
+  .c-prompt { fill: var(--prompt); }
+  .c-cursor { fill: var(--claude); }
+  .sq { rx: var(--radius-none); }
+  .text { position: absolute; left: 48px; bottom: 40px; max-width: 440px; }
+  .name { font-family: var(--font-display); font-size: 120px; line-height: .95; color: var(--fg-strong); margin: 0; font-weight: 400; }
+  .tag { font-family: var(--font-mono); font-size: 14px; line-height: 20px; color: var(--fg-muted); margin: 8px 0 0; }
+</style>
+</head>
+<body>
+<div class="cover">
+  <svg viewBox="0 0 960 288" width="960" height="288" aria-hidden="true">
+    <!--
+      blocks: claude 160×176 (space-8 multiples) bleeding top-right; prompt 96×112 bleeding bottom; tool 80×80 bleeding bottom-right; warn 48×48 (space-6×2) as a satellite.
+      arrangement: a staggered stack in the lower right, like a terminal window's corner; nothing left of x=480.
+      pattern: "precise, technical, mono" → character cells — transcript lines drawn as monospace cells (12×20, pitch space-4 = 16, row pitch 28) in fg / fg-muted / tool, ending in a prompt line whose cursor is the claude cell.
+      scales: space-4 pitch, space-8 block steps, radius-none corners (square cells).
+    -->
+    <rect class="b-claude sq" x="800" y="0" width="160" height="176"/>
+    <rect class="b-warn sq" x="752" y="128" width="48" height="48"/>
+    <rect class="b-prompt sq" x="704" y="176" width="96" height="112"/>
+    <rect class="b-tool sq" x="880" y="208" width="80" height="80"/>
+    <g id="cells"></g>
+  </svg>
+  <div class="text">
+    <h1 class="name">Segoy</h1>
+    <p class="tag">A terminal you can use with one thumb. Green on black, orange for Claude.</p>
+  </div>
+</div>
+<script>
+  // rows of character cells: [class, start column, length]
+  var rows = [["c-muted",0,9],["c-fg",2,12],["c-tool",2,6],["c-fg",2,10]];
+  var g = document.getElementById('cells'), ns = 'http://www.w3.org/2000/svg';
+  function cell(cls, col, y) {
+    var r = document.createElementNS(ns, 'rect');
+    r.setAttribute('class', cls + ' sq');
+    r.setAttribute('x', 496 + col * 16); r.setAttribute('y', y);
+    r.setAttribute('width', 12); r.setAttribute('height', 20);
+    g.appendChild(r);
+  }
+  rows.forEach(function (row, i) { for (var c = 0; c < row[2]; c++) cell(row[0], row[1] + c, 32 + i * 28); });
+  cell('c-prompt', 0, 172);
+  for (var c = 2; c < 6; c++) cell('c-strong', c, 172);
+  cell('c-cursor', 6, 172);
+</script>
+</body>
+</html>
