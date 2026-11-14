@@ -1,0 +1,19 @@
+<!-- @dsCard group="Input" height=330 subtitle="Claude is waiting on the person" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Permission</title></head>
+<body>
+<div class="sg sg-screen">
+  <section class="sg-perm" aria-labelledby="perm-t">
+    <div class="sg-perm__title" id="perm-t"><span aria-hidden="true">!</span>Bash command</div>
+    <pre class="sg-perm__cmd">rm -rf node_modules/.cache &amp;&amp; npm test</pre>
+    <div class="sg-perm__q">Do you want to run this command?</div>
+    <ul class="sg-perm__opts" role="listbox" aria-label="Choose">
+      <li><button class="sg-option" role="option" aria-selected="true" type="button"><span class="sg-option__key">1</span><span class="sg-option__label">Yes</span></button></li>
+      <li><button class="sg-option" role="option" aria-selected="false" type="button"><span class="sg-option__key">2</span><span class="sg-option__label">Yes, and don't ask again for <b>npm test</b></span></button></li>
+      <li><button class="sg-option sg-option--deny" role="option" aria-selected="false" type="button"><span class="sg-option__key">3</span><span class="sg-option__label">No, tell Claude what to do instead</span></button></li>
+    </ul>
+  </section>
+</div>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!-- @dsCard group="Code" height=230 subtitle="Syntax colours reuse the meaning palette" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>CodeBlock</title></head>
+<body>
+<div class="sg sg-screen">
+  <figure class="sg-code" style="margin:0">
+    <figcaption class="sg-code__bar"><span>ts · retry.ts</span><button class="sg-btn sg-btn--ghost" type="button">Copy</button></figcaption>
+<pre><code><span class="k">import</span> { setTimeout } <span class="k">from</span> <span class="t">'node:timers/promises'</span>;
+
+<span class="c">// retry an async check until it passes</span>
+<span class="k">export async function</span> <span class="f">waitFor</span>&lt;<span class="t">T</span>&gt;(fn: () =&gt; <span class="t">Promise</span>&lt;<span class="t">T</span>&gt;, tries = <span class="n">20</span>) {
+  <span class="k">for</span> (<span class="k">let</span> i = <span class="n">0</span>; i &lt; tries; i++) {
+    <span class="k">try</span> { <span class="k">return await</span> <span class="f">fn</span>(); } <span class="k">catch</span> { <span class="k">await</span> <span class="f">setTimeout</span>(<span class="n">50</span>); }
+  }
+  <span class="k">throw new</span> <span class="f">Error</span>(<span class="s">'waitFor: gave up'</span>);
+}</code></pre>
+  </figure>
+</div>
+</body>
+</html>

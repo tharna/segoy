@@ -1,0 +1,13 @@
+<!-- @dsCard group="Transcript" height=240 subtitle="Running, passed and failed" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>ToolCall</title></head>
+<body>
+<div class="sg sg-screen sg-stack">
+  <div class="sg-tool"><span class="sg-tool__glyph is-ok" aria-label="done">⏺</span><div class="sg-tool__head"><span class="sg-tool__name">Read</span><span class="sg-tool__arg">(<span class="sg-path">tests/auth/login.spec.ts</span>)</span></div><div class="sg-tool__out"><pre>Read 84 lines</pre></div></div>
+  <div class="sg-tool"><span class="sg-tool__glyph is-err" aria-label="failed">⏺</span><div class="sg-tool__head"><span class="sg-tool__name">Bash</span><span class="sg-tool__arg">(npm test -- login)</span></div><div class="sg-tool__out"><pre><span class="is-err">✗ login › keeps the session (timeout 200ms)</span>
+  41 passed, <span class="is-err">1 failed</span> · 3.2s</pre></div></div>
+  <div class="sg-tool"><span class="sg-tool__glyph is-running" aria-label="running">⏺</span><div class="sg-tool__head"><span class="sg-tool__name">Bash</span><span class="sg-tool__arg">(npm test -- login --repeat 20)</span></div><div class="sg-tool__out"><pre>Running… 7/20</pre></div></div>
+</div>
+</body>
+</html>
