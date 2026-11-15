@@ -1,4 +1,7 @@
 # Private terms that must never appear in a project repo.
 # One term or extended regular expression per line; case-insensitive.
 # Used by the promote skill's leak check (ADR-017). Lines starting with # are comments.
+# Use word STEMS or patterns, not full words: inflected forms do not match a
+# full word (Finnish "Kuikkalammelta" is not matched by "Kuikkalampi"). Prefer
+# "Kuikkala" or "Kuikkala(mp|mm)"; for names, the stem before case endings.
 # Examples (replace): a family member's name, your street, a private client's name.
