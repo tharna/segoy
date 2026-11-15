@@ -20,6 +20,7 @@ roke/
 ├── log.md                    # append-only: date, actor, operation, files touched
 ├── .segoy/
 │   ├── config.yml            # owner handle, repos, language, model choices
+│   ├── labels.json           # label names, colours, descriptions (applied by segoy init brain)
 │   ├── denylist.txt          # private terms that must never leave (used by promote)
 │   └── version, manifest.json
 ├── inbox/                    # raw captures not yet triaged (mostly empty; issues are the inbox)
@@ -151,6 +152,8 @@ Boundaries: the twin never approves, merges, rejects, or sends anything in the o
 
 ## 7. Config (`.segoy/config.yml`)
 
+The template is `kit/brain/.segoy/config.yml.tmpl`, which is authoritative. In outline:
+
 ```yaml
 owner: <github-handle>
 brain_repo: <owner>/roke
@@ -160,11 +163,12 @@ notes_language: en            # language agents write notes in
 keep_original: true           # keep the verbatim capture next to the translation
 projects_default_visibility: private
 models:
-  triage: <small-model>
+  triage: <mid-model>         # Sonnet to start (M1-D4); try a small model once triage is proven
   spec: <strong-model>
   plan: <strong-model>
   lint: <small-model>
 question_limit_per_round: 3
+duplicate_action: close       # close | label
 answer_label: answered        # owner adds it with an answer or command (ADR-016)
 sweep_interval: hourly        # brain-respond fallback for answers without the label
 ```

@@ -1,0 +1,28 @@
+# Brain configuration. Copied to config.yml by `segoy init brain`; edit config.yml.
+# Values here are placeholders; replace every <…>.
+owner: <github-handle>
+brain_repo: <owner>/<brain-repo>
+tool_repo: <owner>/segoy
+
+# Languages (ADR in brain design §7)
+capture_language: <lang>      # language you usually capture in; captures stay verbatim
+notes_language: en            # language agents write in
+keep_original: true           # keep the verbatim capture next to the translation
+
+# Answers and the sweep (ADR-016)
+answer_label: answered
+sweep_interval: hourly
+
+# Triage
+question_limit_per_round: 3
+duplicate_action: close       # close | label  (close = close as duplicate with a link)
+
+# Models per task (set the same in each scheduled task's settings)
+models:
+  triage: sonnet
+  respond: sonnet
+  spec: opus
+  plan: opus
+  lint: haiku
+
+projects_default_visibility: private

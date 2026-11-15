@@ -1,0 +1,31 @@
+{
+  "v": 1,
+  "labels": [
+    {"name": "state:inbox",       "color": "76a684", "description": "Captured, not yet triaged"},
+    {"name": "state:triaged",     "color": "5cd6e6", "description": "Classified and filed"},
+    {"name": "state:needs-input", "color": "ffd84a", "description": "Waiting for the owner's answer"},
+    {"name": "state:specced",     "color": "c6a6ff", "description": "Spec merged"},
+    {"name": "state:planned",     "color": "c6a6ff", "description": "Private plan drafted"},
+    {"name": "state:promoted",    "color": "ff9a3c", "description": "Gate 1 PR open in the project"},
+    {"name": "state:building",    "color": "86bdff", "description": "Implementation in progress"},
+    {"name": "state:in-review",   "color": "86bdff", "description": "Gate 2 PR open"},
+    {"name": "state:done",        "color": "4fe07f", "description": "Merged and retro written"},
+    {"name": "state:parked",      "color": "76a684", "description": "Deliberately paused"},
+    {"name": "state:rejected",    "color": "ff7070", "description": "Will not do"},
+    {"name": "kind:idea",         "color": "4f7a5d", "description": "An idea"},
+    {"name": "kind:note",         "color": "4f7a5d", "description": "Knowledge to keep"},
+    {"name": "kind:task",         "color": "4f7a5d", "description": "Task for an existing project"},
+    {"name": "kind:self",         "color": "4f7a5d", "description": "Personal context update"},
+    {"name": "segoy:spec",        "color": "ff9a3c", "description": "Spec PR"},
+    {"name": "segoy:plan",        "color": "ff9a3c", "description": "Gate 1 plan PR"},
+    {"name": "segoy:impl",        "color": "ff9a3c", "description": "Gate 2 implementation PR"},
+    {"name": "segoy:retro",       "color": "ff9a3c", "description": "Retro PR"},
+    {"name": "segoy:review",      "color": "ff9a3c", "description": "Weekly review PR"},
+    {"name": "segoy:knowledge",   "color": "ff9a3c", "description": "Knowledge ingest PR"},
+    {"name": "answered",          "color": "5cff8f", "description": "Owner replied: continue"},
+    {"name": "segoy:paused",      "color": "ffd84a", "description": "Automation paused while this issue is open"}
+  ],
+  "dynamic": [
+    {"prefix": "target:", "color": "86bdff", "description": "Target repo, created by skills when first used"}
+  ]
+}
