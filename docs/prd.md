@@ -178,7 +178,7 @@ Detail in `docs/bootstrap-plan.md`.
 | Risk | Mitigation |
 |---|---|
 | Scheduled tasks are a research preview; triggers or limits may change. | Logic lives in skills; triggers are thin and replaceable (ADR-021: dispatcher or own server). |
-| Triggers miss things: comments and agent-made events start nothing; caps drop events (spike S3). | Owner actions drive every step (ADR-015); answer label plus hourly sweep (ADR-016); weekly review lists stuck ideas. |
+| Triggers miss things or fire too often: comments and agent-opened issues start nothing, agent-added labels do; caps drop events (spike S3, M1 staging). | Owner actions drive every step and label triggers filter on their label (ADR-015); answer label plus periodic sweep (ADR-016); weekly review lists stuck ideas. |
 | Behaviour depends on the model, not the platform: pushing to `main`, branch names (spike S11). | Nothing relies on it: no direct commits (ADR-018), artefacts found by label and ID (ADR-020), rulesets before going public (T4.3). |
 | Repo-committed skills might not load in some session types. | Single-repo sessions by default; spike S1/S2 verifies; fall back to prompts that read the skill files explicitly. |
 | Private content leaks during promotion. | `visibility` frontmatter default private; promotion skill checklist with a mandatory leak-check step (hooks do not run in the two-repo promotion run, ADR-017); required CI check; Gate 1 is also a human privacy review. |

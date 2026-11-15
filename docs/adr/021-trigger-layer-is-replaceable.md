@@ -34,5 +34,5 @@ The alternatives were weighed on 2026-11-15:
 - Moving to B or C later is a contained change: new trigger notes, possibly relaxed workarounds, and an ADR superseding this one.
 
 ## Revisit when
-- **Go to B:** the answer label is regularly forgotten and the hourly sweep feels slow, or "run now" and Ask Roke are being built (O3/O5) and a per-task token on the phone is not acceptable.
+- **Go to B:** the answer label is regularly forgotten and the periodic sweep feels slow, or "run now" and Ask Roke are being built (O3/O5) and a per-task token on the phone is not acceptable.
 - **Go to C** (after checking the billing terms): a live Ask Roke or live approvals in Otak are wanted, Android builds are too slow from cold, or the preview's limits or changes get in the way.

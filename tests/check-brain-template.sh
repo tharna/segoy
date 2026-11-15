@@ -18,7 +18,7 @@ for d in inbox knowledge/raw knowledge/wiki/topics knowledge/wiki/entities knowl
 done
 
 # Frontmatter on every Markdown file except log.md, CLAUDE.md, README.md and issue templates' own format.
-find "$B" -name '*.md' ! -name log.md ! -name CLAUDE.md ! -name README.md ! -path '*/ISSUE_TEMPLATE/*' | while read -r f; do
+find "$B" -name '*.md' ! -name log.md ! -name CLAUDE.md ! -name README.md ! -path '*/ISSUE_TEMPLATE/*' ! -path '*/.claude/*' | while read -r f; do
   [ "$(head -n 1 "$f")" = "---" ] || echo "FAIL no frontmatter: $f"
   grep -q '^visibility: ' "$f" || echo "FAIL no visibility: $f"
 done | grep . && fail=1

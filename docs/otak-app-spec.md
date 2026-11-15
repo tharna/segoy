@@ -62,7 +62,7 @@ The app must not parse prose. Skills therefore add a small machine-readable bloc
 - A fenced code block with info string `segoy` containing one JSON object (ADR-022), at the end of a comment or PR body. Full definition: `docs/protocol.md`.
 - Kinds:
   - `question` — idea id, round id, list of questions each with id, text, optional options, default.
-  - `answer` — posted by the app: round id, map of question id → answer. **The app adds the answer label (`answered`) in the same action**, because comments alone start no task (ADR-016). Plain-text replies from GitHub mobile remain valid input; without the label they are picked up by the hourly sweep.
+  - `answer` — posted by the app: round id, map of question id → answer. **The app adds the answer label (`answered`) in the same action**, because comments alone start no task (ADR-016). Plain-text replies from GitHub mobile remain valid input; without the label they are picked up by the periodic sweep.
   - `plan` — in the Gate 1 PR body: idea id, summary, assumptions with confidence, tasks, size, omitted-private count.
   - `impl` — in the Gate 2 PR body: idea id, criteria with evidence and pass/fail, deviations.
   - `run` — a run record comment: skill, repo, idea id, started, finished, outcome, next action, session link if known.
@@ -164,7 +164,7 @@ Results of the M0 spikes are in `adr/spikes-2026-11.md`.
 - S8 **confirmed**: a Compose debug APK builds in a cloud session. Needs a separate environment for Otak that allows `dl.google.com`; JDK 17 from apt; the SDK through the new `android sdk` CLI. About 4 min cold, about 2 GB disk. Put the SDK install in that environment's setup script. Known snag: the templates' `compileSdk = 37` fails because the platform is published as API `37.0`; use 36, or check AGP's minor-API syntax, before targeting 37.
 - S9 **confirmed**: run records can link to the session (`CLAUDE_CODE_REMOTE_SESSION_ID` → `https://claude.ai/code/session_<id>`).
 - S10 **partly**: tasks offer an API trigger (`/fire` with a per-task bearer token, 30 runs/hour per task, optional `text`). Not yet decided whether a long-lived per-task token may live on the phone. Until then, "run now" and Ask Roke create a labelled issue that the normal triggers pick up, which should work: the app uses the owner's own token, not Claude's GitHub tools, so its events count as the owner's. Verify this in O1. A dispatcher is the planned alternative (ADR-021).
-- Answers need a label as well as a comment (ADR-016). Events caused by agents never start tasks (ADR-015). Events caused by the app with the owner's token are expected to (verify in O1).
+- Answers need a label as well as a comment (ADR-016). Issues and comments made by agents never start tasks; labels made by agents do, so label triggers filter on their label (ADR-015 and its amendment). Events caused by the app with the owner's token are expected to (verify in O1).
 - No public API is known for live cloud-session status or plan usage; the app derives status from GitHub and shows run counts instead of a true usage meter.
 
 ## 9. Open questions

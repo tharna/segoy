@@ -44,7 +44,7 @@ Done when: all five are handled per workflows §2 and the owner has not had to o
 Tasks
 - T2.1 Skills `spec`, `plan`, `promote`, `record-decision`.
 - T2.2 `kit/common` leak check: `leak-guard.sh`, generic patterns, hook wiring for single-repo runs, required CI workflow; Roke denylist support as a mandatory step in `promote` (ADR-017).
-- T2.3 Tasks `brain-respond` (answer label on issues and PRs, plus an hourly sweep; ADR-016) and `brain-plan-promote-<repo>` (one per project, filtered on `segoy:spec` + `target:<repo>`).
+- T2.3 Tasks `brain-respond` (answer label on issues and PRs, plus a periodic sweep; ADR-016) and `brain-plan-promote-<repo>` (one per project, filtered on `segoy:spec` + `target:<repo>`).
 - T2.4 Fixture test: a fake brain and fake project under `tests/fixtures/` with a spec containing private blocks and denylisted terms; assert the promoted output contains none.
 - T2.5 End-to-end on a real small idea targeting the Segoy repo itself. Also check whether a run that opened a PR can pick up review comments through auto-fix in a scheduled task (workflows §3).
 

@@ -89,12 +89,12 @@ segoy/
 
 ## 4. Trigger map
 
-Each row is one scheduled task (file in `tasks/`). "Repos" is what the task mounts. "Started by" is the owner action that fires it. Only owner actions start tasks; events caused through Claude's GitHub tools never do (ADR-015, spike S3).
+Each row is one scheduled task (file in `tasks/`). "Repos" is what the task mounts. "Started by" is the owner action that fires it. Only owner actions are meant to start tasks (ADR-015). Issues opened and comments made through Claude's GitHub tools start nothing; **labels added through them do fire `issues.labeled`**, so label triggers always filter on the one label they serve (ADR-015 amendment).
 
 | Task | Trigger | Started by | Repos | Skill | Output |
 |---|---|---|---|---|---|
 | brain-triage | `issues.opened` in Roke | Owner captures (Otak or GitHub) | roke | `triage` | Labels, idea ID, triage comment. No files (ADR-018) |
-| brain-respond | `issues.labeled` and `pull_request.labeled` in Roke (acts only on the answer label) **and** an hourly schedule (sweep) | Owner answers, comments a command or asks for spec changes, then adds the answer label; or the sweep finds an unlabelled answer | roke | `triage` → `spec` or `plan`, depending on state and commands | Updated issue, spec PR in Roke (ADR-016) |
+| brain-respond | `issues.labeled` and `pull_request.labeled` in Roke, **filter: label `answered`** **and** a periodic schedule (sweep, every 4 hours by default) | Owner answers, comments a command or asks for spec changes, then adds the answer label; or the sweep finds an unlabelled answer | roke | `triage` → `spec` or `plan`, depending on state and commands | Updated issue, spec PR in Roke (ADR-016) |
 | brain-plan-promote-`<repo>` | `pull_request.closed` in Roke, filters: Is merged, label `segoy:spec`, label `target:<repo>` | Owner merges a spec PR | roke + `<repo>` | `plan` then `promote` | Promotion PR in the project repo (Gate 1) |
 | project-implement | `pull_request.closed`, filters: Is merged, label `segoy:plan` or `segoy:impl`; `pull_request.labeled`, filter label `answered` | Owner merges Gate 1 (or a `multi-pr` group); owner asks for changes on a Gate 1 or Gate 2 PR | project | `implement` | Implementation PR (Gate 2); revisions; the next group of a `multi-pr` plan |
 | project-retro | `pull_request.closed`, filters: Is merged, label `segoy:impl` | Owner merges Gate 2 | project | `retro` | Retro PR; state noted for the brain to pick up |
@@ -102,7 +102,7 @@ Each row is one scheduled task (file in `tasks/`). "Repos" is what the task moun
 | brain-lint | Weekly schedule | — | roke | `lint` | Lint report issue or PR |
 
 Notes:
-- **Comments start nothing** (S3), so answers and commands need the answer label or wait for the hourly sweep (ADR-016).
+- **Comments start nothing** (S3), so answers and commands need the answer label or wait for the periodic sweep (ADR-016).
 - **One promotion task per project repo**, because a task's repos are fixed when it is created. `segoy init project` prints its settings.
 - **Every run gets a fresh session with a random `claude/*` branch per repo.** Skills find PRs by label and idea ID, not branch name (ADR-020).
 - **The trigger context** is the stored prompt plus a `<github-trigger-context>` block with the event, repository and issue or PR number only. Skills fetch labels, comments and bodies themselves.
@@ -148,7 +148,7 @@ Otak must not parse prose, and there is no backend to translate. So the contract
 
 - **State** = labels (`state:*` on Roke issues, `segoy:*` on PRs). Already required by the pipeline.
 - **Content** = a fenced code block with info string `segoy` containing one versioned JSON object (ADR-022), appended to the comment or PR body a skill already writes. Kinds: `question`, `answer`, `plan`, `impl`, `run`, `review`. Defined in `docs/protocol.md`, with field tables and examples. Validator: `scripts/lib/protocol.sh` (wrapped by `segoy doctor --protocol` from T1.2).
-- **Answers** from the app are comments containing an `answer` block plus the same text in plain words, **together with the answer label** (`answered`), because comments alone start no task (ADR-016). Free-text replies typed in GitHub mobile stay valid: with the label they are handled at once, without it by the hourly sweep. Skills must handle both forms.
+- **Answers** from the app are comments containing an `answer` block plus the same text in plain words, **together with the answer label** (`answered`), because comments alone start no task (ADR-016). Free-text replies typed in GitHub mobile stay valid: with the label they are handled at once, without it by the periodic sweep. Skills must handle both forms.
 - **Run records**: every skill ends by posting or updating one `run` comment (on the Roke issue for brain flows, on the PR for project flows). This is what the app's activity feed and failure inbox read.
 - **Pause**: an open issue labelled `segoy:paused` in a repo pauses automation there; in Roke it pauses the brain flows and promotion. Every skill checks this first and exits quietly. The app opens and closes that issue. No commit, no backend. Opening it fires `brain-triage` like any issue; triage recognises the label and exits.
 - **Compatibility rule**: the block is additive. Unknown kinds and fields are ignored by the app; skills never depend on the app being present.
@@ -197,7 +197,7 @@ Otak must not parse prose, and there is no backend to translate. So the contract
 | ADR-014 | Otak's UI is the Segoy design system: tokens generated from `tokens.json`, components re-implemented in Compose with the same names and rules | One visual language across web and app; single source of truth for tokens | The design system gains a second consumer with different needs |
 | ADR-013 | Pause via an open `segoy:paused` issue | Needs no commit to a protected branch and no backend | — |
 | ADR-015 | Only owner actions start tasks; agent hand-offs happen inside one run | Agent-made events do not fire triggers (S3) | Platform changes, or ADR-021 |
-| ADR-016 | Answers are signalled by a label, with an hourly sweep | Comments do not fire triggers (S3) | Comment triggers exist, or the friction is felt |
+| ADR-016 | Answers are signalled by a label, with a periodic sweep | Comments do not fire triggers (S3) | Comment triggers exist, or the friction is felt |
 | ADR-017 | Promotion's leak check is a skill step + CI + Gate 1, not a hook | No hooks in multi-repo sessions (S2) | Hooks run there |
 | ADR-018 | Triage writes no files; the issue is the record until a merged PR | Pushing to `main` depends on the model (S11) | Reliable default-branch pushes |
 | ADR-019 | Agent commits keep the `Claude` identity | Observed default; separates agent and owner commits | Owner wants attribution |
