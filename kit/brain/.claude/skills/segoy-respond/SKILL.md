@@ -10,7 +10,8 @@ description: Use when the owner has answered or given a command on a brain issue
 
 ## Preconditions (exit quietly if not met)
 - No open issue labelled `segoy:paused` in this repo (protocol §5).
-- Event mode on a PR: the PR is open, labelled `segoy:spec` and the `answer_label`, and the owner commented after its newest `run` block. PRs with other labels: exit quietly.
+- Event mode on a PR: the PR is open, labelled `segoy:spec` and the `answer_label`, and the owner commented after the newest agent comment on it (or after the PR was opened, if there is none). PRs with other labels: exit quietly.
+- **Timing rule (all modes):** "after" and "newer" always compare GitHub's own timestamps (`created_at` of comments and PRs). Never use the `started` or `finished` fields written inside `segoy` blocks; they are model-written and can be wrong (M2 T2.5: a PR body's `run` block claimed a later time than the owner's comment, and the run wrongly exited).
 - Event mode on an issue: the issue is open, has the `answer_label` label, and its newest comment that has no `segoy` block (or only an `answer` block) was written by `owner` after the newest comment carrying a `run` block.
 - Sweep mode: at least one open issue labelled `state:needs-input` or `kind:self` meets the reply rule above, **or** an open PR labelled `segoy:spec` has the `answer_label` label and an owner comment newer than its newest `run` block. Otherwise exit without posting.
 - "Exit quietly" means: post nothing, change nothing, end the run.

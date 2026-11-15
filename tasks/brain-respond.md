@@ -4,7 +4,7 @@ Continues an idea after you answer or give a command. Skill: `segoy-respond`.
 
 **A task can have only one GitHub event trigger** (observed in M2 staging), so this is two tasks with the **same prompt**:
 - `brain-respond`: Trigger 1 + Trigger 2 below (issues and the sweep).
-- `brain-respond-pr`: Trigger 3 only (feedback on spec PRs). **Not yet observed to fire** (M2 T2.5: an owner-added `answered` on a spec PR started no run). Until it is confirmed, the sweep in `brain-respond` picks up spec PR feedback, so a revision may wait until the next sweep.
+- `brain-respond-pr`: Trigger 3 only (feedback on spec PRs). It fired in M2 T2.5 when the owner changed a label on a spec PR that carried `answered`. Whether the owner's first `answered` also started a run is not known (only the latest run is visible). The sweep in `brain-respond` also picks up spec PR feedback, as a safety net.
 
 ## Settings
 
