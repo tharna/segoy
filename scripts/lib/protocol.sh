@@ -36,7 +36,7 @@ if type != "object" then "block is not a JSON object"
 else
   need("v"; . == 1; "must be 1"),
   need("kind"; str_ok; "must be a non-empty string"),
-  ( if (.kind | IN("question","answer")) then empty
+  ( if (.kind | IN("question","answer","spec","plan","decision")) then empty
     else opt("idea"; idea_ok; "must look like I-<yyyymmdd>-<n>") end ),
   ( if .kind == "question" then
       need("idea"; idea_ok; "must look like I-<yyyymmdd>-<n>"),
@@ -69,7 +69,37 @@ else
       need("next"; str_ok; "must be a non-empty string"),
       opt("session"; type == "string" and test("^https://"); "must be a URL"),
       opt("checks"; type == "object"; "must be an object")
-    elif (.kind | IN("plan","impl","review")) then empty
+    elif .kind == "spec" then
+      need("idea"; idea_ok; "must look like I-<yyyymmdd>-<n>"),
+      need("title"; str_ok; "must be a non-empty string"),
+      need("target"; str_ok and (test("/") | not); "must be a repo name without owner, or none"),
+      need("criteria"; type == "number" and . >= 1 and . == floor; "must be an integer >= 1"),
+      need("open_questions"; type == "number" and . >= 0 and . == floor; "must be an integer >= 0"),
+      need("private_blocks"; type == "number" and . >= 0 and . == floor; "must be an integer >= 0")
+    elif .kind == "plan" then
+      need("idea"; idea_ok; "must look like I-<yyyymmdd>-<n>"),
+      need("summary"; str_ok; "must be a non-empty string"),
+      need("assumptions"; type == "array"; "must be an array"),
+      ( (.assumptions // []) | if type == "array" then
+          ( to_entries[] | .key as $i | .value |
+            if type != "object" then "assumptions[\($i)] is not an object"
+            else
+              need("text"; str_ok; "must be a non-empty string"),
+              need("confidence"; IN("firm","likely","guess"); "must be firm|likely|guess"),
+              need("source"; str_ok and (test("^(self|ways|decisions|ideas|knowledge|journal)/") | not); "must be owner-stated, brain, spec or a project path (never a brain path)")
+              | "assumptions[\($i)]: " + .
+            end )
+        else empty end ),
+      need("tasks"; type == "array" and length >= 1 and all(.[]; type == "object" and (.id | type == "string") and (.title | type == "string" and length > 0)); "must be a non-empty array of {id, title}"),
+      need("size"; IN("S","M","L"); "must be S|M|L"),
+      need("omitted_private"; type == "number" and . >= 0 and . == floor; "must be an integer >= 0"),
+      need("checks"; type == "object" and .["leak-check"] == "pass"; "must include \"leak-check\": \"pass\"")
+    elif .kind == "decision" then
+      need("idea"; idea_ok; "must look like I-<yyyymmdd>-<n>"),
+      need("gate"; IN("triage","spec","plan","impl","other"); "must be triage|spec|plan|impl|other"),
+      need("outcome"; IN("approved","changed","rejected","parked"); "must be approved|changed|rejected|parked"),
+      need("reason"; str_ok; "must be a non-empty string")
+    elif (.kind | IN("impl","review")) then empty
     else "warning: unknown kind \(.kind) (ignored by readers)"
     end )
 end

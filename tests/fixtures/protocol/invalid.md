@@ -17,4 +17,11 @@
 ```
 
 ```segoy
-{"v": 1, "kind": "question"
+{"v": 1, "kind": "plan", "idea": "I-20260101-1", "summary": "x",
+ "assumptions": [{"text": "a", "confidence": "sure", "source": "self/goals.md"}],
+ "tasks": [], "size": "XL", "omitted_private": -1, "checks": {"leak-check": "fail"}}
+```
+
+```segoy
+{"v": 1, "kind": "decision", "idea": "I-20260101-1", "gate": "merge", "outcome": "maybe", "reason": ""}
+```
