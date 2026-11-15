@@ -108,6 +108,7 @@ Notes:
 - **Issue triggers fire on every issue event**, including the owner opening the `segoy:paused` issue. `triage` must check labels first and exit quietly when there is nothing to do.
 - **Creating tasks is manual**: web UI, desktop app, or `/schedule` in the CLI (S5). An agent can only edit tasks it created itself. Remove the default connectors from every Segoy task (§5 rule 5).
 - **One GitHub event trigger per task** (M2 staging). A task needing two GitHub events is split into two tasks with the same prompt (`brain-respond` and `brain-respond-pr`; `project-implement` will need the same in M3). Schedules can be added alongside the one GitHub trigger.
+- **`Pull request → labeled` did not fire** in M2 T2.5 (owner added `answered` to a spec PR; the task had no runs). Under investigation; the `brain-respond` sweep covers spec PR feedback meanwhile.
 - **Label filters test the item's current labels** ("has `answered`"), not just the label that was added. A skill that is started by a label must remove that label before it changes any other label (M2 staging).
 - **Hourly and per-account caps** apply. Events over a cap are dropped, and the weekly review catches what is stuck.
 - **This whole layer is replaceable** (ADR-021).
