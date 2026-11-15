@@ -117,9 +117,9 @@ Each skill is `kit/brain/.claude/skills/<name>/SKILL.md`. Contracts below; full 
 | `capture` | "idea:"/"note:" in a session | Creates a Roke issue from text so everything flows through one path | Issue |
 | `triage` | New issue; answer label or sweep (via `brain-respond`) | Classify; assign ID; link related (index files and open issues); consult brain before asking; label; comment; `self` proposals as PR | Labels and a comment only. No files* |
 | `spec` | State `triaged` with enough input, or `/spec` | Write `idea.md`, `spec.md` and the index entry; open PR `segoy:spec` with `target:<repo>` | PR |
-| `plan` | Spec merged, or `/plan` | Read target repo's `CLAUDE.md` and structure; write `plan.md` (private draft) | Commit on branch |
-| `promote` | After `plan` | Build project-side `spec.md` + `plan.md` from shareable content; leak check with denylist; open Gate 1 PR in target repo; update idea state | PR in project repo; state update |
-| `record-decision` | Gate outcome observed (PR merged/closed, `/reject`, review comments) | Write decision record; propose generalisation | PR or part of weekly review |
+| `plan` | Spec merged (`brain-plan-promote-<repo>`) | Read target repo's `CLAUDE.md` and structure; draft the plan in a scratch file | Nothing committed; hands over to `promote` |
+| `promote` | After `plan`, same run | Strip private blocks (`strip-private.sh`); mandatory leak check with denylist (`leak-guard.sh`); open Gate 1 PR in target repo; comment the private side on the brain issue; set `state:promoted` | PR in project repo; brain comment and state |
+| `record-decision` | Gate outcome observed (PR merged/closed, `/reject`, review comments) | In M2: a `decision` block in the acting skill's comment. From M5: `weekly-review` writes the decision records and proposes generalisations | Comment now; files via the weekly review PR |
 | `ingest` | New file in `knowledge/raw/` or note capture | Summarise source; update/create wiki pages; update index; log | PR `segoy:knowledge` |
 | `query` | Owner asks in a Roke session | Answer from wiki + ways + ideas with file citations; offer to file the answer as a synthesis page | Optional PR |
 | `lint` | Weekly | Find contradictions, orphans, stale pages, missing frontmatter, ideas stuck in a state, index drift | Report issue; fix-PR for mechanical problems |

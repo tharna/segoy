@@ -66,7 +66,7 @@ The comment ends with a `segoy` block of kind `question` carrying the same quest
 2. `spec` writes `idea.md` (from the issue, ADR-018), `spec.md` and the `ideas/index.md` entry, using the answers, ways and related knowledge. Marks private parts. Acceptance criteria must be testable statements. Sets the `target:<repo>` label on the PR; promotion depends on it.
 3. Opens a PR in Roke: label `segoy:spec`, title `Spec: <title> (<id>)`; the branch name is best effort (ADR-020). Body = summary + assumptions + open questions.
 4. Owner reviews on the phone. To request a revision: comment on the PR **and add the label `answered`**, which `brain-respond` also listens to on PRs. Whether the run that opened the PR can instead pick up review comments through auto-fix in a scheduled task is unverified; check it in T2.5. Merge → state `specced`.
-5. `record-decision` notes approval/changes with reasons when there are review comments.
+5. Decisions with reasons (changes requested, `/reject`, `/park`) are recorded as a `decision` block in the agent's comment on the issue or PR (protocol §3.7). The weekly review files them into `decisions/` (M2-D2).
 
 Small ideas: if triage judges the idea is a small change to an existing project (config value: under ~1 day of agent work and no open questions), spec and plan are produced together in one Roke PR, then promoted. Two artefacts, one review.
 
@@ -76,12 +76,12 @@ Small ideas: if triage judges the idea is a small change to an existing project 
 2. `plan`:
    1. Precondition: the target repo and its promotion task exist. A new project has to be set up **before** its spec is merged: the spec PR body says so and links Flow G. If the task is missing, nothing fires, and the weekly review lists the idea as stuck in `specced`.
    2. Read target repo `CLAUDE.md`, structure, existing specs.
-   3. Write `plan.md`: approach, components touched, task groups (each with files, steps, acceptance checks, commands to run), test plan, risks, rollout, size estimate, *assumptions at the top*.
+   3. Write the plan into a scratch file (not committed in the brain, M2-D1): approach, components touched, task groups (each with files, steps, acceptance checks, commands to run), test plan, risks, rollout, size estimate, *assumptions at the top*.
 3. `promote`:
    1. Build project-side `docs/specs/<id>-<slug>/spec.md` and `plan.md`: drop `<!-- private -->` blocks, rewrite references to Roke files as plain statements, remove personal context.
    2. **Mandatory:** run `leak-guard.sh` with the Roke denylist plus the generic patterns over every file to be committed. This is a skill step, not a hook, because hooks do not run in two-repo sessions (ADR-017). Any hit: stop, state `needs-input`, comment in Roke (not in the project repo). The run record states that the check ran and passed.
    3. Open the PR in the project repo: label `segoy:plan`, title `Plan: <title> (<id>)`; the branch name is best effort. The project's CI runs the generic leak check as a required check. Body: what and why in five lines, task list, assumptions, "omitted N private items", how to approve (merge) or request changes (comment).
-   4. Update Roke: state `promoted`, link to PR.
+   4. Update Roke: state `promoted`; one comment on the idea's issue with the PR link and the **private side** of the plan (the omitted private items, summarised). The issue is the record (M2-D1).
 4. **Gate 1**: owner merges (approve), comments and adds `answered` (revise), or closes (reject). A merge fires `project-implement`. A revision request on a project PR is handled by the project-side `implement` task, which also listens for `answered` on `segoy:plan` PRs. A close fires nothing; the next brain run or the weekly review sees it, asks for the reason in Roke, and records a decision.
 
 ## 5. Flow D — Implementation (Gate 2)

@@ -58,7 +58,7 @@ Carried into M2:
 ## M2 — Spec, plan, promotion (Gate 1)
 
 Tasks
-- T2.1 Skills `spec`, `plan`, `promote`, `record-decision`.
+- T2.1 Skills `spec`, `plan`, `promote` (`segoy-spec`, `segoy-plan`, `segoy-promote`). `record-decision` is a `decision` block in comments for now; the weekly review files decisions (M2-D2).
 - T2.2 `kit/common` leak check: `leak-guard.sh` and `strip-private.sh`, generic patterns, the generic check in Segoy's own CI (hook wiring and the project CI template move to `kit/project`, M3); Roke denylist support as a mandatory step in `promote` (ADR-017).
 - T2.3 Tasks `brain-respond` (answer label on issues and PRs, plus a periodic sweep; ADR-016) and `brain-plan-promote-<repo>` (one per project, filtered on `segoy:spec` + `target:<repo>`).
 - T2.4 Fixture test: a fake brain and fake project under `tests/fixtures/` with a spec containing private blocks and denylisted terms; assert the promoted output contains none.

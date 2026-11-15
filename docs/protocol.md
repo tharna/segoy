@@ -122,11 +122,53 @@ A skill that exits quietly in its preconditions (already handled, paused, not it
 
 **Every comment an agent posts carries a `run` block** (often in the same comment as a `question` block), and owner comments never do. Comments made through the session's GitHub tools appear under the owner's account (spike S11), so this is how skills and the app tell agent comments from the owner's: an owner reply is any comment without a `run` block that is newer than the newest comment with one. An `answer` block from the app does not make a comment an agent comment. A second signal, for labels and other issue events: actions made through Claude's GitHub tools appear in the issue's event list with `performed_via_github_app.slug` = `claude`; the owner's own actions have no app.
 
-### 3.5 Outlines for later milestones
+### 3.5 `spec` (M2)
+
+At the end of a spec PR body in the brain (`segoy:spec`).
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `idea` | string | yes | |
+| `title` | string | yes | Short English title |
+| `target` | string | yes | Target repo name (no owner), or `none` for "not code" |
+| `criteria` | integer ≥ 1 | yes | Number of acceptance criteria |
+| `open_questions` | integer ≥ 0 | yes | Questions the spec leaves open |
+| `private_blocks` | integer ≥ 0 | yes | `<!-- private -->` blocks in the spec, which promotion will drop |
+
+### 3.6 `plan` (M2)
+
+At the end of a Gate 1 PR body in the project repo (`segoy:plan`). **This block is in the project repo, which may be public:** it carries nothing private, and assumption sources that point into the brain read `brain` rather than a path.
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `idea` | string | yes | |
+| `summary` | string | yes | One or two sentences |
+| `assumptions` | array | yes | May be empty |
+| `assumptions[].text` | string | yes | |
+| `assumptions[].confidence` | string | yes | `firm`, `likely` or `guess` |
+| `assumptions[].source` | string | yes | `owner-stated`, `brain`, `spec` or a path in this project repo |
+| `tasks` | array, ≥ 1 | yes | Task groups |
+| `tasks[].id` | string | yes | `T1`, `T2`, … |
+| `tasks[].title` | string | yes | |
+| `size` | string | yes | `S` (under a day of agent work), `M` (a few days), `L` (more; consider splitting) |
+| `omitted_private` | integer ≥ 0 | yes | Private items left out by promotion |
+| `checks` | object | yes | Must include `"leak-check": "pass"` (ADR-017) |
+
+### 3.7 `decision` (M2)
+
+A short note on the brain issue when the owner approves with changes, rejects, parks or explains a choice at a gate (M2-D2). The weekly review (M5) files these into `decisions/`. It usually rides in the same comment as a `run` block.
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `idea` | string | yes | |
+| `gate` | string | yes | `triage`, `spec`, `plan`, `impl`, `other` |
+| `outcome` | string | yes | `approved`, `changed`, `rejected`, `parked` |
+| `reason` | string | yes | In the owner's words, quoted; `none given` if there was none |
+
+### 3.8 Outlines for later milestones
 
 These kinds are reserved. Their fields are fixed in the milestone that first emits them, and the validator only checks the common fields until then.
 
-- `plan` (M2, Gate 1 PR body): `idea`, `summary`, `assumptions` (each with `text`, `confidence`: `firm`/`likely`/`guess`, `source`), `tasks`, `size`, `omitted_private` (count).
 - `impl` (M3, Gate 2 PR body): `idea`, `criteria` (each with `id`, `text`, `evidence`, `result`: `pass`/`fail`), `deviations`.
 - `review` (M5, weekly review PR body): `week`, `proposals` (each with `id`, `text`, `target`), `stats`.
 

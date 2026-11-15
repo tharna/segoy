@@ -12,6 +12,7 @@ Continues an idea after you answer or give a command. Skill: `segoy-respond`.
 | Model | Sonnet |
 | Trigger 1 | GitHub event → `<owner>/<brain>` → Event: **Issues → labeled**, **Filter + → Label → `answered`** (required: without it every label a skill sets starts a run, ADR-015 amendment) |
 | Trigger 2 | Schedule: **every 4 hours** (the sweep). Hourly is the platform minimum; use it if you often reply without the label |
+| Trigger 3 | GitHub event → `<owner>/<brain>` → **Pull request → labeled**, **Filter + → Label → `answered`** (spec PR feedback, M2) |
 | Connectors | **remove all** |
 
 ## Prompt
@@ -26,4 +27,4 @@ Follow .claude/skills/segoy-respond/SKILL.md exactly, including its precondition
 - The label is what starts the task; a comment alone starts nothing (ADR-016). Otak adds the label for you. From GitHub mobile, add `answered` after replying.
 - Labels set by skills (`state:*`, `kind:*`, `target:*`) also fire `issues.labeled` (observed in M1 staging). The filter keeps them from starting runs; if it is missing, each one costs a short run that exits quietly.
 - The sweep exits without posting when there is nothing to do. Each sweep is still one short run on your plan, which is why the default is every 4 hours rather than hourly.
-- In M1 the skill handles answers, `defaults`, `/park`, `/unpark`, `/reject` and confirmations of `me:` captures. `/spec` and `/plan` are acknowledged; the spec step arrives in M2.
+- The skill handles answers, `defaults`, `/park`, `/unpark`, `/reject`, confirmations of `me:` captures, `/spec` (runs `segoy-spec`, which opens the spec PR) and comments on spec PRs (revised by `segoy-spec`). From M2 it writes files through `segoy-spec`, so the model matters more: keep Sonnet or use Opus.
