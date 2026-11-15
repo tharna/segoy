@@ -18,9 +18,11 @@ Continues an idea after you answer or give a command. Skill: `segoy-respond`.
 ## Prompt
 
 ```
-Run the segoy-respond skill. If the GitHub trigger context names an issue, handle
-that issue (event mode); otherwise run the sweep (sweep mode).
+Run the segoy-respond skill. If the GitHub trigger context names an issue or a PR,
+handle it (event mode); otherwise run the sweep (sweep mode).
 Follow .claude/skills/segoy-respond/SKILL.md exactly, including its preconditions.
+When segoy-spec revises an open segoy:spec PR, you may push the revision to that PR's
+own head branch in this repository. Never push to the default branch.
 ```
 
 ## Notes
