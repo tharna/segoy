@@ -38,3 +38,10 @@ Triage comment with questions.
 {"v": 1, "kind": "decision", "idea": "I-20260101-1", "gate": "spec", "outcome": "changed",
  "reason": "\"keep it offline only\""}
 ```
+
+```segoy
+{"v": 1, "kind": "impl", "idea": "I-20260101-1",
+ "criteria": [{"id": "1", "text": "search finds matching notes", "evidence": "tests/test.sh: search case passed", "result": "pass"},
+              {"id": "2", "text": "case-insensitive", "evidence": "notes.sh:42 uses grep -i", "result": "unclear"}],
+ "deviations": [], "tests": {"command": "tests/test.sh", "result": "pass"}}
+```

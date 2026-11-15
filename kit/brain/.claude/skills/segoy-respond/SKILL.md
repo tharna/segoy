@@ -24,6 +24,7 @@ description: Use when the owner has answered or given a command on a brain issue
 4. **Apply a command** if there is one (it wins over answers):
    - `/park` → set `state:parked`. `/unpark` → `state:triaged`.
    - `/reject <reason>` → set `state:rejected`; close the issue with reason "not planned"; quote the reason in the comment.
+   - **Gate 2 closed** (`segoy-gate-sync` asked `q1` with options `retry`, `park`, `reject`): `retry` → `state:building`, and tell the owner to press **Run now** on `project-implement` in the target repo; `park` and `reject` → as the commands below. Add a `decision` block with `gate` `impl`.
    - **Gate 1 closed** (`segoy-gate-sync` asked `q1` with options `replan`, `park`, `reject`): `replan` → `state:specced`, and tell the owner to press **Run now** on `brain-plan-promote-<target>` (agents cannot start tasks); `park` and `reject` → as the commands below. Add a `decision` block with `gate` `plan` (`outcome` `changed` for replan) and the owner's reason.
    - `/spec` or `/plan` → take defaults for any open questions, set `state:triaged`, then run `segoy-spec` in **create** mode on this issue. Post your own comment (step 7) only if `segoy-spec` stopped before opening a PR.
    - For `/park` and `/reject`, add a `decision` block to the comment (protocol §3.7: `gate` `triage`, `outcome` `parked` or `rejected`, `reason` quoted, or `none given`).

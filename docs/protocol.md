@@ -165,11 +165,25 @@ A short note on the brain issue when the owner approves with changes, rejects, p
 | `outcome` | string | yes | `approved`, `changed`, `rejected`, `parked` |
 | `reason` | string | yes | In the owner's words, quoted; `none given` if there was none |
 
-### 3.8 Outlines for later milestones
+### 3.8 `impl` (M3)
+
+At the end of a Gate 2 PR body in the project repo (`segoy:impl`). Like `plan`, it is in the project repo: nothing private.
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `idea` | string | yes | |
+| `criteria` | array, ≥ 1 | yes | One entry per acceptance criterion in the spec |
+| `criteria[].id` | string | yes | The criterion's number in the spec, as a string (`"1"`) |
+| `criteria[].text` | string | yes | Short form of the criterion |
+| `criteria[].evidence` | string | yes | Test name and result, command output, or `path:line` |
+| `criteria[].result` | string | yes | `pass`, `fail` or `unclear` (verifier's verdict) |
+| `deviations` | array of strings | yes | Differences from the plan; empty when none |
+| `tests` | object | no | `{"command": "…", "result": "pass"/"fail"}` for the repo's test command |
+
+### 3.9 Outlines for later milestones
 
 These kinds are reserved. Their fields are fixed in the milestone that first emits them, and the validator only checks the common fields until then.
 
-- `impl` (M3, Gate 2 PR body): `idea`, `criteria` (each with `id`, `text`, `evidence`, `result`: `pass`/`fail`), `deviations`.
 - `review` (M5, weekly review PR body): `week`, `proposals` (each with `id`, `text`, `target`), `stats`.
 
 ## 4. Owner actions

@@ -86,16 +86,16 @@ Small ideas: if triage judges the idea is a small change to an existing project 
 
 ## 5. Flow D — Implementation (Gate 2)
 
-1. Trigger: PR with label `segoy:plan` merged in the project repo (`project-implement`). Session mounts the project repo only.
+1. Trigger: PR with label `segoy:plan` merged in the project repo (`project-implement`; **Run now** catches up a merge made before the task existed). Session mounts the project repo only. Skill: `segoy-implement`.
 2. `implement`:
    1. Read `docs/specs/<id>/spec.md` and `plan.md`, repo `CLAUDE.md`.
    2. Branch `claude/impl-<id>-<slug>` if the run may create it, otherwise the assigned branch (ADR-020).
    3. For each task group: delegate to `implementer` subagent or do inline; run the group's checks; commit with message `<id>: <task>`.
-   4. If the plan is wrong or blocked: stop, open a draft PR with what exists, explain, propose a plan amendment as a change to `plan.md` in the same PR. Do not improvise beyond the plan's scope.
+   4. If the plan is wrong or blocked: stop, open a draft PR with what exists, explain, and propose the plan change in the PR body (the spec folder is not edited). Do not improvise beyond the plan's scope.
    5. `verifier` subagent (fresh context): for each acceptance criterion, find evidence (test name, command output, file/line). Missing evidence → back to step 3 or flag in PR.
-   6. Open PR: label `segoy:impl`; body = summary, criterion-by-criterion evidence table, deviations from plan, how to test manually, follow-ups. Enable auto-fix.
-3. **Gate 2**: owner reviews and merges. To ask for changes: comment and add the label `answered`, which fires `project-implement` on that PR. CI failures and review comments may also be handled by auto-fix, if it works for PRs opened by scheduled tasks (check in T3.4). Substantial changes loop inside the PR.
-4. Plans marked `multi-pr` produce one PR per task group, each following the same steps. The next starts when the owner merges the previous one: `project-implement` also fires on merged `segoy:impl` PRs, continues if the plan has unfinished groups, and otherwise exits.
+   6. Run the repo's tests and lint (from `CLAUDE.md`), then open the PR: label `segoy:impl`, title `Impl: <title> (<id>)`; body = summary, criterion-by-criterion evidence table, deviations, how to try it, follow-ups, `impl` + `run` blocks (protocol §3.8). Draft if any check or criterion fails.
+3. **Gate 2**: owner reviews and merges. To ask for changes, including a CI failure: comment and add the label `answered`, which fires `project-implement-pr` (revise mode, pushes to the same PR). Merging fires `project-retro` and `brain-gate-sync-<repo>` (brain issue → `done`, closed). Closing without merging asks in the brain: retry, park or reject.
+4. Plans marked `multi-pr` are not supported yet (M3-D1): `segoy-implement` stops and says so; `segoy-plan` proposes splitting large ideas instead.
 
 ## 6. Flow E — Retro and learning
 

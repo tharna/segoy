@@ -36,7 +36,7 @@ if type != "object" then "block is not a JSON object"
 else
   need("v"; . == 1; "must be 1"),
   need("kind"; str_ok; "must be a non-empty string"),
-  ( if (.kind | IN("question","answer","spec","plan","decision")) then empty
+  ( if (.kind | IN("question","answer","spec","plan","decision","impl")) then empty
     else opt("idea"; idea_ok; "must look like I-<yyyymmdd>-<n>") end ),
   ( if .kind == "question" then
       need("idea"; idea_ok; "must look like I-<yyyymmdd>-<n>"),
@@ -99,7 +99,23 @@ else
       need("gate"; IN("triage","spec","plan","impl","other"); "must be triage|spec|plan|impl|other"),
       need("outcome"; IN("approved","changed","rejected","parked"); "must be approved|changed|rejected|parked"),
       need("reason"; str_ok; "must be a non-empty string")
-    elif (.kind | IN("impl","review")) then empty
+    elif .kind == "impl" then
+      need("idea"; idea_ok; "must look like I-<yyyymmdd>-<n>"),
+      need("criteria"; type == "array" and length >= 1; "must be a non-empty array"),
+      ( (.criteria // []) | if type == "array" then
+          ( to_entries[] | .key as $i | .value |
+            if type != "object" then "criteria[\($i)] is not an object"
+            else
+              need("id"; type == "string" and test("^[0-9]+$"); "must be the criterion number as a string"),
+              need("text"; str_ok; "must be a non-empty string"),
+              need("evidence"; str_ok; "must be a non-empty string"),
+              need("result"; IN("pass","fail","unclear"); "must be pass|fail|unclear")
+              | "criteria[\($i)]: " + .
+            end )
+        else empty end ),
+      need("deviations"; type == "array" and all(.[]; type == "string"); "must be an array of strings"),
+      opt("tests"; type == "object" and (.result | IN("pass","fail")); "must be {command, result: pass|fail}")
+    elif (.kind | IN("review")) then empty
     else "warning: unknown kind \(.kind) (ignored by readers)"
     end )
 end

@@ -25,3 +25,9 @@
 ```segoy
 {"v": 1, "kind": "decision", "idea": "I-20260101-1", "gate": "merge", "outcome": "maybe", "reason": ""}
 ```
+
+```segoy
+{"v": 1, "kind": "impl", "idea": "I-20260101-1",
+ "criteria": [{"id": "one", "text": "x", "evidence": "", "result": "maybe"}],
+ "deviations": "none", "tests": {"command": "t", "result": "ok"}}
+```

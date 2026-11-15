@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "segoy": "0.1.0-dev+add62e9",
+  "segoy": "0.1.0-dev+9f2c4b3",
   "kit": "project",
   "files": {
     ".claude/scripts/leak-guard.sh": "637e48108fd421ae5cd91d056114d53d2e9fa891",
@@ -12,6 +12,12 @@
     ".segoy/config.yml": "84fd45f18e8c492b50a17c9e1c112c49f11587d7",
     ".segoy/labels.json": "f1b6c705e90fd7cb71b887367034eeae50224a8e",
     "docs/retros/.gitkeep": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
-    "docs/specs/.gitkeep": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    "docs/specs/.gitkeep": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+    ".claude/agents/implementer.md": "78990c825aa9ac01ab38700146ad696e73550104",
+    ".claude/agents/verifier.md": "3dbc1c601c33f9a3a1af2a37be192b8647923cfc",
+    ".claude/skills/segoy-implement/SKILL.md": "888fe05c101426bc246ac7c1b9838e4f52751103",
+    ".claude/skills/segoy-implement/pr-body.md": "93e5e1781c8e325bcbca9647cb330225597e411c",
+    ".claude/skills/segoy-retro/SKILL.md": "ff62eee2a7931fb33f6507f70962434846f622e1",
+    ".claude/skills/segoy-retro/template.md": "a3567b52a87a2cae05fcdfa92867cf3ecc0960db"
   }
 }
