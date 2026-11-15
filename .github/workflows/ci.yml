@@ -24,6 +24,9 @@ jobs:
             echo "no shell files yet"
           fi
 
+      - name: Leak check (generic patterns; Segoy documents the private marker format)
+        run: git ls-files | grep -v '^tests/fixtures/promote/' | xargs kit/common/.claude/scripts/leak-guard.sh --skip "private block marker"
+
       - name: Skill frontmatter and sections
         run: scripts/lib/lint-skills.sh
 
