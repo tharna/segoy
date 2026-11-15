@@ -1,0 +1,4 @@
+# Private terms that must never appear in a project repo.
+# One term or extended regular expression per line; case-insensitive.
+# Used by the promote skill's leak check (ADR-017). Lines starting with # are comments.
+# Examples (replace): a family member's name, your street, a private client's name.

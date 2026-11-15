@@ -49,8 +49,8 @@ segoy/
 │       ├── .claude/skills/{capture,triage,spec,plan,promote,
 │       │                    ingest,query,lint,weekly-review,record-decision}/SKILL.md
 │       ├── .claude/settings.json
-│       ├── .segoy/config.yml.tmpl
-│       ├── .github/ISSUE_TEMPLATE/  labels.yml
+│       ├── .segoy/config.yml.tmpl  labels.json  denylist.txt
+│       ├── .github/ISSUE_TEMPLATE/capture.md
 │       └── <folder skeleton with index.md files>
 ├── tasks/                       # trigger definitions: prompt + setup notes
 │   ├── brain-triage.md  brain-spec.md  brain-plan-promote.md

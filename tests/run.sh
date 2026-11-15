@@ -56,5 +56,7 @@ check "protocol: each bad idea reported once" sh -c "[ \$(grep -c 'bad field ide
 check "protocol: four-backtick examples are skipped" sh -c "$proto $pf/valid.md | grep -q '^4 block'"
 rm -f "$proto_out"
 
+check "brain template: structure, frontmatter, labels, config" tests/check-brain-template.sh
+
 printf '\n%d passed, %d failed\n' "$passed" "$failed"
 [ "$failed" -eq 0 ]
