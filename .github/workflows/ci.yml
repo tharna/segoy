@@ -19,7 +19,7 @@ jobs:
           files=$(git ls-files 'scripts/segoy' 'scripts/lib/*.sh' 'kit/**/*.sh' 'tests/*.sh')
           if [ -n "$files" ]; then
             # shellcheck is preinstalled on ubuntu-latest runners
-            echo "$files" | xargs shellcheck
+            echo "$files" | xargs shellcheck -x
           else
             echo "no shell files yet"
           fi

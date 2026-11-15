@@ -65,7 +65,7 @@ Done when: one idea has gone capture → done with exactly the two gates.
 Tasks
 - T4.1 `scripts/segoy sync` with manifest and local-modification handling; tests on fixtures.
 - T4.2 Versioning: `CHANGELOG.md`, tags, `migrations/`.
-- T4.3 Public-readiness pass on Segoy: README with quick start for a stranger, scrub history check, generic examples, contribution notes. Set up branch rulesets on `main` in Segoy (require PR, 0 approvals, block force-push and deletion, no bypass) and in the brain (same, with a bypass for whichever actor S11 shows triage pushes as, if direct commits are kept). Flip to public if not already.
+- T4.3 Public-readiness pass on Segoy: README with quick start for a stranger, scrub history check, generic examples, contribution notes. Set up branch rulesets on `main` in Segoy (require PR, 0 approvals, block force-push and deletion, no bypass; free once Segoy is public) and in the brain (same; no bypass needed since ADR-018). Rulesets on a **private** repo need GitHub Pro (observed 2026-11-15: the rules API answers 403 "Upgrade to GitHub Pro"), so decide then whether the brain gets Pro or relies on the skills' rules. Flip to public if not already.
 - T4.4 From here on, every Segoy change is an idea in Roke.
 
 Done when: a Segoy improvement is delivered through the pipeline and synced into Roke and the scratch project by PRs.
