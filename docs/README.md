@@ -26,7 +26,7 @@ Start here. These documents describe Segoy (this repo), the brain template (the 
 8. Retros and your gate decisions flow back to Roke in a weekly review PR that proposes changes to your ways of working.
 9. Segoy itself is files: skills, agents, hooks, templates, task prompts, a shell script. They are vendored into each repo.
 10. Segoy is project number one and is developed through its own pipeline from milestone M4.
-11. Otak (native Kotlin, no backend) is the phone front end for capture, questions, gate decisions, and status. It reads labels and small YAML blocks that skills add to their comments and PRs, and it polls GitHub instead of receiving push. It uses the Segoy design system already in the repo (terminal-style, touch-sized), with tokens generated for Android. It is the first project built through the pipeline.
+11. Otak (native Kotlin, no backend) is the phone front end for capture, questions, gate decisions, and status. It reads labels and small JSON blocks that skills add to their comments and PRs, and it polls GitHub instead of receiving push. It uses the Segoy design system already in the repo (terminal-style, touch-sized), with tokens generated for Android. It is the first project built through the pipeline.
 
 ## Decisions
 
