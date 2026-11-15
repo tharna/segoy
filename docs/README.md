@@ -38,12 +38,12 @@ Resolved 2026-11-14. Values that differ per user live in the brain's `.segoy/con
 | 2 | Licence for Segoy | MIT (already in the repo) |
 | 3 | Segoy public from day one, or private until M4? | Private until the M4 public-readiness pass |
 | 4 | Language for notes agents write in Roke | Configurable: captures kept verbatim in `capture_language`, agent notes written in `notes_language` with the original kept alongside (`keep_original`). See `brain-design.md` §7 |
-| 5 | May triage commit new idea files straight to Roke `main`, or must everything be a PR? | Direct commit for new idea files and the log only; PRs for everything else. Whether a scheduled task can push to `main` at all is spike S11 |
+| 5 | May triage commit new idea files straight to Roke `main`, or must everything be a PR? | Everything is a PR; triage writes no files (ADR-018, after spike S11) |
 | 6 | Script language | POSIX shell + `gh` + `jq`; revisit if it gets complicated |
 | 7 | Do you want Obsidian (or similar) as a reader for Roke on phone/desktop? | Optional; design does not depend on it |
 | 8 | Personal context connectors (calendar, email) | Deferred to M6, read-only, after a privacy review |
 | 9 | Should Roke be created from a GitHub template repo, or by running `segoy init brain` in an empty repo? | `segoy init brain` |
-| 10 | Is using your own GitHub identity for agent commits acceptable, or do you want a separate bot account later? | Own identity. Branch protection (rulesets) deferred to the M4 public-readiness pass (T4.3) |
+| 10 | Is using your own GitHub identity for agent commits acceptable, or do you want a separate bot account later? | Issues, comments and PRs appear as the owner; commits keep the `Claude` author (ADR-019). Rulesets deferred to T4.3 |
 
 Otak-specific: decided — merging from the phone is allowed on all repos behind biometric confirmation; photo capture is deferred; the app follows the Segoy design system. Also decided: minimum Android 10, English UI, distribution as an APK from GitHub Releases.
 
@@ -59,5 +59,5 @@ Otak-specific: decided — merging from the phone is allowed on all repos behind
 
 ## Caveats
 
-- Scheduled tasks are a research preview and Projects are a beta; the architecture keeps triggers thin so they can be swapped. Eleven short spikes (architecture §9) verify the assumptions before anything is built on them.
-- The trigger behaviour for issue comments and multi-repo skill loading is unverified; fallbacks are documented.
+- Scheduled tasks are a research preview and Projects are a beta; the architecture keeps triggers thin so they can be swapped (ADR-021).
+- The M0 spikes verified the platform assumptions (`adr/spikes-2026-11.md`). The design changes they caused are ADR-015 to ADR-021: owner actions drive every step, answers need a label, promotion's leak check is not a hook, triage writes no files, and artefacts are found by label and ID.

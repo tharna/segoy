@@ -114,8 +114,8 @@ Each skill is `kit/brain/.claude/skills/<name>/SKILL.md`. Contracts below; full 
 | Skill | Trigger | Does | Writes |
 |---|---|---|---|
 | `capture` | "idea:"/"note:" in a session | Creates a Roke issue from text so everything flows through one path | Issue |
-| `triage` | New issue; new comment/label | Classify; create/update `idea.md` or route note to `knowledge/raw/` or `self` proposal; link related; consult brain before asking; label; comment | Files via direct commit to `main` for new idea files only*; labels; comment |
-| `spec` | State `triaged` with enough input, or `/spec` | Write `spec.md`; open PR `segoy:spec` | PR |
+| `triage` | New issue; answer label or sweep (via `brain-respond`) | Classify; assign ID; link related (index files and open issues); consult brain before asking; label; comment; `self` proposals as PR | Labels and a comment only. No files* |
+| `spec` | State `triaged` with enough input, or `/spec` | Write `idea.md`, `spec.md` and the index entry; open PR `segoy:spec` with `target:<repo>` | PR |
 | `plan` | Spec merged, or `/plan` | Read target repo's `CLAUDE.md` and structure; write `plan.md` (private draft) | Commit on branch |
 | `promote` | After `plan` | Build project-side `spec.md` + `plan.md` from shareable content; leak check with denylist; open Gate 1 PR in target repo; update idea state | PR in project repo; state update |
 | `record-decision` | Gate outcome observed (PR merged/closed, `/reject`, review comments) | Write decision record; propose generalisation | PR or part of weekly review |
@@ -124,7 +124,7 @@ Each skill is `kit/brain/.claude/skills/<name>/SKILL.md`. Contracts below; full 
 | `lint` | Weekly | Find contradictions, orphans, stale pages, missing frontmatter, ideas stuck in a state, index drift | Report issue; fix-PR for mechanical problems |
 | `weekly-review` | Weekly | Read merged PRs, retros, decision records, idea states; update `projects/` and `ideas/index.md`; propose `ways/` changes; write `journal/<week>.md` digest | One PR `segoy:review` |
 
-\* Policy on direct commits: creating a new idea file and appending to `log.md` may be committed straight to `main` by triage, so capture is never blocked on a merge. Everything that changes existing durable content (`ways/`, `self/`, `knowledge/wiki/`, specs) goes through a PR. This needs branch protection configured to allow it, or triage also uses small auto-created PRs that the owner batch-merges; decide after spike S4 (see open questions).
+\* No direct commits (ADR-018). Whether a scheduled run pushes to `main` depends on the model (spike S11), so every file change in the brain is a PR the owner merges. Capture is still never blocked: the issue is the idea's record until the spec PR creates `idea.md`. Notes, parked or rejected idea stubs and `log.md` entries are filed in one batch by the weekly review PR.
 
 ## 5. "Consult the brain before asking" (the twin in practice)
 
@@ -165,7 +165,8 @@ models:
   plan: <strong-model>
   lint: <small-model>
 question_limit_per_round: 3
-direct_commit_paths: ["ideas/*/idea.md", "log.md", "inbox/**"]
+answer_label: answered        # owner adds it with an answer or command (ADR-016)
+sweep_interval: hourly        # brain-respond fallback for answers without the label
 ```
 
 ## 8. Human use

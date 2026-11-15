@@ -1,6 +1,6 @@
 # Segoy — Architecture
 
-Version 0.1, 2026-11-14. Read `docs/prd.md` first.
+Version 0.2, 2026-11-15 (updated with the M0 spike results). Read `docs/prd.md` first.
 
 ## 1. Principles
 
@@ -89,23 +89,27 @@ segoy/
 
 ## 4. Trigger map
 
-Each row is one scheduled task (file in `tasks/`). "Repos" is what the task mounts.
+Each row is one scheduled task (file in `tasks/`). "Repos" is what the task mounts. "Started by" is the owner action that fires it. Only owner actions start tasks; events caused through Claude's GitHub tools never do (ADR-015, spike S3).
 
-| Task | Trigger | Repos | Skill | Output |
-|---|---|---|---|---|
-| brain-triage | Issue opened in Roke | roke | `triage` | Idea/note file, labels, triage comment |
-| brain-respond | Issue comment / label change in Roke* | roke | `triage` → `spec` or `plan` depending on state and commands | Updated files, PR in Roke |
-| brain-plan-promote | Roke PR merged with label `segoy:spec` | roke + target project repo | `plan` then `promote` | Promotion PR in project repo (Gate 1) |
-| project-implement | Project PR merged with label `segoy:plan` | project | `implement` | Implementation PR (Gate 2) |
-| project-retro | Project PR merged with label `segoy:impl` | project | `retro` | Retro file via small PR; comment on spec |
-| brain-weekly-review | Weekly schedule | roke (reads project repos through GitHub tools) | `weekly-review` | One review PR in Roke |
-| brain-lint | Weekly schedule | roke | `lint` | Lint report issue or PR |
+| Task | Trigger | Started by | Repos | Skill | Output |
+|---|---|---|---|---|---|
+| brain-triage | `issues.opened` in Roke | Owner captures (Otak or GitHub) | roke | `triage` | Labels, idea ID, triage comment. No files (ADR-018) |
+| brain-respond | `issues.labeled` and `pull_request.labeled` in Roke (acts only on the answer label) **and** an hourly schedule (sweep) | Owner answers, comments a command or asks for spec changes, then adds the answer label; or the sweep finds an unlabelled answer | roke | `triage` → `spec` or `plan`, depending on state and commands | Updated issue, spec PR in Roke (ADR-016) |
+| brain-plan-promote-`<repo>` | `pull_request.closed` in Roke, filters: Is merged, label `segoy:spec`, label `target:<repo>` | Owner merges a spec PR | roke + `<repo>` | `plan` then `promote` | Promotion PR in the project repo (Gate 1) |
+| project-implement | `pull_request.closed`, filters: Is merged, label `segoy:plan` or `segoy:impl`; `pull_request.labeled`, filter label `answered` | Owner merges Gate 1 (or a `multi-pr` group); owner asks for changes on a Gate 1 or Gate 2 PR | project | `implement` | Implementation PR (Gate 2); revisions; the next group of a `multi-pr` plan |
+| project-retro | `pull_request.closed`, filters: Is merged, label `segoy:impl` | Owner merges Gate 2 | project | `retro` | Retro PR; state noted for the brain to pick up |
+| brain-weekly-review | Weekly schedule | — | roke (reads project repos through GitHub tools) | `weekly-review` | One review PR in Roke, which also files notes, stubs and log entries (ADR-018) |
+| brain-lint | Weekly schedule | — | roke | `lint` | Lint report issue or PR |
 
-\* The docs list Issue events (opened, edited, labeled, …) as supported triggers; whether issue *comments* fire a trigger is unverified (spike S3). Fallbacks, in order: (a) drive state changes by labels instead of comments; (b) a minimal GitHub Actions workflow in Roke that calls the task's API trigger on `issue_comment`; (c) `claude-code-action` responding to `@claude`.
-
-PR triggers support filters (labels, base/head branch, is-merged), so label-gated tasks are cheap. Issue triggers may not have filters; the `triage` skill therefore starts by reading the issue's labels and exits early if there is nothing to do.
-
-One task is needed per project repo for `project-implement` and `project-retro` (a GitHub trigger names a repository). `segoy init project` prints the exact task settings to create; creating them is a manual step in the web UI or via `/schedule` (spike S5 checks how much can be scripted).
+Notes:
+- **Comments start nothing** (S3), so answers and commands need the answer label or wait for the hourly sweep (ADR-016).
+- **One promotion task per project repo**, because a task's repos are fixed when it is created. `segoy init project` prints its settings.
+- **Every run gets a fresh session with a random `claude/*` branch per repo.** Skills find PRs by label and idea ID, not branch name (ADR-020).
+- **The trigger context** is the stored prompt plus a `<github-trigger-context>` block with the event, repository and issue or PR number only. Skills fetch labels, comments and bodies themselves.
+- **Issue triggers fire on every issue event**, including the owner opening the `segoy:paused` issue. `triage` must check labels first and exit quietly when there is nothing to do.
+- **Creating tasks is manual**: web UI, desktop app, or `/schedule` in the CLI (S5). An agent can only edit tasks it created itself. Remove the default connectors from every Segoy task (§5 rule 5).
+- **Hourly and per-account caps** apply. Events over a cap are dropped, and the weekly review catches what is stuck.
+- **This whole layer is replaceable** (ADR-021).
 
 ## 5. Data flow and the privacy boundary
 
@@ -127,14 +131,16 @@ Rules:
 1. **Visibility frontmatter.** Every Roke file has `visibility: private | shareable`. Default is `private`. `ways/public/` is shareable by convention; everything in `self/` is always private and cannot be marked otherwise.
 2. **Promotion is the only writer from Roke context into a project repo.** The `promote` skill builds the project-side spec and plan from shareable content, rewrites or drops anything else, runs the leak check, and opens the PR. It lists in the PR body what it left out ("2 private assumptions omitted") without revealing them.
 3. **Implementation sessions mount only the project repo.** They get ways of working from the project's own `CLAUDE.md`, which `segoy init project` / `segoy sync` fills from Roke's `ways/public/` at scaffold or sync time (a deliberate, diffable copy).
-4. **Leak guard**, two layers:
-   - Hook (`PreToolUse` on git commit/push and file writes) in every repo's `.claude/settings.json`, running `leak-guard.sh`: blocks content matching patterns from a denylist. In project repos the denylist is generic (secrets, e-mail addresses, tokens). The Roke-specific denylist (names, places, private project names) lives in Roke at `.segoy/denylist.txt` and is used by the `promote` skill, which is the only place both are present.
-   - CI workflow in public repos: the same generic check on every PR, with no model involved.
+4. **Leak guard**, three layers (ADR-017):
+   - **Skill step in `promote`:** run `leak-guard.sh` with the Roke denylist (`.segoy/denylist.txt`: names, places, private project names) plus the generic patterns over every file it is about to commit, and stop on any hit. This is the only place both lists are present. It has to be a skill step: promotion mounts two repos, and hooks do not run in multi-repo sessions (S2).
+   - **CI in every project repo:** `segoy-ci.yml` runs the generic check (secrets, e-mail addresses, tokens) on every PR as a required check, with no model involved.
+   - **Gate 1:** the owner reads the promotion PR before merging.
+   - In single-repo runs, the same script also runs as a `PreToolUse` hook on git commit and push, as an extra net.
 5. **Connectors.** Tasks that touch public repos carry no connectors. Roke tasks carry only those explicitly needed (none in v1).
-6. **Identity.** Commits and comments appear as the user. Branch protection on `main` in all repos: PR required, no force-push. Agents push only to `claude/*`.
+6. **Identity.** Issues, comments and PRs made by agents appear as the owner. Git commits are authored `Claude <noreply@anthropic.com>` (ADR-019). Agents are told to push only to `claude/*`, but the platform does not enforce it (S11). Rulesets on `main` (PR required, no force-push) are the real control; they are set up in T4.3.
 7. **Segoy's own ideas** start in Roke like any other, and are promoted to the public Segoy repo through the same gate.
 
-Residual risk to accept knowingly: Roke content is processed in Anthropic's cloud sessions (same trust as using Claude at all); the promotion session has both repos mounted and relies on the skill, the denylist, and the human Gate 1 review.
+Residual risk to accept knowingly: Roke content is processed in Anthropic's cloud sessions (same trust as using Claude at all). The promotion session has both repos mounted and no hooks. It relies on the skill's leak-check step, the generic CI check and the owner's Gate 1 review. Personal terms that are not generic patterns are caught only by the skill step and Gate 1.
 
 ## 5a. Agent–app protocol and pause
 
@@ -142,9 +148,9 @@ Otak must not parse prose, and there is no backend to translate. So the contract
 
 - **State** = labels (`state:*` on Roke issues, `segoy:*` on PRs). Already required by the pipeline.
 - **Content** = a fenced code block with info string `segoy` containing versioned YAML, appended to the comment or PR body a skill already writes. Kinds: `question`, `answer`, `plan`, `impl`, `run`, `review`. Defined in `docs/protocol.md` (written in M1), with JSON-schema-style field lists and examples, and a validator in `scripts/segoy doctor --protocol`.
-- **Answers** from the app are comments containing an `answer` block plus the same text in plain words; free-text replies typed in GitHub mobile stay valid, and skills must handle both.
+- **Answers** from the app are comments containing an `answer` block plus the same text in plain words, **together with the answer label** (`answered`), because comments alone start no task (ADR-016). Free-text replies typed in GitHub mobile stay valid: with the label they are handled at once, without it by the hourly sweep. Skills must handle both forms.
 - **Run records**: every skill ends by posting or updating one `run` comment (on the Roke issue for brain flows, on the PR for project flows). This is what the app's activity feed and failure inbox read.
-- **Pause**: an open issue labelled `segoy:paused` in a repo pauses automation there; in Roke it pauses the brain flows and promotion. Every skill checks this first and exits quietly. The app opens and closes that issue. No commit, no backend.
+- **Pause**: an open issue labelled `segoy:paused` in a repo pauses automation there; in Roke it pauses the brain flows and promotion. Every skill checks this first and exits quietly. The app opens and closes that issue. No commit, no backend. Opening it fires `brain-triage` like any issue; triage recognises the label and exits.
 - **Compatibility rule**: the block is additive. Unknown kinds and fields are ignored by the app; skills never depend on the app being present.
 
 ## 6. Use of Claude Code features
@@ -154,8 +160,8 @@ Otak must not parse prose, and there is no backend to translate. So the contract
 | `CLAUDE.md` | Per repo: purpose, commands, conventions, pointer to `docs/specs`. In Roke it is the brain schema. Kept short; detail goes in skills and `.claude/rules/`. |
 | Skills | One per pipeline step. Each has: when to use, inputs, numbered procedure, output contract, stop conditions, budget. |
 | Subagents | `implementer` (does a task group), `verifier` (fresh context; checks acceptance criteria against the diff and test output before the PR is opened). In Roke: `researcher` for ingest. |
-| Hooks | Leak guard; in project repos a `Stop` hook reminding to run the plan's checks; in Roke a hook that appends to `log.md` on commit. Deterministic only. |
-| Scheduled tasks | Triggers, as in §4. |
+| Hooks | Run only in single-repo sessions (S2). Leak guard as an extra net; in project repos a `Stop` hook reminding to run the plan's checks. Deterministic only. Nothing a two-repo run needs may depend on a hook. |
+| Scheduled tasks | Triggers, as in §4. Created by hand; default connectors removed. |
 | Auto-fix | Enabled by the `implement` skill on the PR it opens. |
 | Projects (beta) | Optional. Useful for a manual sprint across repos. Not required, because project threads do not load repo skills or hooks. |
 | Plugins | Later: `kit/` also published as a plugin for local use (FR-35). |
@@ -190,10 +196,17 @@ Otak must not parse prose, and there is no backend to translate. So the contract
 | ADR-012 | Agent–app contract is labels + `segoy` YAML blocks in comments/PR bodies | Works without a server; stays readable in plain GitHub; versionable | Blocks become too large or brittle |
 | ADR-014 | Otak's UI is the Segoy design system: tokens generated from `tokens.json`, components re-implemented in Compose with the same names and rules | One visual language across web and app; single source of truth for tokens | The design system gains a second consumer with different needs |
 | ADR-013 | Pause via an open `segoy:paused` issue | Needs no commit to a protected branch and no backend | — |
+| ADR-015 | Only owner actions start tasks; agent hand-offs happen inside one run | Agent-made events do not fire triggers (S3) | Platform changes, or ADR-021 |
+| ADR-016 | Answers are signalled by a label, with an hourly sweep | Comments do not fire triggers (S3) | Comment triggers exist, or the friction is felt |
+| ADR-017 | Promotion's leak check is a skill step + CI + Gate 1, not a hook | No hooks in multi-repo sessions (S2) | Hooks run there |
+| ADR-018 | Triage writes no files; the issue is the record until a merged PR | Pushing to `main` depends on the model (S11) | Reliable default-branch pushes |
+| ADR-019 | Agent commits keep the `Claude` identity | Observed default; separates agent and owner commits | Owner wants attribution |
+| ADR-020 | Find artefacts by label and idea ID, not by branch | Runs get random branch names (S11) | Branch names can be set |
+| ADR-021 | The trigger layer is replaceable (cloud tasks → dispatcher → own server) | The spikes' limits are all in this layer | See the ADR's switch criteria |
 
 ## 9. Spikes (verify before building on them)
 
-Run these first; each takes minutes and is listed as a task in `docs/bootstrap-plan.md`.
+All run in M0. Results: `adr/spikes-2026-11.md`. Design changes from them: ADR-015 to ADR-021. Original questions kept below for reference.
 
 - **S1** In a single-repo cloud session and in a single-repo scheduled task, do skills in `.claude/skills/`, agents in `.claude/agents/`, and hooks in `.claude/settings.json` load and run? (Docs say yes outside projects.)
 - **S2** In a two-repo scheduled task, which repo's `CLAUDE.md`, skills, and hooks load? Decide whether `brain-plan-promote` should be Roke-first with the project repo cloned by the skill through the GitHub proxy instead.
@@ -209,8 +222,8 @@ Run these first; each takes minutes and is listed as a task in `docs/bootstrap-p
 
 - **S11** Which branches can a cloud session and a scheduled task push to (the session's own branch only, `claude/*`, `main`)? Who is the commit author and pusher (owner or Claude GitHub App)? Decides whether triage can commit to the brain's `main` (decision 5) and which actor a ruleset bypass list must name.
 
-Already observed (2026-11-14, in a cloud session): an interactive cloud session is assigned one working branch with a session-derived name (not `claude/<kind>-<slug>`) and is told to push only there, so one session yields one PR; S11 checks what scheduled tasks get.
+Already observed (2026-11-14, in a cloud session): an interactive cloud session is assigned one working branch with a session-derived name (not `claude/<kind>-<slug>`) and is told to push only there, so one session yields one PR. Scheduled tasks get the same, one random `claude/*` branch per repo (S11, ADR-020).
 
 Also observed (2026-11-14, in a cloud session): GitHub's GraphQL API is not available from Claude Code cloud sessions; the REST API is (`gh api repos/<owner>/<repo>/...`). `gh` subcommands that use GraphQL (`gh issue list`, `gh label list`, `gh pr create`) fail. Skills must use REST calls or the session's built-in GitHub tools. This does not affect Otak, which calls GitHub from the phone.
 
-Record results in `docs/adr/spikes-2026-11.md` and adjust §4 if any assumption fails.
+Results are recorded in `docs/adr/spikes-2026-11.md`. §4, §5 and §6 above already reflect them.

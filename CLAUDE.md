@@ -59,7 +59,7 @@ Keep skills under ~150 lines. Put long templates in sibling files and reference 
 ## Conventions
 
 - Idea IDs `I-<yyyymmdd>-<n>`; decision IDs `D-<yyyymmdd>-<n>`.
-- Branches `claude/<spec|plan|impl|retro|review|chore>-<id-or-slug>`.
+- Branches `claude/<spec|plan|impl|retro|review|chore>-<id-or-slug>` where the session may create them. Cloud runs are often assigned a random `claude/*` branch and should use it; pipeline artefacts are identified by label and idea ID, never by branch name (ADR-020).
 - PR labels `segoy:spec|plan|impl|retro|review|knowledge`.
 - Commits: `<id or area>: <imperative summary>`.
 - Markdown: relative links, YAML frontmatter on pipeline files, no wiki-link syntax.

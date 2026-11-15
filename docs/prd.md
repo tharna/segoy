@@ -81,14 +81,14 @@ Priority: **M** must for v1, **S** should, **C** could/later.
 - FR-4 (S) Captures can be knowledge ("note:", a link, a quote) rather than ideas; triage routes them to the knowledge inbox.
 
 ### 7.2 Triage
-- FR-5 (M) On a new Roke issue, an agent classifies it (idea / note / task for an existing project / personal-context update), creates or updates the corresponding file, links related existing items, and labels the issue.
+- FR-5 (M) On a new Roke issue, an agent classifies it (idea / note / task for an existing project / personal-context update), links related existing items, and labels the issue. Files are created later, by PRs the owner merges (ADR-018).
 - FR-6 (M) For ideas, the agent posts a short triage comment: one-paragraph restatement, related ideas/projects, suggested target (new project, existing project, Segoy itself, not code), and up to three clarifying questions only if needed.
 - FR-7 (M) Before asking a question, the agent checks Roke for an answer (ways of working, earlier decisions, personal context). Questions the brain can answer are not asked; the assumption is recorded instead.
 - FR-8 (S) Duplicates are merged into the existing idea with a comment.
 
 ### 7.3 Spec
 - FR-9 (M) When an idea has enough input (or the user comments `/spec`), an agent writes `ideas/<id>-<slug>/spec.md`: problem, users, outcomes, scope/non-scope, acceptance criteria, open questions, assumptions with their source in Roke.
-- FR-10 (M) The spec arrives as a PR in Roke linked to the issue. Review comments are handled by the agent.
+- FR-10 (M) The spec arrives as a PR in Roke linked to the issue. Review comments are handled by the agent once the owner adds the answer label (ADR-016).
 - FR-11 (S) The spec lists which parts are `shareable` and which are `private`.
 
 ### 7.4 Plan and Gate 1
@@ -96,13 +96,13 @@ Priority: **M** must for v1, **S** should, **C** could/later.
 - FR-13 (M) **Promotion**: the plan and the shareable part of the spec are opened as a PR in the target project repo under `docs/specs/<id>-<slug>/`. This PR is Gate 1. Merging it is approval. Closing it is rejection.
 - FR-14 (M) The promotion PR contains no content marked `private` and passes the leak check.
 - FR-15 (M) If the target repo does not exist, the agent prepares everything and tells the user the one manual step (create an empty repo), then scaffolds it once it exists.
-- FR-16 (S) The user can request changes by commenting on the PR; the agent revises.
+- FR-16 (S) The user can request changes by commenting on the PR and adding the answer label; the agent revises.
 
 ### 7.5 Implement and Gate 2
 - FR-17 (M) When a promotion PR is merged, an agent in the project repo implements the plan's tasks on a `claude/` branch, runs the checks the plan names, and opens a PR that references the spec and lists each acceptance criterion with its evidence.
 - FR-18 (M) The implementation session uses only the project repo. Roke is not available to it.
 - FR-19 (M) The agent never merges. Gate 2 is the user merging.
-- FR-20 (S) Auto-fix is enabled on the PR so CI failures and review comments are handled.
+- FR-20 (S) Review comments plus the answer label are handled by the agent. Auto-fix for CI failures is used if it works for PRs opened by scheduled tasks (to verify in M3).
 - FR-21 (S) Large plans are implemented as a sequence of PRs, one per task group.
 
 ### 7.6 Learn
@@ -177,16 +177,18 @@ Detail in `docs/bootstrap-plan.md`.
 
 | Risk | Mitigation |
 |---|---|
-| Scheduled tasks are a research preview; triggers or limits may change. | Logic lives in skills; triggers are thin. GitHub Action fallback documented. |
+| Scheduled tasks are a research preview; triggers or limits may change. | Logic lives in skills; triggers are thin and replaceable (ADR-021: dispatcher or own server). |
+| Triggers miss things: comments and agent-made events start nothing; caps drop events (spike S3). | Owner actions drive every step (ADR-015); answer label plus hourly sweep (ADR-016); weekly review lists stuck ideas. |
+| Behaviour depends on the model, not the platform: pushing to `main`, branch names (spike S11). | Nothing relies on it: no direct commits (ADR-018), artefacts found by label and ID (ADR-020), rulesets before going public (T4.3). |
 | Repo-committed skills might not load in some session types. | Single-repo sessions by default; spike S1/S2 verifies; fall back to prompts that read the skill files explicitly. |
-| Private content leaks during promotion. | `visibility` frontmatter default private; promotion skill checklist; leak-guard hook; CI check; Gate 1 is also a human privacy review. |
-| Agent acts under the user's GitHub identity. | Branch protection on `main` everywhere; no auto-merge; tasks trimmed to needed repos and connectors. |
+| Private content leaks during promotion. | `visibility` frontmatter default private; promotion skill checklist with a mandatory leak-check step (hooks do not run in the two-repo promotion run, ADR-017); required CI check; Gate 1 is also a human privacy review. |
+| Agent acts under the user's GitHub identity (issues, comments, PRs; commits are authored `Claude`, ADR-019). | Rulesets on `main` everywhere from T4.3; no auto-merge; tasks trimmed to needed repos; default connectors removed. |
 | Brain quality decays (wrong inferred preferences, stale notes). | Stated-only rule for `self/` and `ways/`; lint; weekly review PR. |
 | Usage limits consumed by automation. | Event-driven tasks, budgets in prompts, smaller model for triage and lint. |
 | No backend means no instant push; notifications can lag by 15 minutes or more. | Accepted trade-off; app refreshes on open; GitHub's own notifications remain available. |
-| Agents cannot test on a device; Android builds may need network access outside the default allowlist. | JVM unit and screenshot tests, CI-built APK, owner device check at Gate 2, thin PRs; spike S8. |
+| Agents cannot test on a device; Android builds need `dl.google.com`, outside the default allowlist. | JVM unit and screenshot tests, CI-built APK, owner device check at Gate 2, thin PRs; a separate Otak environment with that host and an SDK setup script (spike S8). |
 | Over-engineering before first value. | M1 delivers capture+triage alone; each milestone is usable by itself. |
 
 ## 12. Open questions
 
-See `docs/README.md`, section "Decisions I need from you".
+See `docs/README.md`, section "Decisions".
