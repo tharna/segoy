@@ -26,7 +26,7 @@ description: Use when the owner has answered or given a command on a brain issue
 5. **Otherwise apply the answers** to the latest `question` block's round. An omitted question takes its default.
    - All questions settled and nothing new is unclear → set `state:triaged`.
    - The answers raise something that is genuinely unclear and costly to get wrong → ask at most `question_limit_per_round` new questions, `round` + 1, keep `state:needs-input`. Never ask more than three rounds per idea in total; after that, take defaults and record them as assumptions.
-6. **Self confirmation** (`kind:self` issues): if the owner confirmed (`yes`, or a corrected statement), open a PR changing the named `self/` file: add the statement as a bullet with `(source: issue #<n>, <date>)`, update the `updated` frontmatter, title `Self: <short summary>`, body linking the issue and ending with a `run` block. Never merge. If the owner declined, close the issue with reason "not planned".
+6. **Self confirmation** (`kind:self` issues): if the owner confirmed (`yes`, or a corrected statement), open a PR changing the named `self/` file: add the statement as a bullet with `(source: issue #<n>, <date>)`, **set the frontmatter `updated:` to today (required)**, title `Self: <short summary>`, body linking the issue and ending with a `run` block. Never merge. If the owner declined, close the issue with reason "not planned".
 7. **Post one comment** on the issue in `notes_language`:
    - What was understood, in at most 3 bullets ("Platform: phone (your answer)", "Offline: no (default)").
    - The new state and the single next step for the owner.

@@ -89,12 +89,12 @@ segoy/
 
 ## 4. Trigger map
 
-Each row is one scheduled task (file in `tasks/`). "Repos" is what the task mounts. "Started by" is the owner action that fires it. Only owner actions start tasks; events caused through Claude's GitHub tools never do (ADR-015, spike S3).
+Each row is one scheduled task (file in `tasks/`). "Repos" is what the task mounts. "Started by" is the owner action that fires it. Only owner actions are meant to start tasks (ADR-015). Issues opened and comments made through Claude's GitHub tools start nothing; **labels added through them do fire `issues.labeled`**, so label triggers always filter on the one label they serve (ADR-015 amendment).
 
 | Task | Trigger | Started by | Repos | Skill | Output |
 |---|---|---|---|---|---|
 | brain-triage | `issues.opened` in Roke | Owner captures (Otak or GitHub) | roke | `triage` | Labels, idea ID, triage comment. No files (ADR-018) |
-| brain-respond | `issues.labeled` and `pull_request.labeled` in Roke (acts only on the answer label) **and** a periodic schedule (sweep, every 4 hours by default) | Owner answers, comments a command or asks for spec changes, then adds the answer label; or the sweep finds an unlabelled answer | roke | `triage` → `spec` or `plan`, depending on state and commands | Updated issue, spec PR in Roke (ADR-016) |
+| brain-respond | `issues.labeled` and `pull_request.labeled` in Roke, **filter: label `answered`** **and** a periodic schedule (sweep, every 4 hours by default) | Owner answers, comments a command or asks for spec changes, then adds the answer label; or the sweep finds an unlabelled answer | roke | `triage` → `spec` or `plan`, depending on state and commands | Updated issue, spec PR in Roke (ADR-016) |
 | brain-plan-promote-`<repo>` | `pull_request.closed` in Roke, filters: Is merged, label `segoy:spec`, label `target:<repo>` | Owner merges a spec PR | roke + `<repo>` | `plan` then `promote` | Promotion PR in the project repo (Gate 1) |
 | project-implement | `pull_request.closed`, filters: Is merged, label `segoy:plan` or `segoy:impl`; `pull_request.labeled`, filter label `answered` | Owner merges Gate 1 (or a `multi-pr` group); owner asks for changes on a Gate 1 or Gate 2 PR | project | `implement` | Implementation PR (Gate 2); revisions; the next group of a `multi-pr` plan |
 | project-retro | `pull_request.closed`, filters: Is merged, label `segoy:impl` | Owner merges Gate 2 | project | `retro` | Retro PR; state noted for the brain to pick up |

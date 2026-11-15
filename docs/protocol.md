@@ -120,7 +120,7 @@ Every skill run ends by posting one `run` comment: on the brain issue for brain 
 
 A skill that exits quietly in its preconditions (already handled, paused, not its event) posts **no** run block, to keep timelines clean.
 
-**Every comment an agent posts carries a `run` block** (often in the same comment as a `question` block), and owner comments never do. Comments made through the session's GitHub tools appear under the owner's account (spike S11), so this is how skills and the app tell agent comments from the owner's: an owner reply is any comment without a `run` block that is newer than the newest comment with one. An `answer` block from the app does not make a comment an agent comment.
+**Every comment an agent posts carries a `run` block** (often in the same comment as a `question` block), and owner comments never do. Comments made through the session's GitHub tools appear under the owner's account (spike S11), so this is how skills and the app tell agent comments from the owner's: an owner reply is any comment without a `run` block that is newer than the newest comment with one. An `answer` block from the app does not make a comment an agent comment. A second signal, for labels and other issue events: actions made through Claude's GitHub tools appear in the issue's event list with `performed_via_github_app.slug` = `claude`; the owner's own actions have no app.
 
 ### 3.5 Outlines for later milestones
 
