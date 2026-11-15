@@ -44,16 +44,20 @@ tn "guard: denylist term outside private block caught" $LG --denylist "$F/denyli
 gh="gh""p_"$(printf 'a%.0s' $(seq 1 36))
 ant="sk-""ant-"$(printf 'b%.0s' $(seq 1 30))
 aws="AK""IA"$(printf 'C%.0s' $(seq 1 16))
-for case in "e-mail address|mail me at owner@realmail.fi" "GitHub token|token $gh" "Anthropic API key|key $ant" \
+mail="owner""@""realmail"".fi"
+phone="+3""58 40 123"" 4567"
+hetu="1310""52-308""T"
+iban="FI2""1 1234 5600"" 0007 85"
+for case in "e-mail address|mail me at $mail" "GitHub token|token $gh" "Anthropic API key|key $ant" \
             "AWS access key|$aws" "private key block|-----BEGIN RSA PRIVATE"" KEY-----" \
-            "phone number|call +358 40 123 4567" "Finnish personal identity code|hetu 131052-308T" \
-            "IBAN|FI21 1234 5600 0007 85"; do
+            "phone number|call $phone" "Finnish personal identity code|hetu $hetu" \
+            "IBAN|$iban"; do
   rule=${case%%|*} text=${case#*|}
   printf '%s\n' "$text" > "$T/g.md"
   if $LG "$T/g.md" 2>/dev/null | grep -q "$rule"; then ok "guard rule: $rule"; else bad "guard rule: $rule"; fi
 done
 for text in "noreply@anthropic.com" "123+456@users.noreply.github.com" "user@example.com" "ADR-015 and ADR-022" \
-            "version 1.2.3 build 20260101" "I-20260101-1" "phone: <your number>" "see leak-guard: allow owner@realmail.fi"; do
+            "version 1.2.3 build 20260101" "I-20260101-1" "phone: <your number>" "see leak-guard: allow $mail"; do
   printf '%s\n' "$text" > "$T/ok.md"
   if $LG "$T/ok.md" >/dev/null 2>&1; then ok "guard allows: $text"; else bad "guard allows: $text"; fi
 done
