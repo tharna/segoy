@@ -19,7 +19,12 @@ doctor_offline() {
   else
     d_ok "config has no placeholders"
   fi
-  for k in owner brain_repo notes_language answer_label; do
+  kind=$(jq -r '.kit // "brain"' "$dir/.segoy/manifest.json" 2>/dev/null || echo brain)
+  case $kind in
+    project) keys="owner project_repo answer_label" ;;
+    *) keys="owner brain_repo notes_language answer_label" ;;
+  esac
+  for k in $keys; do
     [ -n "$(config_value "$dir" "$k")" ] || d_fail "config lacks $k"
   done
   if [ -f "$dir/CLAUDE.md" ]; then d_ok "CLAUDE.md present"; else d_fail "CLAUDE.md missing"; fi
@@ -70,6 +75,7 @@ doctor_online() {
     return
   fi
   slug=$(config_value "$dir" brain_repo)
+  [ -n "$slug" ] || slug=$(config_value "$dir" project_repo)
   case $slug in */*) ;; *) slug=$(repo_slug "$dir") ;; esac
   if [ -z "$slug" ]; then
     d_fail "cannot tell the repo: set brain_repo in config"

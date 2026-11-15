@@ -62,6 +62,7 @@ rm -f "$proto_out"
 check "brain template: structure, frontmatter, labels, config" tests/check-brain-template.sh
 check "segoy init brain and doctor (offline)" tests/check-init-doctor.sh
 check "strip-private and leak-guard (T2.2, T2.4)" tests/check-leak-guard.sh
+check "segoy init project, project leak check, commit hook (T3.1, T3.2)" tests/check-init-project.sh
 check "triage comment templates carry valid blocks" sh -c "grep -v '^\`\`\`\`' kit/brain/.claude/skills/segoy-triage/comment.md | $proto - | grep -q '^2 block'"
 
 printf '\n%d passed, %d failed\n' "$passed" "$failed"

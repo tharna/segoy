@@ -1,0 +1,11 @@
+{
+  "v": 1,
+  "labels": [
+    {"name": "segoy:plan",   "color": "ff9a3c", "description": "Gate 1 plan PR"},
+    {"name": "segoy:impl",   "color": "ff9a3c", "description": "Gate 2 implementation PR"},
+    {"name": "segoy:retro",  "color": "ff9a3c", "description": "Retro PR"},
+    {"name": "answered",     "color": "5cff8f", "description": "Owner replied: continue"},
+    {"name": "segoy:paused", "color": "ffd84a", "description": "Automation paused while this issue is open"}
+  ],
+  "dynamic": []
+}

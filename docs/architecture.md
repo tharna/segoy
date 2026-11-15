@@ -36,8 +36,10 @@ segoy/
 │   ├── common/                  # vendored into every repo
 │   │   └── .claude/
 │   │       └── scripts/leak-guard.sh  strip-private.sh   # no hook: brains hold personal data
-│   ├── project/                 # vendored into project repos
-│   │   ├── CLAUDE.md.tmpl
+│   ├── project/                 # vendored into project repos (segoy init project)
+│   │   ├── CLAUDE.md.tmpl       # filled with repo name + brain ways/public, leak-checked
+│   │   ├── .claude/hooks/leak-check-commit.sh  .claude/scripts/project-leak-check.sh
+│   │   ├── .segoy/labels.json  config.yml.tmpl  # leak_skip_rules / leak_exclude
 │   │   ├── .claude/skills/{implement,review-pr,retro}/SKILL.md
 │   │   ├── .claude/agents/{implementer,verifier}.md
 │   │   ├── .claude/settings.json

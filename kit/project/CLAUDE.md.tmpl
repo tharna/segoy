@@ -1,0 +1,33 @@
+# {{repo}}
+
+<!-- Describe the project in two or three sentences: what it is, who uses it. -->
+
+## Commands
+
+<!-- Fill in: how to build, test and lint. Agents run these before every PR. -->
+- Build: `<command>`
+- Test: `<command>`
+
+## How work arrives (Segoy)
+
+This repo is a Segoy project. Ideas come in as approved plans; nothing else starts work here.
+
+- **Gate 1:** a PR labelled `segoy:plan` adds `docs/specs/<id>-<slug>/spec.md` and `plan.md`. The owner's merge approves the plan.
+- **Implementation:** the `segoy-implement` skill builds exactly the approved plan and opens one PR labelled `segoy:impl`, with evidence for every acceptance criterion.
+- **Gate 2:** the owner reviews and merges. To ask for changes: comment and add the label `answered`.
+- **Retro:** after Gate 2, `segoy-retro` writes `docs/retros/<id>.md` in a small `segoy:retro` PR.
+
+## Rules for agents
+
+1. Pause first: an open issue labelled `segoy:paused` here means stop.
+2. Never push to the default branch, never merge, never force-push.
+3. Stay inside the approved plan. If the plan is wrong or blocked, stop and say so in the PR; do not improvise beyond its scope.
+4. Run the plan's checks and this repo's tests before opening or updating a PR.
+5. Every PR must pass `segoy-leak-check`. Nothing personal belongs in this repo.
+6. Comments and PR bodies end with `segoy` blocks as in Segoy `docs/protocol.md`.
+
+## Ways of working
+
+The owner's public ways of working, copied from their brain on {{date}}. Edit them there, not here.
+
+{{ways}}

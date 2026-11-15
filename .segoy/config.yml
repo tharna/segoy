@@ -1,0 +1,16 @@
+# Project configuration for Segoy. Copied to config.yml by `segoy init project`.
+owner: tharna
+project_repo: tharna/segoy
+
+answer_label: answered
+
+# Leak check (ADR-017). Extra rules or paths to skip, for repos that legitimately
+# document patterns or keep test fixtures. One per line under each key, "- " prefixed.
+leak_skip_rules:
+  - "private block marker"     # Segoy documents the marker format
+leak_exclude:
+  - "tests/fixtures/promote/*"  # planted private terms for the leak tests
+
+models:
+  implement: opus
+  verify: sonnet
