@@ -3,7 +3,7 @@
 #
 # Usage: strip-private.sh FILE   (- for stdin)   → cleaned text on stdout
 #
-# Removes everything from <!-- private --> to <!-- /private -->, inclusive,
+# Removes everything from <!-- private --> to <!-- /private -->, inclusive,  (leak-guard: allow)
 # whether on one line or across lines. Prints "removed <n> private block(s)"
 # on stderr so the caller can report "N private items omitted".
 # Exit status: 0 ok, 1 unbalanced markers (nothing is printed then),

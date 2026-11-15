@@ -4,7 +4,7 @@
 # Usage: leak-guard.sh [--denylist FILE] [--exclude GLOB]... [--skip RULE]... FILE...   (- for stdin)
 #
 # Fails on:
-#   - private block markers (<!-- private --> / <!-- /private -->) still present;
+#   - private block markers (<!-- private --> / <!-- /private -->) still present;  (leak-guard: allow)
 #   - generic secrets and personal data: e-mail addresses, access tokens and
 #     API keys, private-key blocks, phone numbers in international form,
 #     Finnish personal identity codes, IBANs;
