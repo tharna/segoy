@@ -32,7 +32,7 @@ Tasks
 - T1.1 `kit/brain/` skeleton: folders, `index.md` files, `CLAUDE.md` schema (condensed from brain design), `README.md` cheat sheet (including "answer = comment + `answered` label"), labels file (with `answered`), `.segoy/config.yml.tmpl`.
 - T1.2 `scripts/segoy init brain` and `segoy doctor` (checks: gh auth, labels present, branch protection, App installed where detectable).
 - T1.3 Skills `capture` and `triage` with the comment format from workflows §2. Triage writes no files (ADR-018) and exits quietly on issues that already have a state or are the pause issue.
-- T1.3a `docs/protocol.md`: the `segoy` block kinds, fields, examples, versioning; the answer label rule (ADR-016); validator in `segoy doctor --protocol`; pause check snippet shared by all skills. Triage emits `question` and `run` blocks from day one.
+- T1.3a `docs/protocol.md`: the `segoy` block kinds, fields, examples, versioning (JSON, ADR-022); the answer label rule (ADR-016); validator in `segoy doctor --protocol`; pause check snippet shared by all skills. Triage emits `question` and `run` blocks from day one.
 - T1.4 `tasks/brain-triage.md` (prompt + exact task settings: trigger `issues.opened`, repo, model, **no connectors**). Owner creates the scheduled task by hand (agents can only edit tasks they created).
 - T1.5 Instantiate Roke with `segoy init brain`; seed `self/` and `ways/public/` from a 15-minute interview session with the owner (agent asks, owner answers, result is a PR).
 - T1.6 Test: five real captures from the phone, including a duplicate, a `note:`, and a vague one-liner.

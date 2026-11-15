@@ -59,7 +59,7 @@ Entry points: launcher, home-screen widget (capture box + inbox count), quick-se
 
 The app must not parse prose. Skills therefore add a small machine-readable block to what they already post. Humans using plain GitHub see normal text and can ignore the block. Full definition lives in Segoy at `docs/protocol.md`; outline:
 
-- A fenced code block with info string `segoy` containing YAML, at the end of a comment or PR body.
+- A fenced code block with info string `segoy` containing one JSON object (ADR-022), at the end of a comment or PR body. Full definition: `docs/protocol.md`.
 - Kinds:
   - `question` — idea id, round id, list of questions each with id, text, optional options, default.
   - `answer` — posted by the app: round id, map of question id → answer. **The app adds the answer label (`answered`) in the same action**, because comments alone start no task (ADR-016). Plain-text replies from GitHub mobile remain valid input; without the label they are picked up by the hourly sweep.

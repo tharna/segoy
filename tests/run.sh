@@ -39,5 +39,22 @@ check "linter does not flag the present Procedure section" sh -c "! grep -qF 'mi
 
 check "linter passes on the repo's own skills" "$lint"
 
+proto=scripts/lib/protocol.sh
+pf=tests/fixtures/protocol
+check "protocol: valid blocks pass" "$proto" "$pf/valid.md"
+check "protocol: examples in docs/protocol.md pass" "$proto" docs/protocol.md
+check "protocol: unknown kind only warns" "$proto" "$pf/unknown-kind.md"
+check "protocol: blocks read from stdin" sh -c "$proto - < $pf/valid.md"
+proto_out=$(mktemp)
+check "protocol: invalid blocks fail" expect_fail "$proto_out" "$proto" "$pf/invalid.md"
+for msg in "question: bad field idea" "bad field round" "array of 1-3 questions" "missing field: default" \
+           "question ids must be unique" "answer: bad field v" "unknown command" "must be <owner>/<repo>" \
+           "ISO 8601" "bad field outcome" "not valid JSON" "block not closed"; do
+  check "protocol reports: $msg" grep -qF "$msg" "$proto_out"
+done
+check "protocol: each bad idea reported once" sh -c "[ \$(grep -c 'bad field idea' '$proto_out') -eq 1 ]"
+check "protocol: four-backtick examples are skipped" sh -c "$proto $pf/valid.md | grep -q '^4 block'"
+rm -f "$proto_out"
+
 printf '\n%d passed, %d failed\n' "$passed" "$failed"
 [ "$failed" -eq 0 ]

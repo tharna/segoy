@@ -147,7 +147,7 @@ Residual risk to accept knowingly: Roke content is processed in Anthropic's clou
 Otak must not parse prose, and there is no backend to translate. So the contract between agents and the app is carried in GitHub itself:
 
 - **State** = labels (`state:*` on Roke issues, `segoy:*` on PRs). Already required by the pipeline.
-- **Content** = a fenced code block with info string `segoy` containing versioned YAML, appended to the comment or PR body a skill already writes. Kinds: `question`, `answer`, `plan`, `impl`, `run`, `review`. Defined in `docs/protocol.md` (written in M1), with JSON-schema-style field lists and examples, and a validator in `scripts/segoy doctor --protocol`.
+- **Content** = a fenced code block with info string `segoy` containing one versioned JSON object (ADR-022), appended to the comment or PR body a skill already writes. Kinds: `question`, `answer`, `plan`, `impl`, `run`, `review`. Defined in `docs/protocol.md`, with field tables and examples. Validator: `scripts/lib/protocol.sh` (wrapped by `segoy doctor --protocol` from T1.2).
 - **Answers** from the app are comments containing an `answer` block plus the same text in plain words, **together with the answer label** (`answered`), because comments alone start no task (ADR-016). Free-text replies typed in GitHub mobile stay valid: with the label they are handled at once, without it by the hourly sweep. Skills must handle both forms.
 - **Run records**: every skill ends by posting or updating one `run` comment (on the Roke issue for brain flows, on the PR for project flows). This is what the app's activity feed and failure inbox read.
 - **Pause**: an open issue labelled `segoy:paused` in a repo pauses automation there; in Roke it pauses the brain flows and promotion. Every skill checks this first and exits quietly. The app opens and closes that issue. No commit, no backend. Opening it fires `brain-triage` like any issue; triage recognises the label and exits.
@@ -193,7 +193,7 @@ Otak must not parse prose, and there is no backend to translate. So the contract
 | ADR-009 | Twin = stated facts + decision records used for decision support only | Research shows inferred behaviour models are unreliable | — |
 | ADR-010 | Otak is native Kotlin (Compose), Android only | Owner's choice; best access to share sheet, widget, tile, speech, biometrics | A second platform is wanted |
 | ADR-011 | Otak is backend-free: GitHub API only, background polling instead of push | Keeps zero hosted infrastructure and no third party holding a token | Notification delay becomes a real problem |
-| ADR-012 | Agent–app contract is labels + `segoy` YAML blocks in comments/PR bodies | Works without a server; stays readable in plain GitHub; versionable | Blocks become too large or brittle |
+| ADR-012 | Agent–app contract is labels + `segoy` blocks in comments/PR bodies (content is JSON, ADR-022) | Works without a server; stays readable in plain GitHub; versionable | Blocks become too large or brittle |
 | ADR-014 | Otak's UI is the Segoy design system: tokens generated from `tokens.json`, components re-implemented in Compose with the same names and rules | One visual language across web and app; single source of truth for tokens | The design system gains a second consumer with different needs |
 | ADR-013 | Pause via an open `segoy:paused` issue | Needs no commit to a protected branch and no backend | — |
 | ADR-015 | Only owner actions start tasks; agent hand-offs happen inside one run | Agent-made events do not fire triggers (S3) | Platform changes, or ADR-021 |
@@ -203,6 +203,7 @@ Otak must not parse prose, and there is no backend to translate. So the contract
 | ADR-019 | Agent commits keep the `Claude` identity | Observed default; separates agent and owner commits | Owner wants attribution |
 | ADR-020 | Find artefacts by label and idea ID, not by branch | Runs get random branch names (S11) | Branch names can be set |
 | ADR-021 | The trigger layer is replaceable (cloud tasks → dispatcher → own server) | The spikes' limits are all in this layer | See the ADR's switch criteria |
+| ADR-022 | `segoy` blocks contain JSON, not YAML | Validated with `jq`; no YAML parser in shell-only scripts | Scripts gain a YAML parser |
 
 ## 9. Spikes (verify before building on them)
 
