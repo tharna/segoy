@@ -31,7 +31,7 @@ This repository is a personal brain managed with Segoy (https://github.com/<owne
 7. **Private blocks.** Content that must never leave this repo, inside an otherwise shareable file, is wrapped in `<!-- private -->` … `<!-- /private -->`.
 8. **Nothing personal leaves.** Only the `promote` skill writes to other repos, and only after its leak check passes. Never copy `self/` content anywhere.
 9. **Protocol.** Comments and PR bodies that an app may read end with a `segoy` block (Segoy `docs/protocol.md`). Every run that does work ends with one `run` block.
-10. **Labels carry state.** An issue has exactly one `state:*` label. Labels set by agents start no task; only owner actions do.
+10. **Labels carry state.** An issue has exactly one `state:*` label. Issues you open and comments you post start no task, but labels you add do fire label triggers (ADR-015 amendment); never add `answered` or any label meant to start a step. Only owner actions move an idea forward.
 11. **Never** approve, merge, close a PR, or speak in the owner's name. Never push to `main`. Never force-push.
 
 ## IDs and names
