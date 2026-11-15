@@ -95,6 +95,7 @@ Each row is one scheduled task (file in `tasks/`). "Repos" is what the task moun
 | brain-triage | `issues.opened` in Roke | Owner captures (Otak or GitHub) | roke | `triage` | Labels, idea ID, triage comment. No files (ADR-018) |
 | brain-respond | `issues.labeled` and `pull_request.labeled` in Roke, **filter: label `answered`** **and** a periodic schedule (sweep, every 4 hours by default) | Owner answers, comments a command or asks for spec changes, then adds the answer label; or the sweep finds an unlabelled answer | roke | `triage` → `spec` or `plan`, depending on state and commands | Updated issue, spec PR in Roke (ADR-016) |
 | brain-plan-promote-`<repo>` | `pull_request.closed` in Roke, filters: Is merged, label `segoy:spec`, label `target:<repo>` | Owner merges a spec PR | roke + `<repo>` | `plan` then `promote` | Promotion PR in the project repo (Gate 1) |
+| brain-gate-sync-`<repo>` | `pull_request.closed` in the **project**, filter: label `segoy:plan` (merged or not) | Owner merges or closes Gate 1 | roke + `<repo>` | `gate-sync` | Brain issue → `building`, or asks why it was closed |
 | project-implement | `pull_request.closed`, filters: Is merged, label `segoy:plan` or `segoy:impl`; `pull_request.labeled`, filter label `answered` | Owner merges Gate 1 (or a `multi-pr` group); owner asks for changes on a Gate 1 or Gate 2 PR | project | `implement` | Implementation PR (Gate 2); revisions; the next group of a `multi-pr` plan |
 | project-retro | `pull_request.closed`, filters: Is merged, label `segoy:impl` | Owner merges Gate 2 | project | `retro` | Retro PR; state noted for the brain to pick up |
 | brain-weekly-review | Weekly schedule | — | roke (reads project repos through GitHub tools) | `weekly-review` | One review PR in Roke, which also files notes, stubs and log entries (ADR-018) |
@@ -108,6 +109,7 @@ Notes:
 - **Issue triggers fire on every issue event**, including the owner opening the `segoy:paused` issue. `triage` must check labels first and exit quietly when there is nothing to do.
 - **Creating tasks is manual**: web UI, desktop app, or `/schedule` in the CLI (S5). An agent can only edit tasks it created itself. Remove the default connectors from every Segoy task (§5 rule 5).
 - **One GitHub event trigger per task** (M2 staging). A task needing two GitHub events is split into two tasks with the same prompt (`brain-respond` and `brain-respond-pr`; `project-implement` will need the same in M3). Schedules can be added alongside the one GitHub trigger.
+- **`Pull request → labeled` did not fire** in M2 T2.5 (owner added `answered` to a spec PR; the task had no runs). Under investigation; the `brain-respond` sweep covers spec PR feedback meanwhile.
 - **Label filters test the item's current labels** ("has `answered`"), not just the label that was added. A skill that is started by a label must remove that label before it changes any other label (M2 staging).
 - **Hourly and per-account caps** apply. Events over a cap are dropped, and the weekly review catches what is stuck.
 - **This whole layer is replaceable** (ADR-021).
