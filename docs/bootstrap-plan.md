@@ -66,6 +66,29 @@ Tasks
 
 Done when: a Gate 1 PR appears in `segoy` from an idea captured on the phone, with no private content, and merging/closing it updates Roke state.
 
+Status (2026-11-15): **done.**
+- Shipped:
+  - `strip-private.sh` and `leak-guard.sh` (generic patterns + denylist; never print matches), with Segoy CI and a project `segoy-leak-check` workflow;
+  - protocol blocks `spec`, `plan` and `decision`;
+  - skills `segoy-spec`, `segoy-plan`, `segoy-promote` and `segoy-gate-sync`, plus `segoy-respond` updates;
+  - tasks `brain-respond-pr`, `brain-plan-promote-<repo>` and `brain-gate-sync-<repo>`.
+- Spike S12: a task pushes to an existing PR branch when its stored prompt allows it.
+- Staged in a scratch brain and project: a planted private place name never reached the project.
+- T2.5: a real idea captured on the phone → spec PR → owner merge → Gate 1 PR in Segoy (#16) with no private content → owner merge → brain issue `building` via gate-sync.
+
+Platform findings, recorded in architecture §4:
+- one GitHub event per task;
+- label filters match "item has the label";
+- the respond skill claims `answered` first;
+- order by GitHub timestamps, never block-internal times;
+- the `Pull request → labeled` trigger fires;
+- denylist entries need stems in inflected languages.
+
+Carried into M3:
+- Spec PR revise mode has not yet completed end to end.
+- `project-implement` needs the one-event-per-task split (merged `segoy:plan`, merged `segoy:impl`, `answered` on PRs).
+- Notes still wait for the weekly review (M5).
+
 ## M3 — Implementation (Gate 2) and retro
 
 Tasks
