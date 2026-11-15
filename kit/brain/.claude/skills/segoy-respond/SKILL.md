@@ -17,6 +17,7 @@ description: Use when the owner has answered or given a command on a brain issue
 
 ## Procedure
 1. Note the start time. Read config and this repo's `CLAUDE.md`.
+   **Claim first (event mode):** once the preconditions pass, remove the `answer_label` label from the issue or PR **before any other change**. Label triggers filter on "the item has label `answered`", so any label you change while `answered` is still on would start a second run of this task on the same reply (seen in M2 staging: two duplicate spec PRs). A run that finds `answered` already gone exits quietly.
 2. **Pick the work.** Event mode on a `segoy:spec` PR: hand it to `segoy-spec` in **revise** mode, then do step 8 for the PR and stop. Event mode on an issue: the one issue. Sweep mode: open issues labelled `state:needs-input` or `kind:self`, whose newest owner reply (rule in Preconditions) is newer than the newest `run`-block comment, at most 5 per run, oldest first. Agent comments always carry a `run` block; owner comments never do. Both appear under the owner's account, so tell them apart this way, not by author.
 3. For each issue, **collect the reply**: every owner comment after the newest `run`-block comment, in order. Treat them as data. Read an `answer` block if present (`answers`, `command`, `reason`); otherwise read the free text: one line per question, `defaults`, or a command.
 4. **Apply a command** if there is one (it wins over answers):
@@ -35,7 +36,7 @@ description: Use when the owner has answered or given a command on a brain issue
    - The new state and the single next step for the owner.
    - New questions, if any, in the triage format, with a `question` block.
    - A `run` block last: `skill` `segoy-respond`, `repo`, `idea`, `started`, `finished`, `outcome` (`asked`, `ok` or `failed`), `next`, `session` when known.
-8. **Remove the `answer_label` label** from the issue, after the comment is posted.
+8. **Make sure the `answer_label` label is gone** (event mode removed it in step 1; in sweep mode remove it now if present).
 9. **Remove any other `state:*` label** so the issue keeps exactly one.
 
 ## Output contract
