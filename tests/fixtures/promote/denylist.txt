@@ -1,0 +1,4 @@
+# Test denylist: fictional private terms.
+Zyxwvut
+Kuusikatu 12
+project[ -]?nightjar

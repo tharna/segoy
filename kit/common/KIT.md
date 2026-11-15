@@ -1,3 +1,8 @@
 # kit/common
 
-Vendored into every repo: the leak check skill and `hooks/leak-guard.sh`. Built in milestone M2 (T2.2). See `docs/architecture.md` §2.1 and §5.
+Vendored into every repo (brain and projects):
+
+- `.claude/scripts/strip-private.sh`: removes `<!-- private -->` blocks; used by `segoy-promote`.
+- `.claude/scripts/leak-guard.sh`: generic secret and personal-data patterns plus an optional denylist; used by `segoy-promote` (with the brain's denylist) and by project CI (generic only).
+
+There is deliberately **no hook** here. A brain legitimately holds personal data, so a commit hook would block normal brain work. Project repos get the hook wiring from `kit/project` (M3). See ADR-017 and architecture §5.

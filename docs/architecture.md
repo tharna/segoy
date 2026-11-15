@@ -35,8 +35,7 @@ segoy/
 ├── kit/
 │   ├── common/                  # vendored into every repo
 │   │   └── .claude/
-│   │       ├── skills/segoy-leak-check/
-│   │       └── hooks/leak-guard.sh
+│   │       └── scripts/leak-guard.sh  strip-private.sh   # no hook: brains hold personal data
 │   ├── project/                 # vendored into project repos
 │   │   ├── CLAUDE.md.tmpl
 │   │   ├── .claude/skills/{implement,review-pr,retro}/SKILL.md
@@ -135,7 +134,8 @@ Rules:
    - **Skill step in `promote`:** run `leak-guard.sh` with the Roke denylist (`.segoy/denylist.txt`: names, places, private project names) plus the generic patterns over every file it is about to commit, and stop on any hit. This is the only place both lists are present. It has to be a skill step: promotion mounts two repos, and hooks do not run in multi-repo sessions (S2).
    - **CI in every project repo:** `segoy-ci.yml` runs the generic check (secrets, e-mail addresses, tokens) on every PR as a required check, with no model involved.
    - **Gate 1:** the owner reads the promotion PR before merging.
-   - In single-repo runs, the same script also runs as a `PreToolUse` hook on git commit and push, as an extra net.
+   - In single-repo **project** runs, the same script also runs as a `PreToolUse` hook on git commit and push, as an extra net (wired by `kit/project`, M3). Never in the brain, which legitimately holds personal data.
+   - The script lives at `.claude/scripts/leak-guard.sh`; `strip-private.sh` beside it removes private blocks deterministically before the check.
 5. **Connectors.** Tasks that touch public repos carry no connectors. Roke tasks carry only those explicitly needed (none in v1).
 6. **Identity.** Issues, comments and PRs made by agents appear as the owner. Git commits are authored `Claude <noreply@anthropic.com>` (ADR-019). Agents are told to push only to `claude/*`, but the platform does not enforce it (S11). Rulesets on `main` (PR required, no force-push) are the real control; they are set up in T4.3.
 7. **Segoy's own ideas** start in Roke like any other, and are promoted to the public Segoy repo through the same gate.
