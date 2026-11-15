@@ -170,7 +170,7 @@ models:
 question_limit_per_round: 3
 duplicate_action: close       # close | label
 answer_label: answered        # owner adds it with an answer or command (ADR-016)
-sweep_interval: hourly        # brain-respond fallback for answers without the label
+sweep_interval: 4h            # brain-respond sweep for answers without the label (1h minimum)
 ```
 
 ## 8. Human use

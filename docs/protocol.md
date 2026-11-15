@@ -120,6 +120,8 @@ Every skill run ends by posting one `run` comment: on the brain issue for brain 
 
 A skill that exits quietly in its preconditions (already handled, paused, not its event) posts **no** run block, to keep timelines clean.
 
+**Every comment an agent posts carries a `run` block** (often in the same comment as a `question` block), and owner comments never do. Comments made through the session's GitHub tools appear under the owner's account (spike S11), so this is how skills and the app tell agent comments from the owner's: an owner reply is any comment without a `run` block that is newer than the newest comment with one. An `answer` block from the app does not make a comment an agent comment.
+
 ### 3.5 Outlines for later milestones
 
 These kinds are reserved. Their fields are fixed in the milestone that first emits them, and the validator only checks the common fields until then.
@@ -143,7 +145,7 @@ Only owner actions start tasks (ADR-015). The app and GitHub mobile do the same 
 | Gate 2 | Merge the `segoy:impl` PR | `project-retro` |
 | Pause | Open an issue with the label `segoy:paused`; close it to resume | — |
 
-Without the label, an answer or command is still picked up by the hourly `brain-respond` sweep. Skills remove `answered` once they have processed it.
+Without the label, an answer or command is still picked up by the periodic `brain-respond` sweep. Skills remove `answered` once they have processed it.
 
 ## 5. Pause check (every skill, first step)
 

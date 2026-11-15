@@ -58,6 +58,7 @@ rm -f "$proto_out"
 
 check "brain template: structure, frontmatter, labels, config" tests/check-brain-template.sh
 check "segoy init brain and doctor (offline)" tests/check-init-doctor.sh
+check "triage comment templates carry valid blocks" sh -c "grep -v '^\`\`\`\`' kit/brain/.claude/skills/segoy-triage/comment.md | $proto - | grep -q '^2 block'"
 
 printf '\n%d passed, %d failed\n' "$passed" "$failed"
 [ "$failed" -eq 0 ]

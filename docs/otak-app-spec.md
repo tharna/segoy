@@ -62,7 +62,7 @@ The app must not parse prose. Skills therefore add a small machine-readable bloc
 - A fenced code block with info string `segoy` containing one JSON object (ADR-022), at the end of a comment or PR body. Full definition: `docs/protocol.md`.
 - Kinds:
   - `question` — idea id, round id, list of questions each with id, text, optional options, default.
-  - `answer` — posted by the app: round id, map of question id → answer. **The app adds the answer label (`answered`) in the same action**, because comments alone start no task (ADR-016). Plain-text replies from GitHub mobile remain valid input; without the label they are picked up by the hourly sweep.
+  - `answer` — posted by the app: round id, map of question id → answer. **The app adds the answer label (`answered`) in the same action**, because comments alone start no task (ADR-016). Plain-text replies from GitHub mobile remain valid input; without the label they are picked up by the periodic sweep.
   - `plan` — in the Gate 1 PR body: idea id, summary, assumptions with confidence, tasks, size, omitted-private count.
   - `impl` — in the Gate 2 PR body: idea id, criteria with evidence and pass/fail, deviations.
   - `run` — a run record comment: skill, repo, idea id, started, finished, outcome, next action, session link if known.

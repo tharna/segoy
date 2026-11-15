@@ -11,7 +11,7 @@ Open a new issue. A title alone is enough. Write in whatever language you like; 
 Within a few minutes the issue gets labels and a short comment: a restatement, related items, a suggested target, and at most three questions, each with a default.
 
 ## Answer
-Reply in a comment, **then add the label `answered`**. The label is what wakes the agent; Otak adds it for you. Forgot it? The hourly sweep picks up your reply anyway.
+Reply in a comment, **then add the label `answered`**. The label is what wakes the agent; Otak adds it for you. Forgot it? The next sweep (every few hours) picks up your reply anyway.
 - One line per question is enough, or just `defaults`.
 - Commands, also followed by the label: `/spec`, `/plan`, `/park`, `/unpark`, `/reject <reason>`.
 

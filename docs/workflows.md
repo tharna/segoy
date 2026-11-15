@@ -25,7 +25,7 @@ Version 0.2, 2026-11-15 (updated with the M0 spike results). Step-by-step behavi
 - merging the Gate 1 PR;
 - merging the Gate 2 PR.
 
-Everything between two owner actions happens inside one run, or in the hourly `brain-respond` sweep or the weekly review. Comments alone start nothing; the sweep picks up an answer that arrived without the label. States the brain cannot see happen (`building`, `in-review`, `done`, all in the project repo) are brought up to date by the next brain run or the weekly review.
+Everything between two owner actions happens inside one run, or in the periodic `brain-respond` sweep or the weekly review. Comments alone start nothing; the sweep picks up an answer that arrived without the label. States the brain cannot see happen (`building`, `in-review`, `done`, all in the project repo) are brought up to date by the next brain run or the weekly review.
 
 The Roke issue carries exactly one `state:*` label. Once the spec PR has created the idea file (ADR-018), its frontmatter mirrors the label. The issue stays open until `done` or `rejected`. Each transition adds one comment on the Roke issue with a link to the artefact (PR, file), so the issue is the timeline.
 
@@ -56,7 +56,7 @@ Questions (reply in one line each, or say "defaults"):
 Next: reply and add the label `answered`, or comment /spec and add `answered` to proceed with defaults.
 ```
 
-**Answering.** The owner replies in a comment and adds the label `answered`. Otak does both in one tap (ADR-016). The label fires `brain-respond`, which reads the answer, removes the label, and continues: back to triage, or on to spec. A reply without the label is picked up by the hourly sweep. Commands (`/spec`, `/plan`, `/park`, `/unpark`, `/reject <reason>`) work the same way.
+**Answering.** The owner replies in a comment and adds the label `answered`. Otak does both in one tap (ADR-016). The label fires `brain-respond`, which reads the answer, removes the label, and continues: back to triage, or on to spec. A reply without the label is picked up by the periodic sweep. Commands (`/spec`, `/plan`, `/park`, `/unpark`, `/reject <reason>`) work the same way.
 
 The comment ends with a `segoy` block of kind `question` carrying the same questions, options and defaults as JSON (see `docs/protocol.md`), so Otak can render one-tap answers. The same rule applies to every artefact below: Gate 1 PR bodies end with a `plan` block, Gate 2 PR bodies with an `impl` block, the weekly review PR with a `review` block, and every skill run ends with a `run` record comment.
 
@@ -134,4 +134,4 @@ Same as any project. Ideas about Segoy are captured in Roke, promoted to the pub
 - Every skill has a budget and a stop condition. On stop: comment where the owner will see it (Roke issue for brain flows; PR for project flows) with what was done, what blocked, and the single next action needed.
 - Idempotence: skills check current state first and exit if their output already exists.
 - No silent retries across runs. A failed run leaves a `state:needs-input` label and a comment.
-- Safety nets for missed triggers: the hourly `brain-respond` sweep (answers without the label) and the weekly review (ideas stuck in a state for more than N days, missing promotion tasks, events dropped by trigger caps, disabled tasks).
+- Safety nets for missed triggers: the periodic `brain-respond` sweep (answers without the label) and the weekly review (ideas stuck in a state for more than N days, missing promotion tasks, events dropped by trigger caps, disabled tasks).
