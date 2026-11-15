@@ -1,0 +1,41 @@
+#!/bin/sh
+# segoy — set up and check repos that use the Segoy kit.
+#
+#   segoy init brain [--no-github] [--repo <owner>/<repo>] <dir>
+#       Copy kit/common and kit/brain into <dir> (never overwriting), write
+#       .segoy/version and .segoy/manifest.json, and create the labels in
+#       the GitHub repo through the REST API.
+#   segoy doctor [<dir>] [--offline]
+#       Check config, kit files, labels and branch rules.
+#   segoy doctor --skills [<dir>]      Lint SKILL.md files.
+#   segoy doctor --protocol FILE...    Validate `segoy` blocks.
+#   segoy version
+#
+# Exit status: 0 ok, 1 checks failed, 2 usage or environment error.
+# POSIX shell, git, gh (REST only) and jq.
+
+# shellcheck source-path=SCRIPTDIR
+set -u
+
+SEGOY_HOME=$(CDPATH='' cd -- "$(dirname -- "$0")/.." && pwd)
+export SEGOY_HOME
+
+# shellcheck source=lib/common.sh
+. "$SEGOY_HOME/scripts/lib/common.sh"
+# shellcheck source=lib/init.sh
+. "$SEGOY_HOME/scripts/lib/init.sh"
+# shellcheck source=lib/doctor.sh
+. "$SEGOY_HOME/scripts/lib/doctor.sh"
+
+usage() { sed -n '2,15s/^# \{0,1\}//p' "$0"; }
+
+cmd=${1:-}
+[ $# -gt 0 ] && shift
+case $cmd in
+  init) cmd_init "$@" ;;
+  doctor) cmd_doctor "$@" ;;
+  version) segoy_version ;;
+  sync) die "sync arrives in milestone M4" ;;
+  -h|--help|help|'') usage ;;
+  *) usage; exit 2 ;;
+esac

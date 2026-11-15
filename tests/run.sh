@@ -57,6 +57,7 @@ check "protocol: four-backtick examples are skipped" sh -c "$proto $pf/valid.md 
 rm -f "$proto_out"
 
 check "brain template: structure, frontmatter, labels, config" tests/check-brain-template.sh
+check "segoy init brain and doctor (offline)" tests/check-init-doctor.sh
 
 printf '\n%d passed, %d failed\n' "$passed" "$failed"
 [ "$failed" -eq 0 ]
