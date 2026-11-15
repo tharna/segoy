@@ -93,7 +93,7 @@ Carried into M3:
 
 Tasks
 - T3.1 `kit/project/`: `CLAUDE.md.tmpl`, skills `implement`, `review-pr`, `retro`; agents `implementer`, `verifier`; settings with hooks.
-- T3.2 `scripts/segoy init project`; apply to the Segoy repo (dogfood) and to one scratch project repo.
+- T3.2 `scripts/segoy init project`; apply to the Segoy repo (dogfood) and to one scratch project repo. (M3-D4: no scratch staging; straight to the T2.5 idea in Segoy.)
 - T3.3 Tasks `project-implement` (merged `segoy:plan` or `segoy:impl`; `answered` on PRs) and `project-retro` for both repos.
 - T3.4 Run the idea from T2.5 through to a merged implementation PR and a retro.
 

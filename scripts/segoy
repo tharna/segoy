@@ -1,10 +1,12 @@
 #!/bin/sh
 # segoy — set up and check repos that use the Segoy kit.
 #
-#   segoy init brain [--no-github] [--repo <owner>/<repo>] <dir>
-#       Copy kit/common and kit/brain into <dir> (never overwriting), write
+#   segoy init brain|project [--no-github] [--repo <owner>/<repo>]
+#                            [--ways DIR] [--denylist FILE] <dir>
+#       Copy kit/common and kit/<kind> into <dir> (never overwriting), write
 #       .segoy/version and .segoy/manifest.json, and create the labels in
-#       the GitHub repo through the REST API.
+#       the GitHub repo through the REST API. For a project, CLAUDE.md is
+#       generated with the brain's public ways (--ways) and leak-checked.
 #   segoy doctor [<dir>] [--offline]
 #       Check config, kit files, labels and branch rules.
 #   segoy doctor --skills [<dir>]      Lint SKILL.md files.
@@ -27,7 +29,7 @@ export SEGOY_HOME
 # shellcheck source=lib/doctor.sh
 . "$SEGOY_HOME/scripts/lib/doctor.sh"
 
-usage() { sed -n '2,15s/^# \{0,1\}//p' "$0"; }
+usage() { sed -n '2,17s/^# \{0,1\}//p' "$0"; }
 
 cmd=${1:-}
 [ $# -gt 0 ] && shift

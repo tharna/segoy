@@ -1,6 +1,6 @@
 # Segoy leak check: generic secrets and personal-data patterns on every PR.
 # Required check for promotion PRs (ADR-017, layer 2). No model involved.
-# Needs .claude/scripts/leak-guard.sh from Segoy's kit/common in this repo.
+# Uses .claude/scripts/ from Segoy's kit (common + project) in this repo.
 name: segoy-leak-check
 
 on:
@@ -22,4 +22,5 @@ jobs:
           base="${{ github.event.pull_request.base.sha }}"
           files=$(git diff --name-only --diff-filter=AM "$base"...HEAD)
           if [ -z "$files" ]; then echo "no changed files"; exit 0; fi
-          echo "$files" | xargs .claude/scripts/leak-guard.sh
+          # shellcheck disable=SC2086
+          .claude/scripts/project-leak-check.sh $files

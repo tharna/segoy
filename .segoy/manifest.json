@@ -1,0 +1,17 @@
+{
+  "v": 1,
+  "segoy": "0.1.0-dev+add62e9",
+  "kit": "project",
+  "files": {
+    ".claude/scripts/leak-guard.sh": "637e48108fd421ae5cd91d056114d53d2e9fa891",
+    ".claude/scripts/strip-private.sh": "df453cbbc0fb9aeec9047d2d7945ba2c3766321d",
+    ".claude/hooks/leak-check-commit.sh": "f95ec593b53d2350d8bae224f3e8be196b9c1c67",
+    ".claude/scripts/project-leak-check.sh": "b5d098ba2c02ecfa231ea2d9594bd73433920f40",
+    ".claude/settings.json": "9e9259285080c132f73e5c62fd8f2812df0a5db7",
+    ".github/workflows/segoy-leak-check.yml": "2a6ef03f8690aab0ec65e93eeaeae17533ad14ca",
+    ".segoy/config.yml": "84fd45f18e8c492b50a17c9e1c112c49f11587d7",
+    ".segoy/labels.json": "f1b6c705e90fd7cb71b887367034eeae50224a8e",
+    "docs/retros/.gitkeep": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+    "docs/specs/.gitkeep": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+  }
+}

@@ -67,6 +67,10 @@ Keep skills under ~150 lines. Put long templates in sibling files and reference 
 - Markdown: relative links, YAML frontmatter on pipeline files, no wiki-link syntax.
 - ADRs: `docs/adr/NNN-title.md` with Context / Decision / Consequences / Revisit when.
 
+## How Segoy changes arrive (dogfooding)
+
+Segoy is also a Segoy project. Ideas about Segoy come in from the owner's brain as Gate 1 PRs (`segoy:plan`) adding `docs/specs/<id>-<slug>/`. After the owner merges one, `segoy-implement` builds exactly that plan and opens one `segoy:impl` PR (Gate 2) with evidence per acceptance criterion; after Gate 2, `segoy-retro` writes `docs/retros/<id>.md`. Changing `kit/` here changes every repo that syncs it, so plans that touch skills must include a fixture or dry-run step.
+
 ## Definition of done for a PR here
 
 - Shell passes shellcheck; skills pass the frontmatter lint; tests pass.

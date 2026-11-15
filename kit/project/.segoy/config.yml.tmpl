@@ -1,0 +1,14 @@
+# Project configuration for Segoy. Copied to config.yml by `segoy init project`.
+owner: <github-handle>
+project_repo: <owner>/<repo>
+
+answer_label: answered
+
+# Leak check (ADR-017). Extra rules or paths to skip, for repos that legitimately
+# document patterns or keep test fixtures. One per line under each key, "- " prefixed.
+leak_skip_rules:
+leak_exclude:
+
+models:
+  implement: opus
+  verify: sonnet
