@@ -23,4 +23,5 @@ Change only the idea's issue in the brain; never write to <owner>/<repo>.
 
 ## Notes
 - Merging = Gate 1 approved → the brain issue moves to `state:building`. In M3, `project-implement` fires on the same merge.
+- Merged or closed a Gate 1 PR before this task existed, or a run failed? Press **Run now**: it catches up on every closed `segoy:plan` PR whose idea is still `promoted`.
 - Closing without merging → the brain issue asks you: `replan`, `park` or `reject`. Answer and add `answered`. For `replan`, press **Run now** on `brain-plan-promote-<repo>` when asked.

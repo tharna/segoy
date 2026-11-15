@@ -4,6 +4,7 @@ description: Use in the brain-gate-sync task when a segoy:plan (Gate 1) PR in a 
 ---
 ## Inputs
 - The closed project PR from the `<github-trigger-context>` block (event `pull_request.closed` in the project repo, label `segoy:plan`).
+- **Run now** (no trigger context): every closed `segoy:plan` PR in the mounted project whose idea's brain issue is still `state:promoted` (for example, closed before this task existed). Handle each, oldest first, at most 5.
 - Two checkouts: the **brain** (with `.segoy/config.yml`) and the **project**. Only the brain's issue is changed.
 - `.segoy/config.yml` (`owner`, `notes_language`).
 
