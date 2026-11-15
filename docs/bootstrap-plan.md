@@ -39,6 +39,22 @@ Tasks
 
 Done when: all five are handled per workflows §2 and the owner has not had to open a computer.
 
+Status (2026-11-15): **done.**
+- Shipped: protocol v1 with the JSON blocks (ADR-022), the `kit/brain/` template, `segoy init brain` and `segoy doctor`, the skills `segoy-triage`, `segoy-respond`, `segoy-capture` and `segoy-onboard`, and the tasks `brain-triage` and `brain-respond`.
+- Staged in a scratch brain first. That found that agent-added labels fire label triggers (ADR-015 amendment), and the `answered` filter fixed it.
+- The brain is set up and the onboarding interview is merged.
+- T1.6: five phone captures, all handled per workflows §2:
+  - an English idea and a Finnish idea, both with assumptions drawn from the onboarding answers;
+  - a duplicate written in the other language, recognised and closed;
+  - a `note:`;
+  - a vague one-liner, resolved after one answer.
+- With the filter in place, no extra runs from triage's own labels.
+
+Carried into M2:
+- `segoy-respond` should set `target:<repo>` when an answer makes the target clear.
+- Notes stay open until the weekly review (M5) files them. Decide in M2 whether to file them earlier.
+- Sweep runs hourly in the owner's setup (24 runs a day). Revisit with real usage numbers.
+
 ## M2 — Spec, plan, promotion (Gate 1)
 
 Tasks
