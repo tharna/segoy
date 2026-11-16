@@ -10,7 +10,7 @@ proto=kit/common/.claude/scripts/protocol.sh
 FX=tests/fixtures/kit-blocks
 CANON='**Check blocks before posting.** Write the comment, PR body or file to a scratch file and run `.claude/scripts/protocol.sh <file>`; post or commit it only if the script exits 0. On any other exit (1 = invalid block, 2 = usage error or missing `jq`), fix what it names and run it again, at most twice; if it still fails, post nothing and report a `failed` run in a comment holding only a `run` block.'
 SKILLS='brain/segoy-gate-sync brain/segoy-onboard brain/segoy-plan brain/segoy-promote
-brain/segoy-respond brain/segoy-spec brain/segoy-triage brain/segoy-weekly-review
+brain/segoy-respond brain/segoy-spec brain/segoy-triage brain/segoy-weekly-review brain/segoy-ingest
 common/segoy-sync project/segoy-implement project/segoy-retro'
 
 fail=0

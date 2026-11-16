@@ -13,7 +13,7 @@ for f in CLAUDE.md README.md index.md log.md .segoy/config.yml.tmpl .segoy/denyl
          self/profile.md self/goals.md self/values.md self/preferences.md self/constraints.md; do
   [ -f "$B/$f" ] || bad "missing $B/$f"
 done
-for d in inbox knowledge/raw knowledge/wiki/topics knowledge/wiki/entities knowledge/wiki/syntheses journal; do
+for d in inbox knowledge/raw knowledge/wiki/topics knowledge/wiki/entities knowledge/wiki/syntheses knowledge/wiki/sources journal; do
   [ -d "$B/$d" ] || bad "missing directory $B/$d"
 done
 
