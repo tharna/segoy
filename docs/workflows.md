@@ -77,6 +77,7 @@ Small ideas: if triage judges the idea is a small change to an existing project 
    1. Precondition: the target repo and its promotion task exist. A new project has to be set up **before** its spec is merged: the spec PR body says so and links Flow G. If the task is missing, nothing fires, and the weekly review lists the idea as stuck in `specced`.
    2. Read target repo `CLAUDE.md`, structure, existing specs.
    3. Write the plan into a scratch file (not committed in the brain, M2-D1): approach, components touched, task groups (each with files, steps, acceptance checks, commands to run), test plan, risks, rollout, size estimate, *assumptions at the top*.
+   4. PoC check: when the target repo holds only the `segoy init project` scaffold and no earlier plans, and the owner did not ask to skip it, `T1` is a minimal proof of concept (`PoC: <riskiest assumption>`, one short task); otherwise the plan records `PoC: not needed (<reason>)` among its assumptions.
 3. `promote`:
    1. Build project-side `docs/specs/<id>-<slug>/spec.md` and `plan.md`: drop `<!-- private -->` blocks, rewrite references to Roke files as plain statements, remove personal context.
    2. **Mandatory:** run `leak-guard.sh` with the Roke denylist plus the generic patterns over every file to be committed. This is a skill step, not a hook, because hooks do not run in two-repo sessions (ADR-017). Any hit: stop, state `needs-input`, comment in Roke (not in the project repo). The run record states that the check ran and passed.

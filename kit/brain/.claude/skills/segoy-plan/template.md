@@ -15,6 +15,7 @@ links: [spec.md]
 # Plan: <title>
 
 ## Assumptions
+- PoC: <not needed (existing repo | owner skipped) | see T1>
 - <assumption> (<firm|likely|guess>, <owner-stated | brain | spec | path in this repo>)
 <!-- private -->
 - <assumption resting on personal context> ([source](<brain path>))
@@ -49,4 +50,6 @@ links: [spec.md]
 <S | M | L> <and "multi-pr: one PR per task group" when L>
 ```
 
-Coverage check before handing over: list the spec's criteria numbers and the task groups that cover each. Every number must appear at least once.
+When the PoC check (skill step 4) says a PoC is needed, `T1` is `PoC: <riskiest assumption>`: one short task, a `- Judged:` line saying how the result is judged, no feature beyond that assumption.
+
+Coverage check before handing over: list the spec's criteria numbers and the task groups that cover each. Every number must appear at least once. Confirm the `PoC:` line is present, and when it says `see T1`, that `T1` is the PoC task group.
