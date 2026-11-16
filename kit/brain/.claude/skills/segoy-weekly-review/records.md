@@ -89,20 +89,22 @@ Index row in `ideas/index.md`: `| [<id>](<id>-<slug>/idea.md) | <title> | <state
 One line per operation, appended at the end:
 
 ```
-<run date> · segoy-weekly-review · <file note|record decision|stub idea|fix state|propose way|write digest> · <files>
+<run date> · segoy-weekly-review · <file note|record decision|stub idea|fix state|propose way|clean marker|write digest> · <files>
 ```
 
 ## Ways proposal
 
-A new bullet in the target `ways/` file, next to related rules:
+A new bullet in the target `ways/` file, next to related rules. It reads as a final rule: no `proposed` marker, because merging the review PR accepts it. The PR body and the digest list it as a proposal.
 
 ```markdown
-- <Imperative, checkable rule.> (proposed; source: <link, D-… or retro path>, <run date>)
+- <Imperative, checkable rule.> (source: <link, D-… or retro path>, <run date>)
 ```
 
-Replacing an existing rule: keep the old bullet, strike it through, and put the new one right after it, so both are visible in the diff:
+Replacing an existing rule: delete the old bullet and put the new one in its place, in the same diff. No strike-through stays in `ways/`; the PR body and the digest name the rule it replaces.
 
-```markdown
-- ~~<old rule> (source: …)~~ (replaced by the proposal below)
-- <new rule> (proposed; source: <evidence>, <run date>)
+Leftover marker cleanup: a bullet on the default branch whose source note opens with `(proposed; ` (the format before I-20261116-3) loses only that prefix; nothing else in the bullet changes. Any other form of the word is left alone, including the decision-record generalisation marker.
+
+```diff
+-- <rule> (proposed; source: <evidence>, <date>)
++- <rule> (source: <evidence>, <date>)
 ```

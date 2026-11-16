@@ -37,7 +37,12 @@ Period: <from> to <to> (UTC).
 - <idea ID>: label `<state>` but <PR link> is <merged|closed>; the label was not changed.
 
 ## Proposed ways changes
-- p1 → `<ways/ file>`: <rule> (source: <link>)
+Merging this review accepts them; the bullets in `ways/` carry no marker.
+- p1 (proposal) → `<ways/ file>`: <rule> (source: <link>; replaces: <old rule>, if any)
+
+## Markers removed
+Leftover `(proposed; ` markers removed from bullets already on the default branch.
+- `<ways/ file>`: <bullet text after cleanup>
 
 ## Withheld
 - <n> item(s) withheld by the leak check (<file>, line <n>).
