@@ -23,7 +23,7 @@ never to its default branch, and never to a project repo.
 
 ## Notes
 - **Run now** does a catch-up review for the 7 days before the run, for example after a missed week.
-- An empty week (no activity, nothing to file, no drift, nothing stuck) opens no PR and posts nothing.
+- An empty week (no activity, nothing to file and no drift) opens no PR and posts nothing; stuck ideas alone open no PR.
 - While a review PR is still open, the next run opens no second PR; it posts one `skipped` comment on the open one. Merge or close it, and the next run catches up on notes, stubs, drift and stuck ideas.
 - Merging the PR accepts everything in it and closes the filed note issues. Edit the PR's files before merging to change a proposal or record.
 - Agents cannot create tasks: create this one by hand after `segoy sync` brings the skill into the brain.
