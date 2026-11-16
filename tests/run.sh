@@ -72,6 +72,7 @@ check "segoy sync: update, conflict, add, orphan, restore, repo-owned files (T4.
 check "Segoy's own .claude matches the kit (run: scripts/segoy sync --no-github .)" sh -c "scripts/segoy sync --dry-run --no-github . | grep -q 'up to date'"
 check "segoy doctor --history: old versions and commit messages, no matched text (T4.3)" tests/check-history.sh
 check "weekly review: criteria stated in skill and task, fixture dry run (I-20261116-2, I-20261116-3)" tests/check-weekly-review.sh
+check "Gate 1 wording: edit plan.md or close to replan; Gate 2 unchanged (I-20261116-5)" tests/check-gate1-wording.sh
 check "triage comment templates carry valid blocks" sh -c "grep -v '^\`\`\`\`' kit/brain/.claude/skills/segoy-triage/comment.md | $proto - | grep -q '^2 block'"
 
 printf '\n%d passed, %d failed\n' "$passed" "$failed"

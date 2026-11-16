@@ -11,6 +11,7 @@ A version that needs more than `segoy sync` has a note in [`migrations/`](migrat
 - Protocol `review` block (§3.9), validated by `protocol.sh`.
 
 ### Changed
+- Gate 1 PR text and `docs/workflows.md` say to edit `plan.md` in the PR or close it to replan; comment plus `answered` on a `segoy:plan` PR never started anything (I-20261116-5). Run `segoy sync` in the brain.
 - `segoy-weekly-review` writes `ways/` proposals as final bullets with no `proposed` marker, since merging the review PR accepts them; the PR body and the digest list them as proposals, and a replaced rule is deleted in the same diff. Each run also removes a leftover `(proposed; ` marker from `ways/` bullets on the default branch and lists them in the digest under "Markers removed" (I-20261116-3). Run `segoy sync` in the brain; the next weekly review cleans the old markers.
 - `segoy-plan` step 4 states that a target repo that is missing, or holds only the `segoy init project` scaffold with no commits of its own, counts as a new project and needs a PoC first (I-20261116-1; behaviour unchanged).
 
