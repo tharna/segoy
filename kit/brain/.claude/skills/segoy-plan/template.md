@@ -50,6 +50,6 @@ links: [spec.md]
 <S | M | L> <and "multi-pr: one PR per task group" when L>
 ```
 
-When the PoC check (skill step 4) says a PoC is needed, `T1` is `PoC: <riskiest assumption>`: one short task, how the result is judged, no feature beyond that assumption.
+When the PoC check (skill step 4) says a PoC is needed, `T1` is `PoC: <riskiest assumption>`: one short task, a `- Judged:` line saying how the result is judged, no feature beyond that assumption.
 
 Coverage check before handing over: list the spec's criteria numbers and the task groups that cover each. Every number must appear at least once. Confirm the `PoC:` line is present, and when it says `see T1`, that `T1` is the PoC task group.
