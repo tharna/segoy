@@ -40,6 +40,15 @@ t  "version file written" test -s "$P/.segoy/version"
 "$S" sync --no-github "$P" > "$T/out" 2>&1
 t  "second run: up to date (idempotent)" has "$T/out" "up to date"
 
+# 1b. Target holds an older committed kit version, manifest hash stale -> update, not conflict.
+git -C "$T/segoy" init -q && git -C "$T/segoy" add -A && git -C "$T/segoy" -c user.name=t -c user.email=t@example.invalid commit -qm v1
+cp "$K/project/.claude/agents/implementer.md" "$P/.claude/agents/implementer.md"
+jq '.files[".claude/agents/implementer.md"] = "0000000000000000000000000000000000000000"' "$P/.segoy/manifest.json" > "$T/m" && cat "$T/m" > "$P/.segoy/manifest.json"
+printf '\n- newer kit line\n' >> "$K/project/.claude/agents/implementer.md"
+"$S" sync --no-github "$P" > "$T/out" 2>&1
+t  "old kit version with stale manifest: updated" has "$T/out" "update    .claude/agents/implementer.md"
+t  "old kit version replaced" has "$P/.claude/agents/implementer.md" "newer kit line"
+
 # 2. Target changed a managed file, kit changed it too -> conflict, local kept.
 printf '{"local": true}\n' > "$P/.claude/settings.json"
 printf '{"kit": 2}\n' > "$K/project/.claude/settings.json"

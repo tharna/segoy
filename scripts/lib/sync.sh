@@ -29,6 +29,15 @@ render_kit_file() {
   if [ -x "$src" ]; then chmod +x "$3"; else chmod -x "$3"; fi
 }
 
+# kit_had KIT REL HASH — true if HASH is the blob of any committed version of
+# kit/KIT/REL in Segoy's history: the repo holds an old kit file, not a local change
+# (repos synced by hand before `segoy sync` existed have stale manifest hashes).
+kit_had() {
+  git -C "$SEGOY_HOME" log --format=%H -- "kit/$1/$2" 2>/dev/null | while IFS= read -r c; do
+    [ "$(git -C "$SEGOY_HOME" rev-parse -q --verify "$c:kit/$1/$2" 2>/dev/null)" = "$3" ] && echo yes && break
+  done | grep -q yes
+}
+
 # sync_note ACTION PATH — record one line of the report.
 sync_note() {
   printf '%-9s %s\n' "$1" "$2" >> "$TMPD/report"
@@ -68,7 +77,7 @@ sync_kit() {
     ch=$(file_hash "$out")
     if [ "$ch" = "$nh" ]; then
       [ "$rec" = "$nh" ] || printf '%s\t%s\n' "$rel" "$nh" >> "$TMPD/hashes"
-    elif [ -n "$rec" ] && [ "$ch" = "$rec" ]; then
+    elif { [ -n "$rec" ] && [ "$ch" = "$rec" ]; } || kit_had "$1" "$rel" "$ch"; then
       sync_note update "$rel"
       sync_put "$new" "$out"
       printf '%s\t%s\n' "$rel" "$nh" >> "$TMPD/hashes"
