@@ -58,7 +58,7 @@ segoy/
 ├── tasks/                       # trigger definitions: prompt + setup notes
 │   ├── brain-triage.md  brain-spec.md  brain-plan-promote.md
 │   ├── project-implement.md  project-retro.md
-│   └── brain-weekly-review.md  brain-lint.md
+│   └── brain-weekly-review.md  brain-ingest.md  brain-lint.md
 ├── scripts/
 │   ├── segoy               # entry point: init brain | init project | sync | doctor
 │   └── lib/
@@ -106,6 +106,7 @@ Each row is one scheduled task (file in `tasks/`). "Repos" is what the task moun
 | project-retro | `pull_request.closed`, filters: Is merged, label `segoy:impl` | Owner merges Gate 2 | project | `retro` | Retro PR; state noted for the brain to pick up |
 | kit-sync | Weekly schedule (plus Run now) | — | segoy + roke + every project | `segoy-sync` | One sync PR per repo whose kit is behind (M4-D3) |
 | brain-weekly-review | Weekly schedule, Sunday 18:00 Europe/Helsinki | — | roke first, then every project (read-only) | `segoy-weekly-review` | One `segoy:review` PR in Roke, which also files notes, decision records, stubs and log entries (ADR-018); none in an empty week |
+| brain-ingest | `pull_request.closed` in Roke, filter: Is merged, **no label filter** (plus Run now) | Owner merges a PR that adds files under `knowledge/raw/` (usually the weekly review) | roke | `segoy-ingest` | One `segoy:knowledge` PR per new raw file, at most 5 per run; runs whose PR added no raw file exit quietly |
 | brain-lint | Weekly schedule | — | roke | `lint` | Lint report issue or PR |
 
 Notes:

@@ -1,0 +1,48 @@
+{
+  "run_time": "2026-01-02T10:00:00Z",
+  "brain": "example/brain",
+  "trigger": {
+    "number": 14,
+    "title": "Review 2026-W01",
+    "merged": true,
+    "merged_at": "2026-01-02T09:59:00Z",
+    "labels": [
+      "segoy:review"
+    ],
+    "files": [
+      {
+        "filename": "knowledge/raw/20260101-example-article-about-checklists.md",
+        "status": "added"
+      },
+      {
+        "filename": "log.md",
+        "status": "modified"
+      },
+      {
+        "filename": "journal/2026-W01.md",
+        "status": "added"
+      }
+    ]
+  },
+  "issues": [
+    {
+      "number": 20,
+      "title": "pause",
+      "state": "open",
+      "labels": [
+        "segoy:paused"
+      ]
+    }
+  ],
+  "pulls": [
+    {
+      "number": 11,
+      "title": "Ingest: Example covered note (20251220-example-covered-note)",
+      "state": "open",
+      "merged": false,
+      "labels": [
+        "segoy:knowledge"
+      ]
+    }
+  ]
+}
