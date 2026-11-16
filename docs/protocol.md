@@ -31,7 +31,7 @@ Any change to what a skill posts must keep this document valid. Validate with `.
 | `state:<state>` | Brain issues | Lifecycle state, exactly one. States: `inbox`, `triaged`, `needs-input`, `specced`, `planned`, `promoted`, `building`, `in-review`, `done`, `parked`, `rejected` (workflows §1) |
 | `kind:<kind>` | Brain issues | `idea`, `note`, `task`, `self` |
 | `target:<repo>` | Brain issues and spec PRs | Intended project repo (name only, no owner) |
-| `segoy:<kind>` | PRs | `spec`, `plan`, `impl`, `retro`, `review`, `knowledge` |
+| `segoy:<kind>` | PRs | `spec`, `plan`, `impl`, `retro`, `review`, `knowledge`, `lint` (`segoy:lint` is also on the weekly `Lint <date>` report issue in the brain, which has no `state:*` label) |
 | `answered` | Issues and PRs | The owner has answered or given a command; start the next step (ADR-016). Name configurable as `answer_label` |
 | `segoy:paused` | One open issue per repo | Automation in this repo is paused (§5) |
 
