@@ -58,13 +58,13 @@ Questions (reply in one line each, or say "defaults"):
 Next: reply and add the label `answered`, or comment /spec and add `answered` to proceed with defaults.
 ```
 
-**Answering.** The owner replies in a comment and adds the label `answered`. Otak does both in one tap (ADR-016). The label fires `brain-respond`, which reads the answer, removes the label, and continues: back to triage, or on to spec. A reply without the label is picked up by the periodic sweep. Commands (`/spec`, `/plan`, `/park`, `/unpark`, `/reject <reason>`) work the same way.
+**Answering.** The owner replies in a comment and adds the label `answered`. Otak does both in one tap (ADR-016). The label fires `brain-respond`, which reads the answer, removes the label, and continues: back to triage, or on to spec. A reply without the label is picked up by the periodic sweep. Commands (`/spec`, `/plan`, `/park`, `/unpark`, `/reject <reason>`) work the same way. Answers sent together with a command are kept: `/spec` and `/plan` apply them first, and only questions left unanswered take their defaults. A `kind:task` issue (a small change) whose questions the owner fully answers, or answers with `defaults`, goes straight on to the spec in the same run, without `/spec`; a `kind:idea` issue stops at `triaged` and waits for `/spec`.
 
 The comment ends with a `segoy` block of kind `question` carrying the same questions, options and defaults as JSON (see `docs/protocol.md`), so Otak can render one-tap answers. The same rule applies to every artefact below: Gate 1 PR bodies end with a `plan` block, Gate 2 PR bodies with an `impl` block, the weekly review PR with a `review` block, and every skill run ends with a `run` record comment. Every skill checks its blocks with `.claude/scripts/protocol.sh` before posting and posts nothing invalid; a check that still fails after two fixes ends the run as `failed`.
 
 ## 3. Flow B — Spec
 
-1. Runs inside `brain-respond`. Start condition: state `triaged` and no open questions; or the owner commented `/spec`; or the owner answered the questions. Triage does not start spec in the same run.
+1. Runs inside `brain-respond`. Start condition: state `triaged` and no open questions; or the owner commented `/spec`; or a `kind:task` issue whose questions the owner fully answered. Triage does not start spec in the same run.
 2. `spec` writes `idea.md` (from the issue, ADR-018), `spec.md` and the `ideas/index.md` entry, using the answers, ways and related knowledge. Marks private parts. Acceptance criteria must be testable statements. Sets the `target:<repo>` label on the PR; promotion depends on it.
 3. Opens a PR in Roke: label `segoy:spec`, title `Spec: <title> (<id>)`; the branch name is best effort (ADR-020). Body = summary + assumptions + open questions.
 4. Owner reviews on the phone. To request a revision: comment on the PR **and add the label `answered`**, which `brain-respond` also listens to on PRs. Whether the run that opened the PR can instead pick up review comments through auto-fix in a scheduled task is unverified; check it in T2.5. Merge → state `specced`.
