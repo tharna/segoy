@@ -76,6 +76,7 @@ check "ingest: criteria stated in skill and task, fixture dry run (I-20261116-6)
 check "brain-lint.sh: fixture brains, report and --fix scope (I-20261116-7)" tests/check-brain-lint-script.sh
 check "lint: criteria stated in skill and task, fixture dry run (I-20261116-7)" tests/check-lint.sh
 check "Gate 1 wording: edit plan.md or close to replan; Gate 2 unchanged (I-20261116-5)" tests/check-gate1-wording.sh
+check "respond: kind:task straight to spec, answers kept with /spec, fixture dry run (I-20261116-8)" tests/check-respond.sh
 check "kit blocks: examples valid, check step in every posting skill, spec revise fixture (I-20261116-4)" tests/check-kit-blocks.sh
 check "triage comment templates carry valid blocks" sh -c "grep -v '^\`\`\`\`' kit/brain/.claude/skills/segoy-triage/comment.md | $proto - | grep -q '^2 block'"
 
