@@ -7,6 +7,10 @@
 #       .segoy/version and .segoy/manifest.json, and create the labels in
 #       the GitHub repo through the REST API. For a project, CLAUDE.md is
 #       generated with the brain's public ways (--ways) and leak-checked.
+#   segoy sync [--dry-run] [--no-github] [--pr] [--branch NAME] [--pr-footer FILE] <dir>
+#       Update <dir>'s kit files to this Segoy. Files the repo changed get the
+#       new version beside them as <file>.segoy-new; config, notes and other
+#       repo-owned files are left alone. --pr commits on a branch and opens a PR.
 #   segoy doctor [<dir>] [--offline]
 #       Check config, kit files, labels and branch rules.
 #   segoy doctor --skills [<dir>]      Lint SKILL.md files.
@@ -28,8 +32,10 @@ export SEGOY_HOME
 . "$SEGOY_HOME/scripts/lib/init.sh"
 # shellcheck source=lib/doctor.sh
 . "$SEGOY_HOME/scripts/lib/doctor.sh"
+# shellcheck source=lib/sync.sh
+. "$SEGOY_HOME/scripts/lib/sync.sh"
 
-usage() { sed -n '2,17s/^# \{0,1\}//p' "$0"; }
+usage() { sed -n '2,21s/^# \{0,1\}//p' "$0"; }
 
 cmd=${1:-}
 [ $# -gt 0 ] && shift
@@ -37,7 +43,7 @@ case $cmd in
   init) cmd_init "$@" ;;
   doctor) cmd_doctor "$@" ;;
   version) segoy_version ;;
-  sync) die "sync arrives in milestone M4" ;;
+  sync) cmd_sync "$@" ;;
   -h|--help|help|'') usage ;;
   *) usage; exit 2 ;;
 esac
