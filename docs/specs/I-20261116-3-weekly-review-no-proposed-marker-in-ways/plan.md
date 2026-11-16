@@ -15,7 +15,7 @@ links: []
 - PoC: not needed (existing repo)
 - The marker in use is the one `records.md` defines: `(proposed; source: <…>, <date>)`. Cleanup matches only the exact `(proposed; ` opening of the source note and rewrites it to `(` (so `(proposed; source: X, d)` becomes `(source: X, d)`); other forms such as `(proposed)` are left alone. This takes the spec's open-question default (likely, spec Open questions)
 - Cleanup reads `ways/**` on the default branch as checked out at run start, before the run's own edits, so bullets written in the same PR are never touched (likely, spec Out of scope)
-- A replaced rule keeps its strike-through, but its trailing note becomes `(replaced by the next bullet)` instead of `(replaced by the proposal below)`, so a merged file carries no proposal wording at all (guess, spec criterion 1)
+- A replaced rule is deleted in the same diff, with no strike-through left in `ways/`; the PR body and digest name the rule each proposal replaces (owner-stated, Gate 1 comment)
 - Leftover markers count as something to file, like state drift: a week with only cleanup to do still opens the review PR. A week with no markers and nothing else stays empty (guess, spec "each run removes" and criterion 6)
 - The protocol `review` block is unchanged: `proposals[]` already lists the proposals; cleaned bullets are listed only in the digest and counted in the PR body. No app change (likely, `docs/protocol.md` §3.9)
 - Decision-record *Generalisation* (`(proposed)` in `records.md`, `docs/brain-design.md`, `kit/brain/CLAUDE.md`) is not touched (firm, spec Out of scope)
@@ -39,9 +39,9 @@ Behaviour is checked as before: `tests/check-weekly-review.sh` asserts the wordi
 ### T1 Skill, templates, task and docs in one commit
 - Files: the four `segoy-weekly-review` files, `tasks/brain-weekly-review.md`, `docs/workflows.md`, `CHANGELOG.md`.
 - Steps:
-  1. `records.md`: proposal format `- <rule> (source: <…>, <run date>)`; replacement `- ~~<old rule> (source: …)~~ (replaced by the next bullet)`; add `clean marker` to the `log.md` ops.
+  1. `records.md`: proposal format `- <rule> (source: <…>, <run date>)`; a replacement deletes the old bullet in the same diff and the proposal names the rule it replaces; add `clean marker` to the `log.md` ops.
   2. `SKILL.md` step 9: replace "marked `proposed`, with a cited source" by the first canonical sentence; add sub-step "Cleanup" with the second canonical sentence, reading the default branch before any edit of this run and matching only `(proposed; `; never touch `decisions/`.
-  3. `SKILL.md` step 3: leftover markers count like drift. Output contract: `ways/**` (new bullets, replaced-rule strike-throughs, removed leftover markers). Never list: "Never rewrite or delete an existing `ways/` rule without a visible replacement bullet in the same diff, listed as a proposal in the PR body and digest."
+  3. `SKILL.md` step 3: leftover markers count like drift. Output contract: `ways/**` (new bullets, deleted replaced rules, removed leftover markers). Never list: "Never rewrite or delete an existing `ways/` rule without a visible replacement bullet in the same diff, listed as a proposal in the PR body and digest."
   4. `digest.md`: `## Proposed ways changes` items read `- p1 (proposal) → …`; new `## Markers removed` with `- <ways/ file>: <bullet text after cleanup>`, left out when empty.
   5. `pr-body.md`: after the summary lines, `**Proposals** (merge accepts them)` with one `- p1 (proposal) → <file>: <rule>` per proposal, and "Markers removed: <n>" in the summary; filled example updated.
   6. Task file and `docs/workflows.md` Flow E step 7: replace "marked `proposed`" with the canonical sentences; CHANGELOG `Unreleased` → `Changed` entry.
