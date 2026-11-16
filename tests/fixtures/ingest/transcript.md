@@ -22,7 +22,7 @@ Executed by hand by the implementing session for I-20261116-6, step by step from
 - Step 3.7: `knowledge/wiki/index.md` gained the entity line under "Working practices" and the source line under a new "Sources" heading; the topic line stays. (5)
 - Step 3.8: one `log.md` line: `2026-01-02 · segoy-ingest · ingest 20260101-example-article-about-checklists · <5 files>`. (5)
 - Step 3.9: `strip-private.sh topics/checklists.md | leak-guard.sh --denylist .segoy/denylist.txt -` (the only changed shareable page) → exit 0. Running `leak-guard.sh` on the page without stripping flags the private block markers themselves, which is why the step strips first.
-- Step 3.10: changed files: `knowledge/wiki/sources/20260101-example-article-about-checklists.md`, `knowledge/wiki/topics/checklists.md`, `knowledge/wiki/entities/example-checklist-tool.md`, `knowledge/wiki/index.md`, `log.md`; nothing under `knowledge/raw/`. (2)
+- Step 3.10: `git add -A`, then `git diff --cached --name-only` lists: `knowledge/wiki/sources/20260101-example-article-about-checklists.md`, `knowledge/wiki/topics/checklists.md`, `knowledge/wiki/entities/example-checklist-tool.md`, `knowledge/wiki/index.md`, `log.md`; nothing under `knowledge/raw/`. (2)
 - Step 3.11: PR body in `pr-body.md`; `protocol.sh pr-body.md` → 1 block ok, `run` last. (8)
 - Step 3.12: would commit `ingest: 20260101-example-article-about-checklists` on the assigned branch and open `Ingest: Example article about checklists (20260101-example-article-about-checklists)` labelled `segoy:knowledge`. (1)
 - Not done: no push, no PR opened, no merge, no approval, no label change.

@@ -37,6 +37,7 @@ has "$S/SKILL.md" "at most **5 per run**" 1
 # 2: raw files are never changed.
 has "$S/SKILL.md" 'Never create, edit, move, rename or delete anything under `knowledge/raw/`' 2
 has "$S/SKILL.md" 'and nothing under `knowledge/raw/`' 2
+has "$S/SKILL.md" 'git diff --cached --name-only' 2
 # 3: source summary page, Sources citation by path.
 has "$S/SKILL.md" 'knowledge/wiki/sources/<stem>.md' 3
 has "$S/pages.md" "## Source summary page" 3
