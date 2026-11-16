@@ -18,7 +18,7 @@ This text goes into the **project** repo and may become public. Nothing personal
 
 Spec and plan: [`docs/specs/<id>-<slug>/`](docs/specs/<id>-<slug>/)
 
-**Gate 1.** Merge to approve: implementation starts from this plan. To change something, comment and add the label `answered`. Close to reject.
+**Gate 1.** Merge to approve: implementation starts from this plan. To change the plan, edit `plan.md` in this PR (commit to its branch), or close the PR to replan. A comment alone starts nothing.
 
 ```segoy
 {"v": 1, "kind": "plan", "idea": "<id>", "summary": "<one sentence>",
