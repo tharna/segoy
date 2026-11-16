@@ -104,13 +104,17 @@ Small ideas: if triage judges the idea is a small change to an existing project 
 
 1. Trigger: PR with label `segoy:impl` merged (`project-retro`).
 2. `retro` writes `docs/retros/<id>.md`: built vs planned, what went wrong, review comments received (paraphrased), suggested rule changes. Small PR `segoy:retro`. No direct commits (see ADR-018 for why).
-3. `brain-weekly-review` (in Roke, weekly):
-   1. List merged/closed Segoy-labelled PRs across project repos since last run (GitHub tools, read-only).
-   2. Update idea states and `projects/*.md`.
-   3. Create decision records for gate outcomes not yet recorded.
-   4. From retros and decision records, propose at most five changes to `ways/` (each with evidence links). Public-safe ones go to `ways/public/`.
-   5. Write `journal/<year>-W<week>.md`: what moved, what is stuck and why, questions waiting on the owner, automation stats (runs, questions asked vs assumptions made), top three suggested next ideas given `self/goals.md`.
-   6. One PR `segoy:review`. Merging accepts the proposals; editing the PR before merge is how the owner corrects them.
+3. `brain-weekly-review` (in Roke, Sunday 18:00 Europe/Helsinki; skill `segoy-weekly-review`, period = the 7 days ending at run time):
+   1. Stop if paused. If a `segoy:review` PR is still open, comment `skipped` on it and open nothing.
+   2. Read brain issues, comments and label events, and the `segoy:*` PRs closed and retros added in the period in each project repo (read-only).
+   3. File notes deferred by triage into `knowledge/raw/` (never `knowledge/wiki/`), with `Closes #<n>` so the merge closes them.
+   4. Write decision records for `decision` blocks not yet recorded, and stubs for parked and rejected ideas with no idea folder.
+   5. Correct idea states in files and `ideas/index.md` to match the issue labels; list label-vs-PR mismatches for the owner without relabelling.
+   6. List stuck ideas (no state change for more than 14 days) with their state.
+   7. From retros, decision generalisations and brain-side friction (more than one question round, triage corrections), propose at most five changes to `ways/`, each a new bullet marked `proposed` with its source. Public-safe ones go to `ways/public/`.
+   8. Append `log.md` lines and write `journal/<year>-W<week>.md`: what moved, state corrections, stuck ideas, what needs the owner, proposals, stats.
+   9. Leak-check the shareable files, then one PR `segoy:review` ending with `review` and `run` blocks. Merging accepts the proposals; editing the PR before merge is how the owner corrects them. A week with nothing to do opens no PR.
+   10. Later (M6): `projects/*.md` updates and goal-aware "top three next ideas" from `self/goals.md`.
 4. After `ways/public/` changes, the review PR lists project repos whose `CLAUDE.md` is now behind and offers to run `segoy sync` there (each as its own small PR).
 
 ## 7. Flow F — Knowledge

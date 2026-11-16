@@ -105,7 +105,7 @@ Each row is one scheduled task (file in `tasks/`). "Repos" is what the task moun
 | project-implement-pr | `pull_request.labeled`, filter label `answered` | Owner asks for changes on a Gate 2 PR | project | `implement` (revise) | New commits on the same PR |
 | project-retro | `pull_request.closed`, filters: Is merged, label `segoy:impl` | Owner merges Gate 2 | project | `retro` | Retro PR; state noted for the brain to pick up |
 | kit-sync | Weekly schedule (plus Run now) | — | segoy + roke + every project | `segoy-sync` | One sync PR per repo whose kit is behind (M4-D3) |
-| brain-weekly-review | Weekly schedule | — | roke (reads project repos through GitHub tools) | `weekly-review` | One review PR in Roke, which also files notes, stubs and log entries (ADR-018) |
+| brain-weekly-review | Weekly schedule, Sunday 18:00 Europe/Helsinki | — | roke first, then every project (read-only) | `segoy-weekly-review` | One `segoy:review` PR in Roke, which also files notes, decision records, stubs and log entries (ADR-018); none in an empty week |
 | brain-lint | Weekly schedule | — | roke | `lint` | Lint report issue or PR |
 
 Notes:

@@ -31,3 +31,9 @@
  "criteria": [{"id": "one", "text": "x", "evidence": "", "result": "maybe"}],
  "deviations": "none", "tests": {"command": "t", "result": "ok"}}
 ```
+
+```segoy
+{"v": 1, "kind": "review", "week": "2026-1", "period": {"from": "monday"},
+ "proposals": [{"id": "x", "text": "a", "target": "self/goals.md", "source": "D-1"}, {"id": "x", "text": "b", "target": "ways/a.md", "source": ""}],
+ "filed": {"notes": -1}, "stuck": ["idea"], "stats": []}
+```

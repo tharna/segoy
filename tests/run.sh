@@ -53,12 +53,15 @@ for msg in "question: bad field idea" "bad field round" "array of 1-3 questions"
            "plan: assumptions[0]: bad field confidence" "never a brain path" "bad field tasks" "bad field size" \
            "bad field omitted_private" '"leak-check": "pass"' "decision: bad field gate" "decision: bad field outcome" \
            "impl: criteria[0]: bad field id" "criteria[0]: bad field evidence" "criteria[0]: bad field result" \
-           "impl: bad field deviations" "impl: bad field tests"; do
+           "impl: bad field deviations" "impl: bad field tests" \
+           "review: bad field week" "review: bad field period" "review: proposals[0]: bad field id" \
+           "proposals[0]: bad field target" "proposals[1]: bad field source" "proposal ids must be unique" \
+           "review: bad field filed" "review: bad field stuck" "review: bad field stats"; do
   check "protocol reports: $msg" grep -qF "$msg" "$proto_out"
 done
 check "protocol: unclosed block reported" sh -c "$proto $pf/unclosed.md | grep -q 'block not closed'"
 check "protocol: each bad idea reported once" sh -c "[ \$(grep -c 'bad field idea' '$proto_out') -eq 1 ]"
-check "protocol: four-backtick examples are skipped" sh -c "$proto $pf/valid.md | grep -q '^7 block'"
+check "protocol: four-backtick examples are skipped" sh -c "$proto $pf/valid.md | grep -q '^8 block'"
 rm -f "$proto_out"
 
 check "brain template: structure, frontmatter, labels, config" tests/check-brain-template.sh
@@ -68,6 +71,7 @@ check "segoy init project, project leak check, commit hook (T3.1, T3.2)" tests/c
 check "segoy sync: update, conflict, add, orphan, restore, repo-owned files (T4.1)" tests/check-sync.sh
 check "Segoy's own .claude matches the kit (run: scripts/segoy sync --no-github .)" sh -c "scripts/segoy sync --dry-run --no-github . | grep -q 'up to date'"
 check "segoy doctor --history: old versions and commit messages, no matched text (T4.3)" tests/check-history.sh
+check "weekly review: criteria stated in skill and task, fixture dry run (I-20261116-2)" tests/check-weekly-review.sh
 check "triage comment templates carry valid blocks" sh -c "grep -v '^\`\`\`\`' kit/brain/.claude/skills/segoy-triage/comment.md | $proto - | grep -q '^2 block'"
 
 printf '\n%d passed, %d failed\n' "$passed" "$failed"
