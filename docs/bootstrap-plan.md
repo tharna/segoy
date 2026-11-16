@@ -1,5 +1,7 @@
 # Segoy — Bootstrap plan
 
+> **Roke** is the author's own brain repo (private). These docs use it as the worked example; read it as "your brain", the private repo you create from `kit/brain`.
+
 Version 0.1, 2026-11-14. How to get from nothing to a self-hosting Segoy. Written so Claude Code can execute it milestone by milestone. Until M3 the pipeline does not exist, so M0–M3 are built in ordinary Claude Code sessions with the owner approving a short plan before each milestone and merging PRs. From M4, Segoy changes go through Segoy.
 
 ## Manual steps for the owner (once)
@@ -137,7 +139,7 @@ Decisions (2026-11-16):
 - M4-D4: the dogfood idea is the retro's first proposal: in `segoy-plan`, a scaffold with no commits counts as a new project.
 - M4-D5: Segoy goes public after T4.3 is merged and the rulesets are set, before the dogfood run.
 
-Progress: PR 1 merged (#25).
+Progress: PR 1 merged (#25), PR 2 merged (#26). History scan (T4.3): `segoy doctor --history` with the brain's denylist finds only synthetic test samples and the copyright line in `LICENSE` (accepted, M4-D1).
 
 PRs: 1 `segoy sync`, the `segoy-sync` skill and the `kit-sync` task, `protocol.sh` moved to `kit/common` (T4.1) · 2 changelog, version 0.1.0, migrations (T4.2) · 3 public readiness (T4.3) · 4 dogfood run (T4.4).
 

@@ -15,6 +15,8 @@
 #       Check config, kit files, labels and branch rules.
 #   segoy doctor --skills [<dir>]      Lint SKILL.md files.
 #   segoy doctor --protocol FILE...    Validate `segoy` blocks.
+#   segoy doctor --history [--denylist FILE] [--skip RULE] [<dir>]
+#       Leak-check every file version and commit message in the git history.
 #   segoy version
 #
 # Exit status: 0 ok, 1 checks failed, 2 usage or environment error.
@@ -35,7 +37,7 @@ export SEGOY_HOME
 # shellcheck source=lib/sync.sh
 . "$SEGOY_HOME/scripts/lib/sync.sh"
 
-usage() { sed -n '2,21s/^# \{0,1\}//p' "$0"; }
+usage() { sed -n '2,23s/^# \{0,1\}//p' "$0"; }
 
 cmd=${1:-}
 [ $# -gt 0 ] && shift

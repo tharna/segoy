@@ -67,6 +67,7 @@ check "strip-private and leak-guard (T2.2, T2.4)" tests/check-leak-guard.sh
 check "segoy init project, project leak check, commit hook (T3.1, T3.2)" tests/check-init-project.sh
 check "segoy sync: update, conflict, add, orphan, restore, repo-owned files (T4.1)" tests/check-sync.sh
 check "Segoy's own .claude matches the kit (run: scripts/segoy sync --no-github .)" sh -c "scripts/segoy sync --dry-run --no-github . | grep -q 'up to date'"
+check "segoy doctor --history: old versions and commit messages, no matched text (T4.3)" tests/check-history.sh
 check "triage comment templates carry valid blocks" sh -c "grep -v '^\`\`\`\`' kit/brain/.claude/skills/segoy-triage/comment.md | $proto - | grep -q '^2 block'"
 
 printf '\n%d passed, %d failed\n' "$passed" "$failed"

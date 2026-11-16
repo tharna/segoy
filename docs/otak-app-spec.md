@@ -1,5 +1,7 @@
 # Otak — Android app spec
 
+> **Roke** is the author's own brain repo (private). These docs use it as the worked example; read it as "your brain", the private repo you create from `kit/brain`.
+
 Version 0.1, 2026-11-14. Otak is the mobile companion for Segoy: the primary way to capture ideas, see what agents are doing, answer their questions, and make gate decisions. Named after the small companion animal in Earthsea that rides along everywhere.
 
 The app lives in its own repository, `<owner>/otak`.

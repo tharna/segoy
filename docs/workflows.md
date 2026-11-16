@@ -1,5 +1,7 @@
 # Segoy — Workflows
 
+> **Roke** is the author's own brain repo (private). These docs use it as the worked example; read it as "your brain", the private repo you create from `kit/brain`.
+
 Version 0.2, 2026-11-15 (updated with the M0 spike results). Step-by-step behaviour of each flow. This is the acceptance reference for skills.
 
 ## 1. State machine for an idea
