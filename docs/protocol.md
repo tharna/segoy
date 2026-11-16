@@ -22,6 +22,7 @@ Any change to what a skill posts must keep this document valid. Validate with `.
 3. **Versioned.** Every block has `"v": 1`. A breaking change means `"v": 2`, described here, with readers accepting both for at least one release.
 4. **Small.** A block carries what an app needs to render and act, not the whole artefact. Long content stays in files and is linked.
 5. **No personal data beyond what the surrounding comment already shows.** Blocks in project repos are public in public repos.
+6. **Checked before posting.** Every kit skill that posts or writes `segoy` blocks runs `.claude/scripts/protocol.sh` on the text first and posts only on exit 0; after two failed fixes it posts nothing but a checked `failed` `run` block. `tests/check-kit-blocks.sh` checks every example in the kit.
 
 ## 2. Labels (state)
 

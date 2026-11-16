@@ -121,3 +121,22 @@ To ask for changes, comment here and add the label `answered`.
 {"v": 1, "kind": "run", "skill": "segoy-spec", "repo": "<owner>/<brain>", "idea": "<id>", "started": "<iso>", "finished": "<iso>", "outcome": "ok", "next": "owner: review and merge, or comment and add answered", "session": "<url>"}
 ```
 ````
+
+`target` in the `spec` block is the repo name without owner (`<repo>`, never `<owner>/<repo>`), or `none`. After a revision, recount `criteria`, `open_questions` and `private_blocks` from the pushed `spec.md` and update this block and the summary lines.
+
+## Revise comment
+
+At most 5 bullets. Include the `decision` block only if the owner's comment gave a reason; it carries `idea`, never `subject`.
+
+````markdown
+Revised the spec:
+- <what changed>
+
+```segoy
+{"v": 1, "kind": "decision", "idea": "<id>", "gate": "spec", "outcome": "changed", "reason": "<the owner's reason, one line>"}
+```
+
+```segoy
+{"v": 1, "kind": "run", "skill": "segoy-spec", "repo": "<owner>/<brain>", "idea": "<id>", "started": "<iso>", "finished": "<iso>", "outcome": "ok", "next": "owner: review and merge, or comment and add answered", "session": "<url>"}
+```
+````

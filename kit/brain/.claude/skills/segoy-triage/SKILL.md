@@ -38,8 +38,8 @@ description: Use when a new issue in the brain repo needs triage (classify, assi
     - always `kind:idea` (or `kind:task` for a task);
     - `state:needs-input` if there are questions, else `state:triaged`; remove `state:inbox` if present;
     - `target:<repo>` when the target is a repo (existing or suggested). Adding a missing label to the issue creates it.
-11. **Finish**: append a `run` block to the comment you posted (same comment, at the very end): `skill` `segoy-triage`, `repo`, `idea` when assigned, `started`, `finished`, `outcome` (`asked` if questions, else `ok`), `next` (the single next action and whose it is), `session` (`https://claude.ai/code/session_<id>` from `CLAUDE_CODE_REMOTE_SESSION_ID` without its `cse_` prefix, when set).
-12. **Check your blocks**: the comment's `segoy` blocks must be valid JSON matching Segoy `docs/protocol.md`. If a check script is available (`scripts/segoy doctor --protocol` in a Segoy checkout), use it on the text before posting.
+11. **Finish**: append a `run` block to the comment (same comment, at the very end; compose the whole comment first and post it only after step 12): `skill` `segoy-triage`, `repo`, `idea` when assigned, `started`, `finished`, `outcome` (`asked` if questions, else `ok`), `next` (the single next action and whose it is), `session` (`https://claude.ai/code/session_<id>` from `CLAUDE_CODE_REMOTE_SESSION_ID` without its `cse_` prefix, when set).
+12. **Check blocks before posting.** Write the comment, PR body or file to a scratch file and run `.claude/scripts/protocol.sh <file>`; post or commit it only if the script exits 0. On any other exit (1 = invalid block, 2 = usage error or missing `jq`), fix what it names and run it again, at most twice; if it still fails, post nothing and report a `failed` run in a comment holding only a `run` block.
 
 ## Output contract
 - Exactly **one** comment on the issue, using a template from `comment.md`, ending with the `segoy` blocks (`question` when asking, then `run`). Every comment this skill posts carries a `run` block; that is how later runs tell agent comments from the owner's.

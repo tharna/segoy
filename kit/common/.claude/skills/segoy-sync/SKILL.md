@@ -16,10 +16,11 @@ description: Use in the kit-sync scheduled task (or when the owner asks) to brin
 2. For each target, check the preconditions above with `gh api` REST calls (GraphQL does not work in cloud sessions; see `scripts/README.md`).
 3. For a target that is behind:
    1. Make sure its checkout is on its default branch, up to date and clean.
-   2. Write a footer file (see step 5 for migrations) outside the checkouts with: one or two sentences on what changed in the kit since the target's `.segoy/version` (from the changelog or `git log` of `kit/` in Segoy), then a `run` block with exactly these fields (protocol §3.4): `"v": 1`, `"kind": "run"`, `skill` `segoy-sync`, `repo` the target, `started`, `finished` (now), `outcome` `ok`, `next` `owner: review and merge the sync PR`, `session` when known. Check it with `.claude/scripts/protocol.sh <footer>`; the script refuses an invalid footer.
-   3. Run `scripts/segoy sync --pr --pr-footer <footer> <target>`. Add `--branch <your assigned branch>` if you may push only to that branch. The script commits, pushes, creates missing labels and opens the PR; it prints the PR URL.
-   4. If it reports `conflict`, say in your summary which files: the owner merges `<file>.segoy-new` by hand.
-   5. If it reports `migrate` lines, add to the footer, before the `run` block, one bullet per migration: its file in the Segoy repo and its "Who needs this" line. Do not carry out the steps.
+   2. Write a footer file (see step 3.6 for migrations) outside the checkouts with: one or two sentences on what changed in the kit since the target's `.segoy/version` (from the changelog or `git log` of `kit/` in Segoy), then a `run` block with exactly these fields (protocol §3.4): `"v": 1`, `"kind": "run"`, `skill` `segoy-sync`, `repo` the target, `started`, `finished` (now), `outcome` `ok`, `next` `owner: review and merge the sync PR`, `session` when known.
+   3. **Check blocks before posting.** Write the comment, PR body or file to a scratch file and run `.claude/scripts/protocol.sh <file>`; post or commit it only if the script exits 0. On any other exit (1 = invalid block, 2 = usage error or missing `jq`), fix what it names and run it again, at most twice; if it still fails, post nothing and report a `failed` run in a comment holding only a `run` block.
+   4. Run `scripts/segoy sync --pr --pr-footer <footer> <target>`. Add `--branch <your assigned branch>` if you may push only to that branch. The script commits, pushes, creates missing labels and opens the PR; it prints the PR URL.
+   5. If it reports `conflict`, say in your summary which files: the owner merges `<file>.segoy-new` by hand.
+   6. If it reports `migrate` lines, add to the footer, before the `run` block, one bullet per migration: its file in the Segoy repo and its "Who needs this" line. Do not carry out the steps.
 4. End with a short summary per target: PR URL, `up to date`, `paused` or `skipped (open sync PR)`.
 
 ## Output contract

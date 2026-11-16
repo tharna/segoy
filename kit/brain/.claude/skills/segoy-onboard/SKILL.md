@@ -25,8 +25,9 @@ description: Use in an interactive session on a newly set-up brain repo when the
    - `ways/public/*.md`: one imperative, checkable rule per bullet, each ending `(source: owner-stated, <date>)`; `visibility: shareable`.
    - `ways/private/` entries for preferences the owner marked as personal.
    - Update `updated:` in each changed file's frontmatter.
-6. Open one PR: title `Onboarding: self and ways of working`, body listing the changed files and how many entries each got, ending with a `run` block (`skill` `segoy-onboard`, `outcome` `ok`, `next` `owner: review and merge`). Never merge it.
-7. Tell the owner the PR link and that agents use these files from the moment the PR is merged.
+6. **Check blocks before posting.** Write the comment, PR body or file to a scratch file and run `.claude/scripts/protocol.sh <file>`; post or commit it only if the script exits 0. On any other exit (1 = invalid block, 2 = usage error or missing `jq`), fix what it names and run it again, at most twice; if it still fails, post nothing and report a `failed` run in a comment holding only a `run` block.
+7. Open one PR: title `Onboarding: self and ways of working`, body listing the changed files and how many entries each got, ending with a `run` block (`skill` `segoy-onboard`, `outcome` `ok`, `next` `owner: review and merge`). Never merge it.
+8. Tell the owner the PR link and that agents use these files from the moment the PR is merged.
 
 ## Output contract
 - One PR in the brain repo changing only `self/`, `ways/public/` and `ways/private/` files. Every entry carries `(source: owner-stated, <date>)`.

@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "segoy": "0.1.0+64b4543",
+  "segoy": "0.1.0+3c9ca00",
   "kit": "project",
   "files": {
     ".claude/scripts/leak-guard.sh": "637e48108fd421ae5cd91d056114d53d2e9fa891",
@@ -15,11 +15,11 @@
     "docs/specs/.gitkeep": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
     ".claude/agents/implementer.md": "78990c825aa9ac01ab38700146ad696e73550104",
     ".claude/agents/verifier.md": "3dbc1c601c33f9a3a1af2a37be192b8647923cfc",
-    ".claude/skills/segoy-implement/SKILL.md": "c940d0ec8aa7645419ccd14c64f9a4700061e7d1",
+    ".claude/skills/segoy-implement/SKILL.md": "bb6ad4be552cf39c549cd7e214cc36007d1c51c4",
     ".claude/skills/segoy-implement/pr-body.md": "93e5e1781c8e325bcbca9647cb330225597e411c",
-    ".claude/skills/segoy-retro/SKILL.md": "035de8ca8f649c89ad868bd32b02d3262085936f",
+    ".claude/skills/segoy-retro/SKILL.md": "9859278b7f10430bc3c8bb94210d6108feb31cf6",
     ".claude/skills/segoy-retro/template.md": "a3567b52a87a2cae05fcdfa92867cf3ecc0960db",
     ".claude/scripts/protocol.sh": "faf575b67c15609d1efbb23d8a467366280cf094",
-    ".claude/skills/segoy-sync/SKILL.md": "3447b2744026fcbb513cfb8db813919f94224d2f"
+    ".claude/skills/segoy-sync/SKILL.md": "e29f6cd403ff9c527000a0fb9189a6e58cad7f69"
   }
 }
