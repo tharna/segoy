@@ -53,12 +53,15 @@ for msg in "question: bad field idea" "bad field round" "array of 1-3 questions"
            "plan: assumptions[0]: bad field confidence" "never a brain path" "bad field tasks" "bad field size" \
            "bad field omitted_private" '"leak-check": "pass"' "decision: bad field gate" "decision: bad field outcome" \
            "impl: criteria[0]: bad field id" "criteria[0]: bad field evidence" "criteria[0]: bad field result" \
-           "impl: bad field deviations" "impl: bad field tests"; do
+           "impl: bad field deviations" "impl: bad field tests" \
+           "review: bad field week" "review: bad field period" "review: proposals[0]: bad field id" \
+           "proposals[0]: bad field target" "proposals[1]: bad field source" "proposal ids must be unique" \
+           "review: bad field filed" "review: bad field stuck" "review: bad field stats"; do
   check "protocol reports: $msg" grep -qF "$msg" "$proto_out"
 done
 check "protocol: unclosed block reported" sh -c "$proto $pf/unclosed.md | grep -q 'block not closed'"
 check "protocol: each bad idea reported once" sh -c "[ \$(grep -c 'bad field idea' '$proto_out') -eq 1 ]"
-check "protocol: four-backtick examples are skipped" sh -c "$proto $pf/valid.md | grep -q '^7 block'"
+check "protocol: four-backtick examples are skipped" sh -c "$proto $pf/valid.md | grep -q '^8 block'"
 rm -f "$proto_out"
 
 check "brain template: structure, frontmatter, labels, config" tests/check-brain-template.sh

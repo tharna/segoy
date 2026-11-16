@@ -180,11 +180,34 @@ At the end of a Gate 2 PR body in the project repo (`segoy:impl`). Like `plan`, 
 | `deviations` | array of strings | yes | Differences from the plan; empty when none |
 | `tests` | object | no | `{"command": "…", "result": "pass"/"fail"}` for the repo's test command |
 
-### 3.9 Outlines for later milestones
+### 3.9 `review` (M5)
 
-These kinds are reserved. Their fields are fixed in the milestone that first emits them, and the validator only checks the common fields until then.
+At the end of a weekly review PR body in the brain (`segoy:review`), followed by the `run` block. Written by `segoy-weekly-review`.
 
-- `review` (M5, weekly review PR body): `week`, `proposals` (each with `id`, `text`, `target`), `stats`.
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `week` | string | yes | ISO week of the run, `<yyyy>-W<ww>` |
+| `period` | object | yes | `{"from": "<iso>", "to": "<iso>"}`: the 7 days ending at run time |
+| `proposals` | array | yes | Proposed `ways/` changes, at most five; may be empty |
+| `proposals[].id` | string | yes | `p1`, `p2`, … unique within the block |
+| `proposals[].text` | string | yes | The proposed rule, one line |
+| `proposals[].target` | string | yes | The `ways/` file it goes into, for example `ways/public/review.md` |
+| `proposals[].source` | string | yes | Evidence: a link, `D-<yyyymmdd>-<n>` or a retro path |
+| `filed` | object | yes | Counts of what the PR files: `notes`, `decisions`, `stubs`, `state_fixes` (integers ≥ 0) |
+| `stuck` | array of strings | yes | Idea IDs with no state change for more than 14 days; may be empty |
+| `stats` | object | yes | Free-form counts for the week, for example `{"runs": 12, "questions": 3, "assumptions": 9}` |
+
+```segoy
+{"v": 1, "kind": "review", "week": "2026-W01",
+ "period": {"from": "2025-12-28T16:00:00Z", "to": "2026-01-04T16:00:00Z"},
+ "proposals": [{"id": "p1", "text": "Ask platform questions before scope questions.", "target": "ways/public/principles.md", "source": "D-20260102-1"}],
+ "filed": {"notes": 1, "decisions": 1, "stubs": 1, "state_fixes": 0},
+ "stuck": ["I-20251201-1"], "stats": {"runs": 12, "questions": 3, "assumptions": 9}}
+```
+
+### 3.10 Outlines for later milestones
+
+Kinds reserved for later milestones are listed here. Their fields are fixed in the milestone that first emits them, and the validator only checks the common fields until then. None are reserved at present.
 
 ## 4. Owner actions
 

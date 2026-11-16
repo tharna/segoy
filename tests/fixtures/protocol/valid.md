@@ -45,3 +45,11 @@ Triage comment with questions.
               {"id": "2", "text": "case-insensitive", "evidence": "notes.sh:42 uses grep -i", "result": "unclear"}],
  "deviations": [], "tests": {"command": "tests/test.sh", "result": "pass"}}
 ```
+
+```segoy
+{"v": 1, "kind": "review", "week": "2026-W01",
+ "period": {"from": "2025-12-28T16:00:00Z", "to": "2026-01-04T16:00:00Z"},
+ "proposals": [{"id": "p1", "text": "Ask platform questions first.", "target": "ways/public/principles.md", "source": "D-20260102-1"}],
+ "filed": {"notes": 1, "decisions": 1, "stubs": 0, "state_fixes": 2},
+ "stuck": ["I-20251201-1"], "stats": {"runs": 4}}
+```

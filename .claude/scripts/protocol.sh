@@ -115,7 +115,26 @@ else
         else empty end ),
       need("deviations"; type == "array" and all(.[]; type == "string"); "must be an array of strings"),
       opt("tests"; type == "object" and (.result | IN("pass","fail")); "must be {command, result: pass|fail}")
-    elif (.kind | IN("review")) then empty
+    elif .kind == "review" then
+      need("week"; type == "string" and test("^[0-9]{4}-W(0[1-9]|[1-4][0-9]|5[0-3])$"); "must look like <yyyy>-W<ww>"),
+      need("period"; type == "object" and (.from | ts_ok) and (.to | ts_ok); "must be {from, to} with ISO 8601 UTC timestamps"),
+      need("proposals"; type == "array" and length <= 5; "must be an array of at most 5 proposals"),
+      ( (.proposals // []) | if type == "array" then
+          ( to_entries[] | .key as $i | .value |
+            if type != "object" then "proposals[\($i)] is not an object"
+            else
+              need("id"; type == "string" and test("^p[0-9]+$"); "must be p<n>"),
+              need("text"; str_ok; "must be a non-empty string"),
+              need("target"; type == "string" and test("^ways/.+"); "must be a path under ways/"),
+              need("source"; str_ok; "must be a non-empty string")
+              | "proposals[\($i)]: " + .
+            end ),
+          ( [ .[]? | objects | .id ] | if length != (unique | length) then "proposal ids must be unique" else empty end )
+        else empty end ),
+      need("filed"; type == "object" and ([.notes, .decisions, .stubs, .state_fixes] | all(type == "number" and . >= 0 and . == floor));
+           "must have integer counts notes, decisions, stubs, state_fixes"),
+      need("stuck"; type == "array" and all(.[]; idea_ok); "must be an array of idea IDs"),
+      need("stats"; type == "object"; "must be an object")
     else "warning: unknown kind \(.kind) (ignored by readers)"
     end )
 end
