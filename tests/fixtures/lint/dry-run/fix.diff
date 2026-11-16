@@ -1,5 +1,4 @@
 diff --git a/ideas/I-20251201-1-example-idea-one/idea.md b/ideas/I-20251201-1-example-idea-one/idea.md
-index 6411f48..8b97a5b 100644
 --- a/ideas/I-20251201-1-example-idea-one/idea.md
 +++ b/ideas/I-20251201-1-example-idea-one/idea.md
 @@ -7 +7 @@ created: 2025-12-01
@@ -9,7 +8,6 @@ index 6411f48..8b97a5b 100644
 +kind: idea
 +links: []
 diff --git a/ideas/index.md b/ideas/index.md
-index 4b5a712..e02b2a0 100644
 --- a/ideas/index.md
 +++ b/ideas/index.md
 @@ -10 +9,0 @@ visibility: private
@@ -19,7 +17,6 @@ index 4b5a712..e02b2a0 100644
 +| [I-20251203-1](I-20251203-1-example-wrong-state/idea.md) | Example wrong-state idea | planned | example-project | 2025-12-08 |
 +| [I-20251202-1](I-20251202-1-example-unlisted-idea/idea.md) | Example unlisted idea | needs-input |  | 2025-12-06 |
 diff --git a/knowledge/wiki/index.md b/knowledge/wiki/index.md
-index 27847b0..c417dcf 100644
 --- a/knowledge/wiki/index.md
 +++ b/knowledge/wiki/index.md
 @@ -19,0 +20,4 @@ One line per page, grouped by topic. Pages cite sources in `knowledge/raw/`.
@@ -27,14 +24,7 @@ index 27847b0..c417dcf 100644
 +## Unfiled
 +
 +- [Example orphan](topics/example-orphan.md) (topic)
-diff --git a/log.md b/log.md
-index 1554b3c..d7fc88b 100644
---- a/log.md
-+++ b/log.md
-@@ -5,0 +6 @@ Append-only. One line per operation: `<date> · <actor> · <operation> · <files
-+2026-01-10 · segoy-lint · fix frontmatter and index · ideas/I-20251201-1-example-idea-one/idea.md, self/goals.md, ideas/index.md, knowledge/wiki/index.md
 diff --git a/self/goals.md b/self/goals.md
-index 509d83c..350c610 100644
 --- a/self/goals.md
 +++ b/self/goals.md
 @@ -7,0 +8 @@ links: []
