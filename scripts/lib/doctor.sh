@@ -105,13 +105,53 @@ doctor_online() {
   say "info the Claude GitHub App cannot be detected from here; check github.com/settings/installations"
 }
 
+# doctor_history DIR [leak-guard options] — leak-check every file version and every
+# commit message in DIR's history. Prints "<path>@<blob>:<line>: <rule>", never the text.
+doctor_history() {
+  hdir=$1; shift
+  git -C "$hdir" rev-parse --git-dir >/dev/null 2>&1 || die "$hdir is not a git repository"
+  H=$(mktemp -d) || die "mktemp failed"
+  git -C "$hdir" rev-list --all --objects > "$H/objects"
+  cut -d' ' -f1 "$H/objects" | git -C "$hdir" cat-file --batch-check='%(objecttype) %(objectname)' \
+    | awk '$1 == "blob" { print $2 }' | sort -u > "$H/blobs"
+  n=0
+  while IFS=' ' read -r sha path; do
+    [ -n "$path" ] || continue
+    grep -qx "$sha" "$H/blobs" || continue
+    [ -e "$H/b/$sha" ] && continue      # one copy per blob is enough
+    mkdir -p "$H/b/$sha/$(dirname "$path")"
+    git -C "$hdir" cat-file blob "$sha" > "$H/b/$sha/$path"
+    n=$((n + 1))
+  done < "$H/objects"
+  git -C "$hdir" log --all --format='%H%n%B%n' > "$H/commit-messages"
+  say "segoy doctor --history: $n file versions and $(git -C "$hdir" rev-list --all | wc -l | tr -d ' ') commit messages"
+  status=0
+  ( cd "$H/b" 2>/dev/null && find . -type f | sed 's#^\./##' ) > "$H/list"
+  if [ -s "$H/list" ]; then
+    (cd "$H/b" && tr '\n' '\0' < "$H/list" | xargs -0 "$SEGOY_HOME/kit/common/.claude/scripts/leak-guard.sh" "$@") > "$H/raw" || status=1
+    sed 's#^LEAK \([0-9a-f]\{40\}\)/\([^:]*\):#LEAK \2@\1:#; s#@\([0-9a-f]\{7\}\)[0-9a-f]*:#@\1:#' "$H/raw" > "$H/out"
+  fi
+  (cd "$H" && "$SEGOY_HOME/kit/common/.claude/scripts/leak-guard.sh" "$@" commit-messages) >> "$H/out" || status=1
+  grep '^LEAK' "$H/out"
+  say "findings: $(grep -c '^LEAK' "$H/out")"
+  rm -rf "$H"
+  return "$status"
+}
+
 cmd_doctor() {
-  dir=. offline=0 mode=repo files=''
+  dir=. offline=0 mode=repo files='' hopts=''
   while [ $# -gt 0 ]; do
     case $1 in
       --offline) offline=1 ;;
       --skills) mode=skills ;;
       --protocol) mode=protocol; shift; files="$*"; break ;;
+      --history) mode=history ;;
+      --denylist|--skip|--exclude)
+        v=${2:-}
+        [ "$1" = --denylist ] && case $v in /*) ;; *) v=$(pwd)/$v ;; esac
+        hopts="$hopts$1
+$v
+"; shift ;;
       -*) die "unknown option $1" ;;
       *) dir=$1 ;;
     esac
@@ -133,6 +173,16 @@ cmd_doctor() {
       return ;;
   esac
   [ -d "$dir" ] || die "$dir is not a directory"
+  if [ "$mode" = history ]; then
+    # Options are newline-separated so values with spaces ("private block marker") survive.
+    old_ifs=$IFS; IFS='
+'
+    # shellcheck disable=SC2086  # split on newlines only
+    set -- $hopts
+    IFS=$old_ifs
+    doctor_history "$dir" "$@"
+    return
+  fi
   say "segoy doctor: $dir"
   doctor_offline "$dir"
   if [ "$offline" -eq 0 ]; then doctor_online "$dir"; else say "info online checks skipped (--offline)"; fi

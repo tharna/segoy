@@ -1,5 +1,7 @@
 # Segoy — Product Requirements Document
 
+> **Roke** is the author's own brain repo (private). These docs use it as the worked example; read it as "your brain", the private repo you create from `kit/brain`.
+
 Version 0.1 (draft for bootstrap), 2026-11-14.
 
 ## 1. Summary

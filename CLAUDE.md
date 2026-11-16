@@ -1,6 +1,6 @@
 # Segoy
 
-Segoy is an open-source kit that turns Claude Code + GitHub into a personal idea-to-implementation pipeline. This repo is the generic tool. It is public. A separate private "brain" repo (the owner's is called Roke) holds everything personal.
+Segoy is an open-source kit that turns Claude Code + GitHub into a personal idea-to-implementation pipeline. This repo is the generic tool. It is public. A separate private "brain" repo holds everything personal. The owner's brain is called Roke, and the docs use that name for "the brain" throughout.
 
 The Android companion app, Otak, lives in its own repo; its spec is `docs/otak-app-spec.md` and the contract between skills and the app is `docs/protocol.md`. Any change to what a skill posts (comments, PR bodies, labels) must keep that protocol valid.
 

@@ -1,6 +1,6 @@
 # Segoy design docs
 
-Start here. These documents describe Segoy (this repo), the brain template (the owner's instance is the private Roke repo), and Otak, the Android companion app.
+Start here. These documents describe Segoy (this repo), the brain template (the author's own brain is the private Roke repo; wherever these docs say Roke, read "your brain"), and Otak, the Android companion app.
 
 | File | What it is |
 |---|---|

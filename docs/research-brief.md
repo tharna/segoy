@@ -1,5 +1,7 @@
 # Segoy research brief
 
+> **Roke** is the author's own brain repo (private). These docs use it as the worked example; read it as "your brain", the private repo you create from `kit/brain`.
+
 Date: 2026-11-14. Purpose: ground the Segoy/Roke design in what exists today. Each section ends with what it means for the design. Platform facts were read from the Claude Code docs on this date; several features are in preview, so re-verify before relying on them (see "Spikes" in `docs/architecture.md`).
 
 ## 1. Agentic development environments
