@@ -164,7 +164,7 @@ PRs: 1 `segoy sync`, the `segoy-sync` skill and the `kit-sync` task, `protocol.s
 ## M5 — Learning loop and knowledge
 
 Tasks
-- T5.1 Skill and task `weekly-review` (journal digest, state reconciliation, ways proposals, stuck-idea detection, stats).
+- T5.1 Skill and task `weekly-review` (journal digest, state reconciliation, ways proposals, stuck-idea detection, stats). Built: `segoy-weekly-review`, `tasks/brain-weekly-review.md`, protocol `review` block (I-20261116-2); not yet run live.
 - T5.2 Skills `ingest`, `query`, `lint`; task `brain-lint`.
 - T5.3 Import a first batch of existing notes/bookmarks into `knowledge/raw/` and ingest.
 

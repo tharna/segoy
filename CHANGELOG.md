@@ -6,6 +6,10 @@ A version that needs more than `segoy sync` has a note in [`migrations/`](migrat
 
 ## Unreleased
 
+### Added
+- Brain skill `segoy-weekly-review` and task `tasks/brain-weekly-review.md` (Sunday 18:00 Europe/Helsinki): one `segoy:review` PR a week with the journal digest, notes filed to `knowledge/raw/`, decision records, parked and rejected idea stubs, state corrections, stuck ideas and at most five `proposed` ways changes; nothing in an empty week (I-20261116-2). Run `segoy sync` in the brain and create the task by hand.
+- Protocol `review` block (§3.9), validated by `protocol.sh`.
+
 ### Changed
 - `segoy-plan` step 4 states that a target repo that is missing, or holds only the `segoy init project` scaffold with no commits of its own, counts as a new project and needs a PoC first (I-20261116-1; behaviour unchanged).
 

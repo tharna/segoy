@@ -125,7 +125,7 @@ Each skill is `kit/brain/.claude/skills/<name>/SKILL.md`. Contracts below; full 
 | `ingest` | New file in `knowledge/raw/` or note capture | Summarise source; update/create wiki pages; update index; log | PR `segoy:knowledge` |
 | `query` | Owner asks in a Roke session | Answer from wiki + ways + ideas with file citations; offer to file the answer as a synthesis page | Optional PR |
 | `lint` | Weekly | Find contradictions, orphans, stale pages, missing frontmatter, ideas stuck in a state, index drift | Report issue; fix-PR for mechanical problems |
-| `weekly-review` | Weekly | Read merged PRs, retros, decision records, idea states; update `projects/` and `ideas/index.md`; propose `ways/` changes; write `journal/<week>.md` digest | One PR `segoy:review` |
+| `weekly-review` | Weekly (`segoy-weekly-review`, Sunday 18:00 Europe/Helsinki) | Read merged PRs, retros, decision blocks, idea states; file notes, decision records and stubs; fix `ideas/index.md` and idea states; list stuck ideas; propose `ways/` changes; write `journal/<week>.md` digest. `projects/` updates come later (M6) | One PR `segoy:review` |
 
 \* No direct commits (ADR-018). Whether a scheduled run pushes to `main` depends on the model (spike S11), so every file change in the brain is a PR the owner merges. Capture is still never blocked: the issue is the idea's record until the spec PR creates `idea.md`. Notes, parked or rejected idea stubs and `log.md` entries are filed in one batch by the weekly review PR.
 
