@@ -1,7 +1,9 @@
 #!/bin/sh
 # shellcheck disable=SC2016  # backticks in patterns are literal Markdown, not shell.
 # check-weekly-review.sh — checks for the segoy-weekly-review skill and the
-# brain-weekly-review task (I-20261116-2), run from the repo root.
+# brain-weekly-review task (I-20261116-2), and the ways proposal format
+# without a proposed marker plus leftover-marker cleanup (I-20261116-3, "P3"),
+# run from the repo root.
 #   Part 1: each acceptance criterion is stated where the agent reads it.
 #   Part 2: the dry run on tests/fixtures/weekly-review shows the behaviour.
 # Prints one line per problem; exit 1 if any.
@@ -53,10 +55,32 @@ has "$S/digest.md" "## State corrections" 7
 # 8: stuck ideas over 14 days with current state.
 has "$S/SKILL.md" "more than **14 days**" 8
 has "$S/digest.md" '`<current state>` for <n> days' 8
-# 9: proposed marker, cited source, no silent rewrite.
-has "$S/records.md" "(proposed; source: <" 9
+# 9: cited source, no silent rewrite (marker dropped by I-20261116-3).
+has "$S/records.md" "- <Imperative, checkable rule.> (source: <link, D-… or retro path>, <run date>)" 9
 has "$S/SKILL.md" "never edit or delete a rule silently" 9
-has "$S/SKILL.md" "without a visible \`proposed\` replacement in the same diff" 9
+has "$S/SKILL.md" "without a visible replacement bullet in the same diff" 9
+# P3 1–7: one wording, verbatim, in skill, task and workflows.
+W=docs/workflows.md
+P3A='Write each proposal as a final `ways/` bullet with its cited source and no `proposed` marker; merging the review PR accepts it. List each one as a proposal in the PR body and the digest.'
+P3B='Remove a leftover `(proposed; ` marker from `ways/` bullets already on the default branch, keep the rest of the bullet, and list each one in the digest.'
+for f in "$S/SKILL.md" "$T" "$W"; do
+  has "$f" "$P3A" "P3 1,2,7"
+  has "$f" "$P3B" "P3 3,4,7"
+  grep -qF 'marked `proposed`' "$f" && bad "criterion P3 7: $f still says marked \`proposed\`"
+done
+grep '(proposed; source' "$S/records.md" | grep -qv '^-- <rule> (proposed; source' \
+  && bad "criterion P3 1: records.md proposal format still has the marker"
+# P3 2, 4: templates label proposals and list cleaned markers.
+has "$S/digest.md" "- p1 (proposal) → " "P3 2"
+has "$S/pr-body.md" "- p1 (proposal) → " "P3 2"
+has "$S/digest.md" "## Markers removed" "P3 4"
+has "$S/digest.md" '- `<ways/ file>`: <bullet text after cleanup>' "P3 4"
+# P3 3, 5, 6: exact match, read before this run's edits, decisions untouched.
+has "$S/SKILL.md" 'match only the exact `(proposed; ` opening and rewrite it to `(`' "P3 3"
+has "$S/SKILL.md" "before any edit of this run" "P3 3"
+has "$S/SKILL.md" 'Never touch `decisions/`' "P3 5"
+has "$S/records.md" '(proposed)"; omit the section if none' "P3 5"
+has "$S/SKILL.md" 'no leftover `ways/` marker (step 9 cleanup)' "P3 6"
 # 10: leak check on shareable parts, self/ untouched.
 has "$S/SKILL.md" ".claude/scripts/leak-guard.sh --denylist .segoy/denylist.txt" 10
 has "$S/SKILL.md" 'Never read, quote or write `self/`' 10
@@ -113,12 +137,35 @@ grep -q '| Example drifted idea | planned |' "$D/ideas/index.md" || bad "criteri
 grep -q 'I-20251201-2: file said `specced`, issue label says `planned`' "$D/journal/2026-W01.md" || bad "criterion 7: fix not listed"
 # 8: stuck idea listed with its state.
 grep -q 'I-20251201-1 .*`needs-input` for 20 days' "$D/journal/2026-W01.md" || bad "criterion 8: stuck idea not listed"
-# 9: proposal is a new bullet marked proposed with a source; old rules unchanged.
-diff "$F/brain/ways/public/principles.md" "$D/ways/public/principles.md" | grep '^[<>]' > "${TMPDIR:-/tmp}/wr.$$" || true
-grep -q '^<' "${TMPDIR:-/tmp}/wr.$$" && bad "criterion 9: an existing ways rule was changed"
-grep '^>' "${TMPDIR:-/tmp}/wr.$$" | grep -vq '(proposed; source: ' && bad "criterion 9: new ways bullet without (proposed; source: …)"
-grep -q '^>' "${TMPDIR:-/tmp}/wr.$$" || bad "criterion 9: no proposal in the dry run"
-rm -f "${TMPDIR:-/tmp}/wr.$$"
+# 9, P3 1: the proposal is a new bullet with a source and no proposed marker.
+wr=$(diff "$F/brain/ways/public/principles.md" "$D/ways/public/principles.md" | grep '^[<>]')
+p1="- Name the exact test command in every plan's task-group checks. (source: example/project docs/retros/I-20251210-1-example.md, 2026-01-04)"
+printf '%s\n' "$wr" | grep -qxF "> $p1" || bad "criterion 9: no proposal bullet with a source in the dry run"
+printf '%s\n' "$wr" | grep '^>' | grep -q 'proposed' && bad "criterion P3 1: a new or changed ways bullet says proposed"
+# P3 2: the proposal is listed and labelled in PR body and digest.
+grep -qF -- "- p1 (proposal) → \`ways/public/principles.md\`: Name the exact test command" "$F/pr-body.md" || bad "criterion P3 2: PR body does not list p1 as a proposal"
+grep -qF -- "- p1 (proposal) → \`ways/public/principles.md\`: Name the exact test command" "$D/journal/2026-W01.md" || bad "criterion P3 2: digest does not list p1 as a proposal"
+# P3 3: exactly one existing bullet changed, and only by dropping "proposed; ".
+old=$(printf '%s\n' "$wr" | sed -n 's/^< //p')
+[ "$(printf '%s\n' "$wr" | grep -c '^<')" -eq 1 ] || bad "criterion P3 3: expected exactly one changed existing bullet"
+case $old in *'(proposed; '*) ;; *) bad "criterion P3 3: the changed bullet had no (proposed; marker" ;; esac
+cleaned=$(printf '%s\n' "$old" | sed 's/(proposed; /(/')
+printf '%s\n' "$wr" | grep -qxF "> $cleaned" || bad "criterion P3 3: cleaned bullet differs by more than the marker"
+# P3 4: digest lists the cleaned bullet with its file.
+grep -qF "## Markers removed" "$D/journal/2026-W01.md" || bad "criterion P3 4: digest has no Markers removed section"
+grep -qxF -- "- \`ways/public/principles.md\`: ${cleaned#- }" "$D/journal/2026-W01.md" || bad "criterion P3 4: digest does not list the cleaned bullet"
+grep -q '· segoy-weekly-review · clean marker · ways/public/principles.md$' "$D/log.md" || bad "criterion P3 4: no clean marker log line"
+# P3 5: the decision record with a (proposed) generalisation is unchanged.
+grep -q '(proposed)$' "$F/brain/decisions/D-20251215-1.md" || bad "criterion P3 5: fixture record lacks a (proposed) generalisation"
+[ ! -e "$D/decisions/D-20251215-1.md" ] || cmp -s "$F/brain/decisions/D-20251215-1.md" "$D/decisions/D-20251215-1.md" \
+  || bad "criterion P3 5: dry run changed the decision record"
+# P3 6: without a leftover marker, no cleanup edit and no cleanup digest entry.
+N=$F/no-marker
+grep -q 'proposed' "$N/brain/ways/public/principles.md" && bad "criterion P3 6: no-marker fixture has a marker"
+diff "$N/brain/ways/public/principles.md" "$N/dry-run/ways/public/principles.md" | grep -q '^<' && bad "criterion P3 6: no-marker run changed an existing bullet"
+diff "$N/brain/ways/public/principles.md" "$N/dry-run/ways/public/principles.md" | grep -qxF "> $p1" || bad "criterion P3 6: no-marker run lost the proposal"
+grep -q 'Markers removed' "$N/dry-run/journal/2026-W01.md" && bad "criterion P3 6: no-marker digest has a Markers removed section"
+grep -q 'Run D: ' "$F/transcript.md" || bad "criterion P3 6: transcript has no run D"
 # 10: shareable output passes the leak check.
 "$guard" --denylist kit/brain/.segoy/denylist.txt "$D/ways/public/principles.md" "$F/pr-body.md" > /dev/null \
   || bad "criterion 10: leak-guard finds something in the dry run"
