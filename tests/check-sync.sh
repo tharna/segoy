@@ -41,7 +41,7 @@ t  "version file written" test -s "$P/.segoy/version"
 t  "second run: up to date (idempotent)" has "$T/out" "up to date"
 
 # 1b. Target holds an older committed kit version, manifest hash stale -> update, not conflict.
-git -C "$T/segoy" init -q && git -C "$T/segoy" add -A && git -C "$T/segoy" -c user.name=t -c user.email=t@example.invalid commit -qm v1
+git -C "$T/segoy" init -q && git -C "$T/segoy" add -A && git -C "$T/segoy" -c user.name=t -c user.email=t@example.invalid commit -qm v1  # leak-guard: allow (test identity)
 cp "$K/project/.claude/agents/implementer.md" "$P/.claude/agents/implementer.md"
 jq '.files[".claude/agents/implementer.md"] = "0000000000000000000000000000000000000000"' "$P/.segoy/manifest.json" > "$T/m" && cat "$T/m" > "$P/.segoy/manifest.json"
 printf '\n- newer kit line\n' >> "$K/project/.claude/agents/implementer.md"
