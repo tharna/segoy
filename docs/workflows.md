@@ -41,7 +41,7 @@ The Roke issue carries exactly one `state:*` label. Once the spec PR has created
    3. **Idea**: assign the ID; search `ideas/index.md`, `projects/index.md` and **open Roke issues** for related or duplicate items. Triage writes **no files** (ADR-018): the issue is the idea's record until the spec PR creates `ideas/<id>-<slug>/idea.md`.
    4. Apply "consult the brain before asking" (brain design §5).
    5. Comment on the issue (see format below), writing in `notes_language`. The capture stays as typed. Set labels `kind:idea`, `state:triaged` or `state:needs-input`, and `target:*` if clear.
-   6. **Note**: label `kind:note` and acknowledge. The weekly review PR saves it verbatim to `knowledge/raw/` and links it, then the issue is closed. Ingest follows from there.
+   6. **Note**: label `kind:note` and acknowledge. The weekly review PR saves it verbatim to `knowledge/raw/` and links it, then the issue is closed. Merging that PR starts ingest (`brain-ingest`); the note issue itself never does.
    7. **Task for existing project**: propose creating an issue in that project repo; do it if the content is shareable, otherwise ask.
    8. **Self-update**: open a PR against `self/` quoting the owner's words; never commit directly.
 
@@ -119,7 +119,7 @@ Small ideas: if triage judges the idea is a small change to an existing project 
 
 ## 7. Flow F — Knowledge
 
-- **Ingest**: `note:` issue or file added under `knowledge/raw/` → `ingest` → PR `segoy:knowledge` updating wiki pages, index, log.
+- **Ingest**: owner merges a PR that adds files under `knowledge/raw/` (usually the weekly review), or presses Run now → `segoy-ingest` (task `brain-ingest`) → one PR `segoy:knowledge` per raw file with a source summary in `wiki/sources/`, updated or new wiki pages, index and one `log.md` line. Not from note issues. Closing the PR unmerged rejects that source.
 - **Query**: in a Roke session, "ask: …" → answer with citations; offer to save as synthesis.
 - **Lint**: weekly → issue titled `Lint <date>` with findings; mechanical fixes as a PR.
 

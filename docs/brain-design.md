@@ -50,7 +50,7 @@ roke/
 │   ├── raw/                  # immutable sources: clipped articles, notes, transcripts
 │   └── wiki/
 │       ├── index.md          # catalogue, one line per page, grouped by topic
-│       ├── topics/  entities/  syntheses/
+│       ├── sources/  topics/  entities/  syntheses/
 ├── self/                     # always private
 │   ├── profile.md            # who, roles, skills, context
 │   ├── goals.md              # current goals with horizon and priority
@@ -122,7 +122,7 @@ Each skill is `kit/brain/.claude/skills/<name>/SKILL.md`. Contracts below; full 
 | `plan` | Spec merged (`brain-plan-promote-<repo>`) | Read target repo's `CLAUDE.md` and structure; draft the plan in a scratch file | Nothing committed; hands over to `promote` |
 | `promote` | After `plan`, same run | Strip private blocks (`strip-private.sh`); mandatory leak check with denylist (`leak-guard.sh`); open Gate 1 PR in target repo; comment the private side on the brain issue; set `state:promoted` | PR in project repo; brain comment and state |
 | `record-decision` | Gate outcome observed (PR merged/closed, `/reject`, review comments) | In M2: a `decision` block in the acting skill's comment. From M5: `weekly-review` writes the decision records and proposes generalisations | Comment now; files via the weekly review PR |
-| `ingest` | New file in `knowledge/raw/` or note capture | Summarise source; update/create wiki pages; update index; log | PR `segoy:knowledge` |
+| `ingest` | Merge of a PR adding files under `knowledge/raw/`, or Run now (`segoy-ingest`, task `brain-ingest`); not note capture | Summarise source into `wiki/sources/`; update every page it bears on, create pages only where none exists; update index; log | One PR `segoy:knowledge` per raw file |
 | `query` | Owner asks in a Roke session | Answer from wiki + ways + ideas with file citations; offer to file the answer as a synthesis page | Optional PR |
 | `lint` | Weekly | Find contradictions, orphans, stale pages, missing frontmatter, ideas stuck in a state, index drift | Report issue; fix-PR for mechanical problems |
 | `weekly-review` | Weekly (`segoy-weekly-review`, Sunday 18:00 Europe/Helsinki) | Read merged PRs, retros, decision blocks, idea states; file notes, decision records and stubs; fix `ideas/index.md` and idea states; list stuck ideas; propose `ways/` changes; write `journal/<week>.md` digest. `projects/` updates come later (M6) | One PR `segoy:review` |
@@ -146,8 +146,8 @@ Boundaries: the twin never approves, merges, rejects, or sends anything in the o
 ## 6. Knowledge workflow (LLM-wiki pattern)
 
 - `knowledge/raw/` is append-only. File names: `<yyyy-mm-dd>-<slug>.md` with frontmatter `url`, `author`, `captured`. Agents never edit raw files.
-- `knowledge/wiki/` is agent-maintained, human-readable. Page types: *topic* (concept), *entity* (tool, person, organisation), *synthesis* (answer to a question, comparison). Pages cite raw files by relative link.
-- Ingest updates every page the source bears on, then `wiki/index.md` and `log.md`.
+- `knowledge/wiki/` is agent-maintained, human-readable. Page types: *source* (one summary per raw file, in `wiki/sources/<raw file stem>.md`), *topic* (concept), *entity* (tool, person, organisation), *synthesis* (answer to a question, comparison). Pages cite raw files by relative link in a `Sources` section.
+- Ingest updates every page the source bears on, then `wiki/index.md` and `log.md`. It starts when a PR that adds raw files is merged (usually the weekly review), or on Run now; one `segoy:knowledge` PR per raw file. Closing an ingest PR unmerged rejects that source.
 - Index hierarchy: when a folder's index passes ~150 lines, split by sub-topic and link from the parent.
 - Lint weekly. Contradictions are flagged for the owner, not resolved silently.
 - Knowledge can inform specs: `spec` and `plan` may cite wiki pages; cited content that is `shareable` can be promoted.
