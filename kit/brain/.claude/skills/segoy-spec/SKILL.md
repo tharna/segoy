@@ -6,7 +6,7 @@ description: Use when segoy-respond hands over an idea for a spec (the owner com
 - **Create mode**: one brain issue (an idea) in `state:triaged`, handed over by `segoy-respond`.
 - **Revise mode**: one open brain PR labelled `segoy:spec`, plus the owner's review comments since the PR's last `run` block.
 - `.segoy/config.yml`; the brain (`ways/`, `decisions/`, `self/`, `projects/index.md`, `ideas/index.md`).
-- Templates next to this file: `templates.md` (idea.md, spec.md, index row, PR body).
+- Templates next to this file: `templates.md` (idea.md, spec.md, index row, PR body, revise comment).
 
 ## Preconditions (exit quietly if not met)
 - No open issue labelled `segoy:paused` (Segoy protocol §5).
@@ -27,10 +27,12 @@ description: Use when segoy-respond hands over an idea for a spec (the owner com
    - Assumption sources in the shareable part say `owner-stated`, `brain` or `spec`, never a brain path. Paths may appear only inside private blocks.
 6. **Update `ideas/index.md`**: add or update the row (ID, title, state `specced`, target, today).
 7. **Self-check the shareable part.** Run `.claude/scripts/strip-private.sh` on `spec.md`, then `.claude/scripts/leak-guard.sh --denylist .segoy/denylist.txt` on the stripped text (stdin `-`). On any finding, wrap or reword the offending lines and re-run until clean. The guard prints rule names and line numbers only; never paste the matched text anywhere.
-8. **Commit and push.**
-   - Create: commit the files with `<id>: spec`. Use the branch `claude/spec-<id>-<slug>` if you may create it, else your assigned branch (ADR-020). Open the PR: title `Spec: <title> (<id>)`, labels `segoy:spec` and `target:<repo>` (or `target:none`), body from `templates.md` ending with a `spec` block, then a `run` block.
-   - Revise: apply the requested changes and push to **the PR's own head branch**. The `brain-respond` task prompt grants this (spike S12: a task pushes to an existing branch when its stored prompt allows it, but not on a skill's word alone). If the push is refused, or the prompt you were started with does not grant it, open a replacement PR in the same form, whose body starts with `Replaces #<old>`, and ask the owner in a comment on the old PR to close it. Either way, post one comment on the PR listing what changed (at most 5 bullets), with a `run` block and, if the owner's comment gave a reason, a `decision` block (`gate` `spec`, `outcome` `changed`).
-9. **Create mode only:** comment on the issue with the PR link, one line on what merging does ("merging starts the plan and the Gate 1 PR in `<repo>`"), and a `run` block.
+8. **Check blocks before posting.** Write the comment, PR body or file to a scratch file and run `.claude/scripts/protocol.sh <file>`; post or commit it only if the script exits 0. On any other exit (1 = invalid block, 2 = usage error or missing `jq`), fix what it names and run it again, at most twice; if it still fails, post nothing and report a `failed` run in a comment holding only a `run` block.
+9. **Commit and push.**
+   - Create: commit the files with `<id>: spec`. Use the branch `claude/spec-<id>-<slug>` if you may create it, else your assigned branch (ADR-020). Open the PR: title `Spec: <title> (<id>)`, labels `segoy:spec` and `target:<repo>` (or `target:none`), body from `templates.md` ending with a `spec` block, then a `run` block. `target` in the `spec` block is the repo name without owner (`<repo>`, never `<owner>/<repo>`), or `none`.
+   - Revise: apply the requested changes and push to **the PR's own head branch**. The `brain-respond` task prompt grants this (spike S12: a task pushes to an existing branch when its stored prompt allows it, but not on a skill's word alone). If the push is refused, or the prompt you were started with does not grant it, open a replacement PR in the same form, whose body starts with `Replaces #<old>`, and ask the owner in a comment on the old PR to close it. Either way, post one comment on the PR listing what changed (at most 5 bullets), with a `run` block and, if the owner's comment gave a reason, a `decision` block (`idea` = the idea ID, `gate` `spec`, `outcome` `changed`, `reason`; never `subject`), as in the *Revise comment* template.
+   - Revise: recount from the pushed `spec.md`: `criteria` = numbered items under *Acceptance criteria*, `open_questions` = bullets under *Open questions* (0 for `none`), `private_blocks` = opening private-block markers; edit the PR body's `spec` block and the summary lines to match, checking the new body as in step 8.
+10. **Create mode only:** comment on the issue with the PR link, one line on what merging does ("merging starts the plan and the Gate 1 PR in `<repo>`"), and a `run` block.
 
 ## Output contract
 - One PR in the brain labelled `segoy:spec` and `target:<repo>`, titled `Spec: <title> (<id>)`, changing only `ideas/<id>-<slug>/idea.md`, `ideas/<id>-<slug>/spec.md`, `ideas/index.md` and, at most, one added row in `projects/index.md`.

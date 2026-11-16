@@ -60,7 +60,7 @@ Next: reply and add the label `answered`, or comment /spec and add `answered` to
 
 **Answering.** The owner replies in a comment and adds the label `answered`. Otak does both in one tap (ADR-016). The label fires `brain-respond`, which reads the answer, removes the label, and continues: back to triage, or on to spec. A reply without the label is picked up by the periodic sweep. Commands (`/spec`, `/plan`, `/park`, `/unpark`, `/reject <reason>`) work the same way.
 
-The comment ends with a `segoy` block of kind `question` carrying the same questions, options and defaults as JSON (see `docs/protocol.md`), so Otak can render one-tap answers. The same rule applies to every artefact below: Gate 1 PR bodies end with a `plan` block, Gate 2 PR bodies with an `impl` block, the weekly review PR with a `review` block, and every skill run ends with a `run` record comment.
+The comment ends with a `segoy` block of kind `question` carrying the same questions, options and defaults as JSON (see `docs/protocol.md`), so Otak can render one-tap answers. The same rule applies to every artefact below: Gate 1 PR bodies end with a `plan` block, Gate 2 PR bodies with an `impl` block, the weekly review PR with a `review` block, and every skill run ends with a `run` record comment. Every skill checks its blocks with `.claude/scripts/protocol.sh` before posting and posts nothing invalid; a check that still fails after two fixes ends the run as `failed`.
 
 ## 3. Flow B — Spec
 

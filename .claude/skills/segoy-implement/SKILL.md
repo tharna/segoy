@@ -24,12 +24,13 @@ description: Use in a project repo after the owner merged a Gate 1 (segoy:plan) 
    4. Commit: `<id>: T<n> <title>`. The commit hook runs the leak check; a blocked commit means fix the content, never bypass.
 4. **Whole-repo checks:** run the test and lint commands from `CLAUDE.md`. All must pass before the PR is marked ready.
 5. **Verify:** give the `verifier` agent the spec's numbered acceptance criteria, the diff against the default branch, and the outputs from steps 3–4. It returns one verdict per criterion (`pass`, `fail`, `unclear`) with evidence. On any `fail`, return to step 3 for that criterion **once**; anything still `fail` or `unclear` goes into the PR as such.
-6. **Open the Gate 2 PR** (build), or **comment** on it (revise):
+6. **Check blocks before posting.** Write the comment, PR body or file to a scratch file and run `.claude/scripts/protocol.sh <file>`; post or commit it only if the script exits 0. On any other exit (1 = invalid block, 2 = usage error or missing `jq`), fix what it names and run it again, at most twice; if it still fails, post nothing and report a `failed` run in a comment holding only a `run` block.
+7. **Open the Gate 2 PR** (build), or **comment** on it (revise):
    - Build: title `Impl: <title> (<id>)`, label `segoy:impl`, body from `pr-body.md`, ending with an `impl` block (one entry per criterion) and a `run` block. Mark it draft if anything is `fail` or a check failed.
    - Revise: push to the PR branch; comment with what changed (at most 5 bullets), the criteria re-verified, and a `run` block. Update the PR body's evidence table and `impl` block.
    - Every `run` block has all required fields (protocol §3.4), including `started` (step 1) and `finished`.
    - Before posting, run `.claude/scripts/project-leak-check.sh` on the body text saved to a file. Fix any finding.
-7. Build only: comment on the merged Gate 1 PR with a link to the Gate 2 PR and a `run` block.
+8. Build only: comment on the merged Gate 1 PR with a link to the Gate 2 PR and a `run` block.
 
 ## Output contract
 - Build: one PR `Impl: <title> (<id>)` labelled `segoy:impl`, changing only what the plan names (plus tests). Its body has a criterion-by-criterion evidence table, deviations, manual test steps, follow-ups, a valid `impl` block (protocol §3.8) and a `run` block. One link comment on the Gate 1 PR.

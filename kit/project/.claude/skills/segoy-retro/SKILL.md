@@ -20,7 +20,8 @@ description: Use in a project repo after the owner merged a Gate 2 (segoy:impl) 
    - **Proposed rule changes**: at most three, each an imperative, checkable rule for the owner's ways of working or for Segoy's skills, with the evidence link. They are proposals; the owner's brain review decides.
    - Facts only, with links. No guesses about the owner's feelings or intentions.
 3. Run `.claude/scripts/project-leak-check.sh` on the file. Fix any finding.
-4. Commit `<id>: retro` on `claude/retro-<id>-<slug>` if you may create it, else your assigned branch. Open the PR: title `Retro: <title> (<id>)`, label `segoy:retro`, body = three-line summary + link to the file + `run` block. The `run` block has every required field (protocol §3.4): `v`, `kind`, `skill` `segoy-retro`, `repo`, `idea`, `started` (step 1), `finished` (now), `outcome`, `next`, plus `session` when known.
+4. **Check blocks before posting.** Write the comment, PR body or file to a scratch file and run `.claude/scripts/protocol.sh <file>`; post or commit it only if the script exits 0. On any other exit (1 = invalid block, 2 = usage error or missing `jq`), fix what it names and run it again, at most twice; if it still fails, post nothing and report a `failed` run in a comment holding only a `run` block.
+5. Commit `<id>: retro` on `claude/retro-<id>-<slug>` if you may create it, else your assigned branch. Open the PR: title `Retro: <title> (<id>)`, label `segoy:retro`, body = three-line summary + link to the file + `run` block. The `run` block has every required field (protocol §3.4): `v`, `kind`, `skill` `segoy-retro`, `repo`, `idea`, `started` (step 1), `finished` (now), `outcome`, `next`, plus `session` when known.
 
 ## Output contract
 - One PR labelled `segoy:retro`, titled `Retro: <title> (<id>)`, adding only `docs/retros/<id>-<slug>.md`. Body ends with a `run` block. The file passes the project leak check.

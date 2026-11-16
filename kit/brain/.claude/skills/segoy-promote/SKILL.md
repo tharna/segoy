@@ -20,13 +20,14 @@ description: Use right after segoy-plan in the brain-plan-promote task; strips p
    - frontmatter `visibility: shareable`, `source: promoted`, `links: []`, `state` (`specced` for spec, `planned` for plan);
    - remove every remaining link or path into the brain (`ideas/`, `self/`, `ways/`, `decisions/`, `knowledge/`, `journal/`), replacing it with a plain statement or with `brain`;
    - no mention of the brain repo's name or URL.
-4. **Write the PR body** from `pr-body.md` into a scratch file, ending with the `plan` block (protocol §3.6, `checks` `{"leak-check": "pass"}`) and a `run` block. Validate the blocks with the same rules (`scripts/segoy doctor --protocol` if a Segoy checkout is mounted, otherwise by checking the field tables by hand).
+4. **Write the PR body** from `pr-body.md` into a scratch file, ending with the `plan` block (protocol §3.6, `checks` `{"leak-check": "pass"}`) and a `run` block.
 5. **Leak check (mandatory, never skip).** Run
    `B/.claude/scripts/leak-guard.sh --denylist B/.segoy/denylist.txt P/D/spec.md P/D/plan.md <pr-body file>`.
    - Exit 0 → continue.
    - Any finding → **do not commit or push anything to the project.** Delete `P/D/`. Comment on the **brain** issue: which file and rule, and the line numbers the guard printed. Never the matched text. Set `state:needs-input`, `run` block with `outcome` `stopped` and `checks` `{"leak-check": "fail"}`. End the run.
-6. **Publish.** In `P`: commit `D/` with message `<id>: plan` on `claude/plan-<id>-<slug>` if you may create it, else your assigned branch (ADR-020). Push. Open the PR: title `Plan: <title> (<id>)`, label `segoy:plan`, body from step 4. Never merge it.
-7. **Update the brain issue** (the idea's issue, found by ID in its triage comment):
+6. **Check blocks before posting.** Write the comment, PR body or file to a scratch file and run `.claude/scripts/protocol.sh <file>`; post or commit it only if the script exits 0. On any other exit (1 = invalid block, 2 = usage error or missing `jq`), fix what it names and run it again, at most twice; if it still fails, post nothing and report a `failed` run in a comment holding only a `run` block.
+7. **Publish.** In `P`: commit `D/` with message `<id>: plan` on `claude/plan-<id>-<slug>` if you may create it, else your assigned branch (ADR-020). Push. Open the PR: title `Plan: <title> (<id>)`, label `segoy:plan`, body from step 4. Never merge it.
+8. **Update the brain issue** (the idea's issue, found by ID in its triage comment):
    - one comment: the Gate 1 PR link; the private side (D1): the omitted private items summarised in a few bullets, which stays in the brain; a `run` block with `checks` `{"leak-check": "pass"}`;
    - labels: remove the current `state:*` and add `state:promoted`.
 

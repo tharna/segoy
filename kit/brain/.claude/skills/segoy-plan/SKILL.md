@@ -29,6 +29,7 @@ description: Use in the brain-plan-promote task after the owner merged a segoy:s
    - every acceptance criterion from the spec mapped to at least one task's check;
    - personal context and brain paths only inside `<!-- private -->` blocks.
 6. Hand over to `segoy-promote` in this same run, passing: the idea ID and slug, the brain and project paths, the spec path and the scratch plan path.
+7. For the failure comment under *Stop conditions* (the only thing this skill posts): **Check blocks before posting.** Write the comment, PR body or file to a scratch file and run `.claude/scripts/protocol.sh <file>`; post or commit it only if the script exits 0. On any other exit (1 = invalid block, 2 = usage error or missing `jq`), fix what it names and run it again, at most twice; if it still fails, post nothing and report a `failed` run in a comment holding only a `run` block.
 
 ## Output contract
 - One plan draft in a scratch file, following `template.md`, with every spec criterion covered and the PoC decision recorded (a `PoC:` task group `T1`, or a `PoC: not needed` assumption line).
