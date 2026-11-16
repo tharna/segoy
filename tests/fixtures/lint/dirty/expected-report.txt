@@ -1,0 +1,11 @@
+frontmatter	decisions/D-20251205-1.md	missing source
+frontmatter	ideas/I-20251201-1-example-idea-one/idea.md	missing kind (fixable)
+frontmatter	ideas/I-20251201-1-example-idea-one/idea.md	missing links (fixable)
+frontmatter	knowledge/raw/20251201-example-raw-note.md	no frontmatter (raw file, not fixed)
+frontmatter	self/goals.md	missing updated (fixable)
+index	ideas/index.md	I-20251202-1: no row (fixable)
+index	ideas/index.md	row I-20251130-1: no file (fixable)
+index	ideas/index.md	row I-20251203-1: state "specced" differs from file "planned" (fixable)
+index	knowledge/wiki/index.md	knowledge/wiki/topics/example-orphan.md: no row (fixable)
+orphan	knowledge/wiki/topics/example-orphan.md	no inbound link
+stale	knowledge/wiki/topics/example-stale.md	updated 2025-09-12, 120 days ago
