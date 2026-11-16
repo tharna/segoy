@@ -37,7 +37,8 @@ last_kind=$(awk '$0 == "```segoy" { getline; print }' "$S/pr-body.md" | tail -n 
 case $last_kind in *'"kind": "run"'*) ;; *) bad "criterion 3: last block in pr-body.md is not a run block" ;; esac
 # 4: empty week opens nothing.
 has "$S/SKILL.md" "**Empty week:**" 4
-has "$S/SKILL.md" "open no PR, post no comment" 4
+has "$S/SKILL.md" "open no PR, post no comment, even if ideas are stuck" 4
+has "$S/SKILL.md" "and one for the digest" 5
 # 5: records with frontmatter and source, and log.md lines.
 has "$S/records.md" "source: <comment URL>" 5
 has "$S/records.md" "source: <issue URL>" 5
@@ -127,6 +128,8 @@ jq -e '[.issues[] | select(.state == "open" and (.labels | index("segoy:paused")
 jq -e '[.issues[] | select(.labels | index("kind:note"))] | length == 0' "$F/github/empty.json" > /dev/null \
   || bad "criterion 4: empty fixture has a note"
 grep -q 'Files changed: none. Comments posted: none. PR: none.' "$F/transcript.md" || bad "criterion 2: transcript run A"
+jq -e '[.issues[].label_events[] | select(.created_at >= "2025-12-28T16:00:00Z")] | length == 0' "$F/github/empty.json" > /dev/null \
+  || bad "criterion 4: empty fixture has activity in the period"
 grep -q 'empty week → no branch, no PR, no comment' "$F/transcript.md" || bad "criterion 4: transcript run B"
 # 11: transcript records nothing pushed or merged.
 grep -q 'no push, no PR opened, no merge, no approval' "$F/transcript.md" || bad "criterion 11: transcript"

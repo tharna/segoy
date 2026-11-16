@@ -9,9 +9,8 @@ Executed by hand by the implementing session for I-20261116-2, step by step from
 ## Run B: `github/empty.json` (criterion 4)
 - Preconditions: no pause issue, no open `segoy:review` PR → continue.
 - Step 2: no issue has a label event or comment in the period; no note issues; no `decision` blocks; no parked or rejected issue; no `segoy:*` PR closed and no retro added in the period.
-- Step 7: #3 label `state:specced` = file `specced`; #4 `state:needs-input` = index `needs-input` → no drift.
-- Step 8: #3 last changed 2025-12-28 (7 days), #4 2025-12-26 (9 days) → nothing stuck.
-- Step 9: no evidence → no proposal.
+- Step 7: #3 label `state:specced` = file `specced`; #4 `state:needs-input` = index `needs-input` → no drift. #3 last changed 2025-12-28, before the period.
+- Step 8 (state only): #4 `state:needs-input` since 2025-12-15 (20 days) is stuck, but a stuck idea alone does not make a week non-empty (spec criterion 4: no activity and no drift).
 - Step 3: empty week → no branch, no PR, no comment. Output: "2026-W01: nothing to review."
 
 ## Run C: `github/active.json` (criteria 3, 5–11)
