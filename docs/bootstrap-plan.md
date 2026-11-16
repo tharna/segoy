@@ -165,7 +165,7 @@ PRs: 1 `segoy sync`, the `segoy-sync` skill and the `kit-sync` task, `protocol.s
 
 Tasks
 - T5.1 Skill and task `weekly-review` (journal digest, state reconciliation, ways proposals, stuck-idea detection, stats). Built: `segoy-weekly-review`, `tasks/brain-weekly-review.md`, protocol `review` block (I-20261116-2); not yet run live.
-- T5.2 Skills `ingest`, `query`, `lint`; task `brain-lint`. Built: `segoy-ingest`, `tasks/brain-ingest.md` (I-20261116-6); not yet run live. Open: `query`, `lint`, `brain-lint`.
+- T5.2 Skills `ingest`, `query`, `lint`; task `brain-lint`. Built: `segoy-ingest`, `tasks/brain-ingest.md` (I-20261116-6); `segoy-lint`, `tasks/brain-lint.md`, helper `brain-lint.sh`, label `segoy:lint` (I-20261116-7); neither run live yet. Open: `query`.
 - T5.3 Import a first batch of existing notes/bookmarks into `knowledge/raw/` and ingest.
 
 Done when: two consecutive weekly review PRs each contain at least one accepted ways-of-working change.

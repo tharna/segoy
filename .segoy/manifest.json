@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "segoy": "0.1.0+3c9ca00",
+  "segoy": "0.1.0+f9a2507",
   "kit": "project",
   "files": {
     ".claude/scripts/leak-guard.sh": "637e48108fd421ae5cd91d056114d53d2e9fa891",
@@ -20,6 +20,7 @@
     ".claude/skills/segoy-retro/SKILL.md": "9859278b7f10430bc3c8bb94210d6108feb31cf6",
     ".claude/skills/segoy-retro/template.md": "a3567b52a87a2cae05fcdfa92867cf3ecc0960db",
     ".claude/scripts/protocol.sh": "faf575b67c15609d1efbb23d8a467366280cf094",
-    ".claude/skills/segoy-sync/SKILL.md": "e29f6cd403ff9c527000a0fb9189a6e58cad7f69"
+    ".claude/skills/segoy-sync/SKILL.md": "e29f6cd403ff9c527000a0fb9189a6e58cad7f69",
+    ".claude/scripts/brain-lint.sh": "2031dd97dc5c50dbff9b64ecadaddbfeb3d14718"
   }
 }

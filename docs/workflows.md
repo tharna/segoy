@@ -121,7 +121,7 @@ Small ideas: if triage judges the idea is a small change to an existing project 
 
 - **Ingest**: owner merges a PR that adds files under `knowledge/raw/` (usually the weekly review), or presses Run now → `segoy-ingest` (task `brain-ingest`) → one PR `segoy:knowledge` per raw file with a source summary in `wiki/sources/`, updated or new wiki pages, index and one `log.md` line. Not from note issues. Closing the PR unmerged rejects that source.
 - **Query**: in a Roke session, "ask: …" → answer with citations; offer to save as synthesis.
-- **Lint**: weekly → issue titled `Lint <date>` with findings; mechanical fixes as a PR.
+- **Lint** (`segoy-lint`, Saturday): weekly → one issue titled `Lint <date>`, labelled `segoy:lint`, with every finding by check; missing derivable frontmatter and index drift fixed in one `segoy:lint` PR; contradictions quoted and never resolved; nothing when the brain is clean. The new issue closes the previous one. Stuck ideas also appear in the Sunday weekly review, which is where to act.
 
 ## 8. Flow G — New project
 
