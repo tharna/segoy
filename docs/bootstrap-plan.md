@@ -137,6 +137,8 @@ Decisions (2026-11-16):
 - M4-D4: the dogfood idea is the retro's first proposal: in `segoy-plan`, a scaffold with no commits counts as a new project.
 - M4-D5: Segoy goes public after T4.3 is merged and the rulesets are set, before the dogfood run.
 
+Progress: PR 1 merged (#25).
+
 PRs: 1 `segoy sync`, the `segoy-sync` skill and the `kit-sync` task, `protocol.sh` moved to `kit/common` (T4.1) · 2 changelog, version 0.1.0, migrations (T4.2) · 3 public readiness (T4.3) · 4 dogfood run (T4.4).
 
 ## M5 — Learning loop and knowledge
