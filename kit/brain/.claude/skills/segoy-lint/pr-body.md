@@ -3,7 +3,7 @@
 Title: `Lint fixes <run date>`. Label: `segoy:lint`. Replace `<…>`. One bullet per `fixed` line from `brain-lint.sh --fix`. No protocol block other than the `run` block, and the `run` block is last.
 
 ````markdown
-**Lint fixes <run date>**: <n> mechanical fixes. Report: #<issue>.
+**Lint fixes <run date>**: <n> mechanical fixes. The `Lint <run date>` report issue links to this PR.
 
 Only frontmatter blocks (missing derivable fields, `updated` set to <run date>) and index rows change, plus one `log.md` line. No body text, no raw file, no contradiction, orphan or stale page.
 
@@ -23,7 +23,7 @@ Merge to accept. To change something, edit the files in this PR before merging, 
 ## Filled example (validated by Segoy's tests)
 
 ````markdown
-**Lint fixes 2026-01-10**: 1 mechanical fix. Report: #20.
+**Lint fixes 2026-01-10**: 1 mechanical fix. The `Lint 2026-01-10` report issue links to this PR.
 
 ## Frontmatter
 - `ideas/I-20251201-1-example-idea/idea.md`: added `links: []`.

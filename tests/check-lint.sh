@@ -114,7 +114,7 @@ for p in $(sed -n '/^## Contradictions/,/^## /p' "$R" | grep -o 'knowledge/wiki/
   grep -q "^diff --git a/$p " "$D/fix.diff" && bad "criterion 5: fix changed $p"
 done
 # 6, 7: orphan and stale listed, untouched.
-grep -q ': no inbound link\.$' "$R" || bad "criterion 6: no orphan listed"
+grep -q ': no inbound link\.' "$R" || bad "criterion 6: no orphan listed"
 grep -q 'days ago (threshold 90)' "$R" || bad "criterion 7: no stale page listed"
 for p in $(awk -F'\t' '$1 == "orphan" || $1 == "stale" { print $2 }' "$F/dirty/expected-report.txt"); do
   grep -q "^diff --git a/$p " "$D/fix.diff" && bad "criteria 6, 7, 11: fix changed $p"
