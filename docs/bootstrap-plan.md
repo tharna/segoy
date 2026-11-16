@@ -130,6 +130,15 @@ Tasks
 
 Done when: a Segoy improvement is delivered through the pipeline and synced into Roke and the scratch project by PRs.
 
+Decisions (2026-11-16):
+- M4-D1: the commit history stays as it is, author names and e-mails included; no rewrite before going public.
+- M4-D2: the docs keep the name Roke and say plainly that it is the owner's brain repo (T4.3).
+- M4-D3: sync runs as a weekly scheduled task, `kit-sync`, with the `segoy-sync` skill; Run now for urgent kit changes.
+- M4-D4: the dogfood idea is the retro's first proposal: in `segoy-plan`, a scaffold with no commits counts as a new project.
+- M4-D5: Segoy goes public after T4.3 is merged and the rulesets are set, before the dogfood run.
+
+PRs: 1 `segoy sync`, the `segoy-sync` skill and the `kit-sync` task, `protocol.sh` moved to `kit/common` (T4.1) · 2 changelog, version 0.1.0, migrations (T4.2) · 3 public readiness (T4.3) · 4 dogfood run (T4.4).
+
 ## M5 — Learning loop and knowledge
 
 Tasks

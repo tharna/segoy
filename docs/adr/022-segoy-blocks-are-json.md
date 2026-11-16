@@ -11,7 +11,7 @@ ADR-012 made the agent–app contract labels plus `segoy` blocks in comments and
 
 ## Decision
 - A `segoy` block is a fenced code block with the info string `segoy` containing exactly one JSON object (`docs/protocol.md` §3).
-- `scripts/lib/protocol.sh` validates blocks with `jq`.
+- `protocol.sh` (in `kit/common/.claude/scripts/` since M4, so every repo has it) validates blocks with `jq`.
 - Labels for state, and the rest of ADR-012, are unchanged.
 
 ## Consequences

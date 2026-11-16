@@ -39,7 +39,7 @@ check "linter does not flag the present Procedure section" sh -c "! grep -qF 'mi
 
 check "linter passes on the repo's own skills" "$lint"
 
-proto=scripts/lib/protocol.sh
+proto=kit/common/.claude/scripts/protocol.sh
 pf=tests/fixtures/protocol
 check "protocol: valid blocks pass" "$proto" "$pf/valid.md"
 check "protocol: examples in docs/protocol.md pass" "$proto" docs/protocol.md
@@ -65,6 +65,8 @@ check "brain template: structure, frontmatter, labels, config" tests/check-brain
 check "segoy init brain and doctor (offline)" tests/check-init-doctor.sh
 check "strip-private and leak-guard (T2.2, T2.4)" tests/check-leak-guard.sh
 check "segoy init project, project leak check, commit hook (T3.1, T3.2)" tests/check-init-project.sh
+check "segoy sync: update, conflict, add, orphan, restore, repo-owned files (T4.1)" tests/check-sync.sh
+check "Segoy's own .claude matches the kit (run: scripts/segoy sync --no-github .)" sh -c "scripts/segoy sync --dry-run --no-github . | grep -q 'up to date'"
 check "triage comment templates carry valid blocks" sh -c "grep -v '^\`\`\`\`' kit/brain/.claude/skills/segoy-triage/comment.md | $proto - | grep -q '^2 block'"
 
 printf '\n%d passed, %d failed\n' "$passed" "$failed"

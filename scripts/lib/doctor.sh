@@ -38,7 +38,7 @@ doctor_offline() {
   if [ -f "$dir/.segoy/version" ]; then
     have=$(cat "$dir/.segoy/version")
     want=$(segoy_version)
-    if [ "${have%%+*}" = "${want%%+*}" ]; then d_ok "kit version $have"; else d_warn "kit version $have, this Segoy is $want (sync arrives in M4)"; fi
+    if [ "${have%%+*}" = "${want%%+*}" ]; then d_ok "kit version $have"; else d_warn "kit version $have, this Segoy is $want (run: segoy sync $dir)"; fi
   else
     d_fail "no .segoy/version"
   fi
@@ -129,7 +129,7 @@ cmd_doctor() {
     protocol)
       [ -n "$files" ] || die "usage: segoy doctor --protocol FILE..."
       # shellcheck disable=SC2086  # word splitting of the file list is intended
-      "$SEGOY_HOME/scripts/lib/protocol.sh" $files
+      "$SEGOY_HOME/kit/common/.claude/scripts/protocol.sh" $files
       return ;;
   esac
   [ -d "$dir" ] || die "$dir is not a directory"

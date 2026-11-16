@@ -68,9 +68,10 @@ segoy/
 
 ### 2.2 Vendoring and versioning
 
-- `segoy sync` copies `kit/common` plus `kit/project` or `kit/brain` into the target repo and writes `.segoy/version` and `.segoy/manifest.json` (path → content hash at sync time).
-- On the next sync, a file whose current hash differs from the manifest is treated as locally modified: the script writes the new version beside it as `<file>.segoy-new` and reports, never overwrites.
-- Files the user owns (`CLAUDE.md` after first creation, everything outside `.claude/skills/segoy-*`, notes, config) are never touched after init.
+- `segoy init` copies `kit/common` plus `kit/project` or `kit/brain` into the target repo and writes `.segoy/version` and `.segoy/manifest.json` (path → content hash when Segoy last wrote the file).
+- `segoy sync` (M4) updates **kit-managed** files: everything under `.claude/`, `.github/workflows/segoy-*`, `.github/ISSUE_TEMPLATE/*`, `.segoy/labels.json`, and the brain's `CLAUDE.md`. A managed file whose hash still matches the manifest is replaced; one the repo changed is left alone and the new version is written beside it as `<file>.segoy-new`. A managed file the repo deleted is restored. A managed file that left the kit is reported as `orphan`, never deleted.
+- Every other kit file (config, denylist, a project's generated `CLAUDE.md`, the brain's skeleton and notes) belongs to the repo after init: sync adds it only if it was never there, and never changes it.
+- `segoy sync --pr` commits on a `claude/` branch and opens the PR through the REST API; the `kit-sync` task runs it weekly (M4-D3).
 - Kit skills are namespaced by directory name prefix `segoy-` once vendored, so a repo's own skills cannot collide.
 - Segoy uses semantic versions and a changelog. Brain template changes that need migration ship a `migrations/<version>.md` that an agent can follow.
 - Implementation language for scripts: POSIX shell + `git` + `gh` + `jq` for v1 (all present in cloud sessions and on any dev machine). Revisit if logic outgrows shell (ADR-003).
@@ -101,6 +102,7 @@ Each row is one scheduled task (file in `tasks/`). "Repos" is what the task moun
 | project-implement | `pull_request.closed`, filters: Is merged, label `segoy:plan` | Owner merges Gate 1 | project | `implement` | Gate 2 PR (`segoy:impl`), single-PR plans only (M3-D1) |
 | project-implement-pr | `pull_request.labeled`, filter label `answered` | Owner asks for changes on a Gate 2 PR | project | `implement` (revise) | New commits on the same PR |
 | project-retro | `pull_request.closed`, filters: Is merged, label `segoy:impl` | Owner merges Gate 2 | project | `retro` | Retro PR; state noted for the brain to pick up |
+| kit-sync | Weekly schedule (plus Run now) | — | segoy + roke + every project | `segoy-sync` | One sync PR per repo whose kit is behind (M4-D3) |
 | brain-weekly-review | Weekly schedule | — | roke (reads project repos through GitHub tools) | `weekly-review` | One review PR in Roke, which also files notes, stubs and log entries (ADR-018) |
 | brain-lint | Weekly schedule | — | roke | `lint` | Lint report issue or PR |
 
@@ -155,7 +157,7 @@ Residual risk to accept knowingly: Roke content is processed in Anthropic's clou
 Otak must not parse prose, and there is no backend to translate. So the contract between agents and the app is carried in GitHub itself:
 
 - **State** = labels (`state:*` on Roke issues, `segoy:*` on PRs). Already required by the pipeline.
-- **Content** = a fenced code block with info string `segoy` containing one versioned JSON object (ADR-022), appended to the comment or PR body a skill already writes. Kinds: `question`, `answer`, `plan`, `impl`, `run`, `review`. Defined in `docs/protocol.md`, with field tables and examples. Validator: `scripts/lib/protocol.sh` (wrapped by `segoy doctor --protocol` from T1.2).
+- **Content** = a fenced code block with info string `segoy` containing one versioned JSON object (ADR-022), appended to the comment or PR body a skill already writes. Kinds: `question`, `answer`, `plan`, `impl`, `run`, `review`. Defined in `docs/protocol.md`, with field tables and examples. Validator: `kit/common/.claude/scripts/protocol.sh`, vendored into every repo as `.claude/scripts/protocol.sh` (wrapped by `segoy doctor --protocol` from T1.2).
 - **Answers** from the app are comments containing an `answer` block plus the same text in plain words, **together with the answer label** (`answered`), because comments alone start no task (ADR-016). Free-text replies typed in GitHub mobile stay valid: with the label they are handled at once, without it by the periodic sweep. Skills must handle both forms.
 - **Run records**: every skill ends by posting or updating one `run` comment (on the Roke issue for brain flows, on the PR for project flows). This is what the app's activity feed and failure inbox read.
 - **Pause**: an open issue labelled `segoy:paused` in a repo pauses automation there; in Roke it pauses the brain flows and promotion. Every skill checks this first and exits quietly. The app opens and closes that issue. No commit, no backend. Opening it fires `brain-triage` like any issue; triage recognises the label and exits.

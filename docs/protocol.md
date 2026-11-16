@@ -13,7 +13,7 @@ This is the contract between Segoy skills and anything that reads their output w
 - **Content** lives in `segoy` blocks: JSON objects in fenced code blocks, appended to the comments and PR bodies that skills already write (§3).
 - **Owner actions** that start work are listed in §4.
 
-Any change to what a skill posts must keep this document valid. Validate with `scripts/lib/protocol.sh <file>`; from M1 also `scripts/segoy doctor --protocol <file>`.
+Any change to what a skill posts must keep this document valid. Validate with `.claude/scripts/protocol.sh <file>` (in any repo with the kit; in Segoy, `kit/common/.claude/scripts/protocol.sh`); from M1 also `scripts/segoy doctor --protocol <file>`.
 
 ## 1. Principles
 
