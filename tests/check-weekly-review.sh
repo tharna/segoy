@@ -81,6 +81,7 @@ has "$S/SKILL.md" "before any edit of this run" "P3 3"
 has "$S/SKILL.md" 'Never touch `decisions/`' "P3 5"
 has "$S/records.md" '(proposed)"; omit the section if none' "P3 5"
 has "$S/SKILL.md" 'no leftover `ways/` marker (step 9 cleanup)' "P3 6"
+has "$S/SKILL.md" 'No leftover marker: no cleanup edit, no `clean marker` log line, no "Markers removed" section.' "P3 6"
 # 10: leak check on shareable parts, self/ untouched.
 has "$S/SKILL.md" ".claude/scripts/leak-guard.sh --denylist .segoy/denylist.txt" 10
 has "$S/SKILL.md" 'Never read, quote or write `self/`' 10
