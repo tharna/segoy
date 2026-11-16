@@ -111,7 +111,7 @@ Small ideas: if triage judges the idea is a small change to an existing project 
    4. Write decision records for `decision` blocks not yet recorded, and stubs for parked and rejected ideas with no idea folder.
    5. Correct idea states in files and `ideas/index.md` to match the issue labels; list label-vs-PR mismatches for the owner without relabelling.
    6. List stuck ideas (no state change for more than 14 days) with their state.
-   7. From retros, decision generalisations and brain-side friction (more than one question round, triage corrections), propose at most five changes to `ways/`, each a new bullet marked `proposed` with its source. Public-safe ones go to `ways/public/`.
+   7. From retros, decision generalisations and brain-side friction (more than one question round, triage corrections), propose at most five changes to `ways/`. Write each proposal as a final `ways/` bullet with its cited source and no `proposed` marker; merging the review PR accepts it. List each one as a proposal in the PR body and the digest. A replaced rule is deleted in the same diff. Public-safe ones go to `ways/public/`. Remove a leftover `(proposed; ` marker from `ways/` bullets already on the default branch, keep the rest of the bullet, and list each one in the digest.
    8. Append `log.md` lines and write `journal/<year>-W<week>.md`: what moved, state corrections, stuck ideas, what needs the owner, proposals, stats.
    9. Leak-check the shareable files, then one PR `segoy:review` ending with `review` and `run` blocks. Merging accepts the proposals; editing the PR before merge is how the owner corrects them. A week with nothing to do opens no PR.
    10. Later (M6): `projects/*.md` updates and goal-aware "top three next ideas" from `self/goals.md`.
