@@ -9,16 +9,17 @@ description: Use in the kit-sync scheduled task (or when the owner asks) to brin
 ## Preconditions (exit quietly if not met)
 - Per target: no open issue labelled `segoy:paused` in it (protocol §5). A paused target is skipped; the others still run.
 - Per target: no open PR whose title starts with `Sync Segoy kit`. If one exists, skip that target: the owner has not decided on the last one yet.
-- Per target: `scripts/segoy sync --dry-run --no-github <target>` reports changes (lines `add`, `update`, `restore` or `conflict`). `up to date` → skip.
+- Per target: `scripts/segoy sync --dry-run --no-github <target>` reports changes (lines `add`, `update`, `restore`, `conflict` or `version`). `up to date` → skip.
 
 ## Procedure
 1. Note the start time. In the Segoy checkout, pull the default branch. Read `CHANGELOG.md` if it exists, for the PR summary.
 2. For each target, check the preconditions above with `gh api` REST calls (GraphQL does not work in cloud sessions; see `scripts/README.md`).
 3. For a target that is behind:
    1. Make sure its checkout is on its default branch, up to date and clean.
-   2. Write a footer file outside the checkouts with: one or two sentences on what changed in the kit since the target's `.segoy/version` (from the changelog or `git log` of `kit/` in Segoy), then a `run` block: `skill` `segoy-sync`, `repo` the target, `started`, `finished` (now), `outcome` `ok`, `next` `owner: review and merge the sync PR`, `session` when known.
+   2. Write a footer file (see step 5 for migrations) outside the checkouts with: one or two sentences on what changed in the kit since the target's `.segoy/version` (from the changelog or `git log` of `kit/` in Segoy), then a `run` block: `skill` `segoy-sync`, `repo` the target, `started`, `finished` (now), `outcome` `ok`, `next` `owner: review and merge the sync PR`, `session` when known.
    3. Run `scripts/segoy sync --pr --pr-footer <footer> <target>`. Add `--branch <your assigned branch>` if you may push only to that branch. The script commits, pushes, creates missing labels and opens the PR; it prints the PR URL.
    4. If it reports `conflict`, say in your summary which files: the owner merges `<file>.segoy-new` by hand.
+   5. If it reports `migrate` lines, add to the footer, before the `run` block, one bullet per migration: its file in the Segoy repo and its "Who needs this" line. Do not carry out the steps.
 4. End with a short summary per target: PR URL, `up to date`, `paused` or `skipped (open sync PR)`.
 
 ## Output contract

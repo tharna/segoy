@@ -22,5 +22,6 @@ branch, and never to the Segoy repo.
 - The task runs `scripts/segoy sync --pr` from the Segoy checkout. A repo that is up to date, paused (`segoy:paused` issue) or still has an open sync PR is skipped, so most weekly runs post nothing.
 - A sync PR changes only kit-managed files (`.claude/`, `segoy-*` workflows, issue templates, `.segoy/labels.json`, and the brain's `CLAUDE.md`) plus `.segoy/version` and `.segoy/manifest.json`. Your config, denylist, notes and a project's `CLAUDE.md` are never touched.
 - A file you changed in the repo is not overwritten: the new kit version lands next to it as `<file>.segoy-new`, and the PR says so. Merge what you want by hand and delete the `.segoy-new` file.
+- When a new Segoy version needs more than copying files, the PR lists a `migrate` line pointing to `migrations/<version>.md` in Segoy. Follow it yourself or ask a session to; the task never runs migrations.
 - Hooks do not run in multi-repo sessions (S7). The project commit hook does not run here either; the project's `segoy-leak-check` CI still checks the sync PR.
 - Segoy's own `.claude/` is not synced by this task: Segoy PRs run `scripts/segoy sync --no-github .`, and its CI fails if they forget.

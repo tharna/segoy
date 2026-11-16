@@ -73,7 +73,7 @@ segoy/
 - Every other kit file (config, denylist, a project's generated `CLAUDE.md`, the brain's skeleton and notes) belongs to the repo after init: sync adds it only if it was never there, and never changes it.
 - `segoy sync --pr` commits on a `claude/` branch and opens the PR through the REST API; the `kit-sync` task runs it weekly (M4-D3).
 - Kit skills are namespaced by directory name prefix `segoy-` once vendored, so a repo's own skills cannot collide.
-- Segoy uses semantic versions and a changelog. Brain template changes that need migration ship a `migrations/<version>.md` that an agent can follow.
+- Segoy uses semantic versions (`VERSION`), `CHANGELOG.md`, and a `v<x.y.z>` tag and release per version. A version that needs more than sync ships `migrations/<version>.md`, which an agent or the owner can follow; `segoy sync` lists the ones a repo has not had (by its `.segoy/version`) and counts a version change as a change, so the PR records the new version.
 - Implementation language for scripts: POSIX shell + `git` + `gh` + `jq` for v1 (all present in cloud sessions and on any dev machine). Revisit if logic outgrows shell (ADR-003).
 
 ## 3. Runtime components

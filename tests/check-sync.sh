@@ -13,7 +13,7 @@ tn()  { d=$1; shift; if "$@" >/dev/null 2>&1; then bad "$d"; else ok "$d"; fi; }
 has() { grep -qF -- "$2" "$1"; }
 
 mkdir -p "$T/segoy"
-cp -R scripts kit VERSION "$T/segoy/"
+cp -R scripts kit migrations VERSION "$T/segoy/"
 S=$T/segoy/scripts/segoy
 K=$T/segoy/kit
 P=$T/p
@@ -94,6 +94,19 @@ printf '\n12. extra rule\n' >> "$K/brain/CLAUDE.md"
 t  "brain CLAUDE.md updated" has "$B/CLAUDE.md" "12. extra rule"
 tn "removed skeleton file not restored" test -e "$B/journal/.gitkeep"
 tn "brain gets no project files" test -e "$B/.claude/skills/segoy-implement/SKILL.md"
+
+# 8a. Version and migrations.
+printf -- '---\nversion: 9.9.9\n---\n' > "$T/segoy/migrations/9.9.9.md"
+printf '0.0.9+abc\n' > "$P/.segoy/version"
+"$S" sync --dry-run --no-github "$P" > "$T/out" 2>&1
+t  "older version: version line" has "$T/out" "version   0.0.9 -> $(cat "$T/segoy/VERSION")"
+t  "older version: migration listed" has "$T/out" "migrate   migrations/$(cat "$T/segoy/VERSION").md"
+tn "future migration not listed" has "$T/out" "migrations/9.9.9.md"
+tn "README is not a migration" has "$T/out" "migrations/README.md"
+"$S" sync --no-github "$P" > /dev/null 2>&1
+"$S" sync --no-github "$P" > "$T/out" 2>&1
+t  "after sync: no migration listed" sh -c "! grep -q migrate '$T/out'"
+t  "after sync: up to date" has "$T/out" "up to date"
 
 # 8. Usage errors.
 mkdir "$T/plain"

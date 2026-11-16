@@ -102,6 +102,31 @@ sync_orphans() {
   done
 }
 
+# ver_lt A B — true if version A sorts before B (x.y.z; a pre-release such as
+# 0.1.0-dev sorts before 0.1.0; build metadata after + is ignored).
+ver_lt() {
+  awk -v a="${1%%+*}" -v b="${2%%+*}" 'BEGIN {
+    na = split(a, x, "-"); nb = split(b, y, "-")
+    split(x[1], p, "."); split(y[1], q, ".")
+    for (i = 1; i <= 3; i++) { if (p[i] + 0 < q[i] + 0) exit 0; if (p[i] + 0 > q[i] + 0) exit 1 }
+    if (na > 1 && nb == 1) exit 0
+    if (na > 1 && nb > 1 && x[2] < y[2]) exit 0
+    exit 1 }'
+}
+
+# sync_migrations HAVE — list migrations/<v>.md with HAVE < v <= this Segoy.
+sync_migrations() {
+  want=$(cat "$SEGOY_HOME/VERSION" 2>/dev/null || echo 0.0.0)
+  for m in "$SEGOY_HOME"/migrations/*.md; do
+    [ -f "$m" ] || continue
+    v=$(basename "$m" .md)
+    case $v in README) continue ;; esac
+    if { [ "$1" = none ] || ver_lt "$1" "$v"; } && ! ver_lt "$want" "$v"; then
+      printf '%-9s %s\n' migrate "migrations/$v.md (follow it by hand; see the Segoy repo)" >> "$TMPD/report"
+    fi
+  done
+}
+
 # sync_write_manifest DEST — new version and hashes, keeping other entries.
 sync_write_manifest() {
   segoy_version > "$1/.segoy/version"
@@ -182,6 +207,12 @@ cmd_sync() {
   sync_kit common "$dir"
   sync_kit "$SYNC_KIND" "$dir"
   sync_orphans "$dir"
+  sync_migrations "$have"
+  want_base=$(cat "$SEGOY_HOME/VERSION" 2>/dev/null || echo 0.0.0)
+  if [ "${have%%+*}" != "$want_base" ]; then
+    printf '%-9s %s\n' version "${have%%+*} -> $want_base" >> "$TMPD/report"
+    SYNC_CHANGED=$((SYNC_CHANGED + 1))
+  fi
 
   mode=''; [ "$SYNC_DRY" -eq 1 ] && mode=' (dry run: nothing written)'
   say "segoy sync $SYNC_KIND $dir: $have -> $(segoy_version)$mode"
