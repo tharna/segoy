@@ -6,8 +6,11 @@ Goes into the brain (private). Replace `<…>`. The `review` block (protocol §3
 **Weekly review <yyyy>-W<ww>** (<from date> to <to date>)
 
 - Filed: <n> notes, <n> decision records, <n> idea stubs; <n> state corrections.
-- Stuck: <n> ideas. Needs you: <n> items. Proposed ways changes: <n>.
+- Stuck: <n> ideas. Needs you: <n> items. Proposed ways changes: <n>. Markers removed: <n>.
 - Digest: [`journal/<yyyy>-W<ww>.md`](journal/<yyyy>-W<ww>.md)
+
+**Proposals** (merge accepts them)
+- p1 (proposal) → `<ways/ file>`: <rule> (replaces: <old rule>, if any)
 
 Merge to accept everything. To change a proposal or record, edit the files in this PR before merging, or close it to reject the whole review. Merging closes the filed notes:
 
@@ -30,6 +33,9 @@ Closes #<n>
 
 ````markdown
 **Weekly review 2026-W01** (2025-12-28 to 2026-01-04)
+
+**Proposals** (merge accepts them)
+- p1 (proposal) → `ways/public/principles.md`: Ask platform questions before scope questions.
 
 Closes #12
 ````

@@ -1,8 +1,11 @@
 **Weekly review 2026-W01** (2025-12-28 to 2026-01-04)
 
 - Filed: 1 notes, 1 decision records, 1 idea stubs; 1 state corrections.
-- Stuck: 1 ideas. Needs you: 0 items. Proposed ways changes: 1.
+- Stuck: 1 ideas. Needs you: 0 items. Proposed ways changes: 1. Markers removed: 1.
 - Digest: [`journal/2026-W01.md`](journal/2026-W01.md)
+
+**Proposals** (merge accepts them)
+- p1 (proposal) → `ways/public/principles.md`: Name the exact test command in every plan's task-group checks.
 
 Merge to accept everything. To change a proposal or record, edit the files in this PR before merging, or close it to reject the whole review. Merging closes the filed notes:
 
