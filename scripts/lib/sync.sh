@@ -183,6 +183,9 @@ cmd_sync() {
   [ -d "$dir" ] || die "$dir is not a directory"
   [ -f "$dir/.segoy/manifest.json" ] || die "$dir has no .segoy/manifest.json; set it up with: segoy init brain|project $dir"
   [ -z "$SYNC_FOOTER" ] || [ -r "$SYNC_FOOTER" ] || die "--pr-footer: cannot read $SYNC_FOOTER"
+  if [ -n "$SYNC_FOOTER" ] && ! "$SEGOY_HOME/kit/common/.claude/scripts/protocol.sh" "$SYNC_FOOTER" >&2; then
+    die "--pr-footer: its segoy blocks are not valid (docs/protocol.md); nothing was changed"
+  fi
   need jq git
   if [ "$pr" -eq 1 ]; then
     [ "$SYNC_DRY" -eq 0 ] || die "--pr and --dry-run do not go together"

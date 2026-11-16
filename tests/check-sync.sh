@@ -109,6 +109,14 @@ t  "after sync: no migration listed" sh -c "! grep -q migrate '$T/out'"
 t  "after sync: up to date" has "$T/out" "up to date"
 
 # 8. Usage errors.
+# shellcheck disable=SC2016  # backticks are Markdown
+printf 'note\n\n```segoy\n{"type": "run", "skill": "segoy-sync"}\n```\n' > "$T/bad-footer.md"
+cp "$P/.segoy/manifest.json" "$T/m.before"
+tn "invalid --pr-footer refused" "$S" sync --no-github --pr-footer "$T/bad-footer.md" "$P"
+t  "refused footer changes nothing" cmp -s "$P/.segoy/manifest.json" "$T/m.before"
+# shellcheck disable=SC2016  # backticks are Markdown
+printf 'note\n\n```segoy\n{"v": 1, "kind": "run", "skill": "segoy-sync", "repo": "o/r", "started": "2026-01-01T00:00:00Z", "finished": "2026-01-01T00:01:00Z", "outcome": "ok", "next": "owner: review"}\n```\n' > "$T/good-footer.md"
+t  "valid --pr-footer accepted" "$S" sync --dry-run --no-github --pr-footer "$T/good-footer.md" "$P"
 mkdir "$T/plain"
 tn "repo without manifest refused" "$S" sync --no-github "$T/plain"
 tn "--pr with --dry-run refused" "$S" sync --pr --dry-run "$P"

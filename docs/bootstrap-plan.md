@@ -139,7 +139,25 @@ Decisions (2026-11-16):
 - M4-D4: the dogfood idea is the retro's first proposal: in `segoy-plan`, a scaffold with no commits counts as a new project.
 - M4-D5: Segoy goes public after T4.3 is merged and the rulesets are set, before the dogfood run.
 
-Progress: PR 1 merged (#25), PR 2 merged (#26). History scan (T4.3): `segoy doctor --history` with the brain's denylist finds only synthetic test samples and the copyright line in `LICENSE` (accepted, M4-D1).
+Status (2026-11-16): **done.**
+- Shipped:
+  - T4.1 `segoy sync` (`--dry-run`, `--pr`; local edits kept beside the file as `.segoy-new`; old kit versions recognised through Segoy's history), the `segoy-sync` skill and the weekly `kit-sync` task, `protocol.sh` in `kit/common` (#25);
+  - T4.2 version 0.1.0, `CHANGELOG.md`, `migrations/` with sync listing pending ones (#26), tag `v0.1.0`;
+  - T4.3 README quick start, `CONTRIBUTING.md`, `SECURITY.md`, `segoy doctor --history`, Roke named as the author's brain (#27). The history scan with the brain's denylist found only synthetic test samples and the copyright line in `LICENSE` (accepted, M4-D1). Segoy is public, with private vulnerability reporting and a `main` ruleset (PR required, no force push or deletion, no bypass);
+  - scratch-project set up with `init project` (migration 0.1.0, scratch-project #4).
+- T4.4 dogfood run: I-20261116-1 (an init-only repo counts as new) went capture → triage → answer → `/spec` → spec PR (Roke #20) → Gate 1 (#28) → Gate 2 (#29) → retro (#30) → brain issue `done` → `kit-sync` PR in Roke (#21), all merged by the owner. scratch-project needed nothing (brain-kit change).
+
+Findings:
+- `kit-sync`'s first run (Roke #18) worked end to end. Its second (Roke #21) wrote a `run` block with `type` instead of `kind` and no `v`; `segoy sync --pr-footer` now refuses a footer whose blocks fail `protocol.sh`, and the skill names every field.
+- Triage restated the dogfood capture with its meaning inverted ("you want that case handled differently"); the owner corrected it in the answer, and the spec came out right.
+- Answering the questions did not start the spec; the owner needed a second round (`/spec` + `answered`). Working as designed, but slow for a small, clear task.
+- The project retro sees only project PRs, so brain-side friction (the two points above) is missing from it. The weekly review (M5) is where those belong.
+- A scheduled run's session stays open: when the owner continued the `kit-sync` session, it carried out a migration by hand (scratch-project #3, closed as a duplicate of #4).
+
+Carried into M5:
+- Weekly review collects brain-side friction (triage restatements, extra rounds) next to the retros' proposals.
+- Proposal for the owner: let `segoy-respond` go straight to the spec when triage marked an idea a small, clear change and every question is answered.
+- From now on every Segoy change is an idea in Roke (T4.4).
 
 PRs: 1 `segoy sync`, the `segoy-sync` skill and the `kit-sync` task, `protocol.sh` moved to `kit/common` (T4.1) · 2 changelog, version 0.1.0, migrations (T4.2) · 3 public readiness (T4.3) · 4 dogfood run (T4.4).
 
