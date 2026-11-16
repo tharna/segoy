@@ -99,6 +99,27 @@ Tasks
 
 Done when: one idea has gone capture → done with exactly the two gates.
 
+Status (2026-11-16): **done.**
+- Shipped:
+  - `kit/project/`: `CLAUDE.md.tmpl`, config with leak-check options, a commit hook for the leak check, the `segoy-leak-check` workflow;
+  - skills `segoy-implement` (build, revise, Run now) and `segoy-retro`; agents `implementer` and `verifier`;
+  - `segoy init project`, applied to Segoy itself (dogfood);
+  - protocol block `impl`; `segoy-gate-sync` extended to Gate 2;
+  - tasks `project-implement`, `project-implement-pr`, `project-retro`.
+- T3.4: I-20261115-5 went capture → spec → Gate 1 (#16) → Gate 2 (#22, three commits named `<id>: T<n>`, evidence per criterion, CI and leak check green) → owner merge → brain issue `done` and closed by gate-sync → retro PR (#23). Two gates, no manual edits by the agent session in between.
+
+Platform findings:
+- A Run now pressed before the skill reached the default branch finds no skill and does nothing; re-run after merging.
+- The retro run's `run` block left out `started` and `finished`; the project skills now list the required fields. Project repos have no protocol validator yet.
+
+Deferred or carried into M4:
+- `review-pr` skill (T3.1): not built; the Gate 2 evidence table and the verifier cover the review need for now.
+- Multi-PR plans (M3-D1).
+- `project-implement-pr` (revise mode on a Gate 2 PR) and Gate 2 closed-without-merge have not run end to end yet.
+- A protocol validator that project repos can run (vendor `protocol.sh` through `kit/common`, or have the skills check by hand).
+- Plan T3 of I-20261115-5: the PoC bullet in the brain's public ways (owner or a brain session).
+- The retro's proposed rule changes go to the weekly review (M5); until then the owner decides by hand.
+
 ## M4 — Self-hosting
 
 Tasks

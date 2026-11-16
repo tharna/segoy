@@ -27,6 +27,7 @@ description: Use in a project repo after the owner merged a Gate 1 (segoy:plan) 
 6. **Open the Gate 2 PR** (build), or **comment** on it (revise):
    - Build: title `Impl: <title> (<id>)`, label `segoy:impl`, body from `pr-body.md`, ending with an `impl` block (one entry per criterion) and a `run` block. Mark it draft if anything is `fail` or a check failed.
    - Revise: push to the PR branch; comment with what changed (at most 5 bullets), the criteria re-verified, and a `run` block. Update the PR body's evidence table and `impl` block.
+   - Every `run` block has all required fields (protocol §3.4), including `started` (step 1) and `finished`.
    - Before posting, run `.claude/scripts/project-leak-check.sh` on the body text saved to a file. Fix any finding.
 7. Build only: comment on the merged Gate 1 PR with a link to the Gate 2 PR and a `run` block.
 
